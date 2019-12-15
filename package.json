@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "local_run": "npm i && npm start",
     "start": "node index.js"
   },
   "repository": {
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/daryl-cecile/SIMS/issues"
   },
-  "homepage": "https://github.com/daryl-cecile/SIMS#readme"
+  "homepage": "https://github.com/daryl-cecile/SIMS#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
