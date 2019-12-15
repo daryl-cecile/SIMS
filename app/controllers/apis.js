@@ -1,29 +1,12 @@
-const mysql = require('mysql');
 const apis = require('express').Router();
-const cert = require('../config/cert_info');
-apis.get("/test-db", function (req, res) {
-    let con = mysql.createConnection({
-        host: process.env.SQL_IP,
-        user: process.env.SQL_USER,
-        password: process.env.SQL_PASS,
-        ssl: cert
-    });
-    con.connect(function (err) {
-        if (err) {
-            res.write("error");
-        }
-        else {
-            res.write("Connected!");
-        }
-        res.end();
-    });
-});
-apis.post("/login", function (req, res) {
+apis.post("/login", async function (req, res) {
     let username = req.body['username'];
     let password = req.body['password'];
+    res.end();
 });
-apis.get('/user_info/:username', function (req, res) {
+apis.get('/user_info/:username', async function (req, res) {
     let username = req.params['username'];
+    res.end();
 });
 module.exports = apis;
 //# sourceMappingURL=apis.js.map
