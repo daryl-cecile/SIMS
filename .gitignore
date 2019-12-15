@@ -150,3 +150,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+### WebStorm Additionals
+# WebStorm IDE files
+.idea/$CACHE_FILE$
+.idea/inspectionProfiles/profiles_settings.xml
