@@ -9,10 +9,16 @@ chai.use(chaiHttp);
 
 describe('Server start', ()=>{
 
-    it("server should start successfully with db connection", (done) => {
+    it("server should start successfully", (done) => {
         eventManager.listen("APP_READY",function(){
             done();
-        },{ autoTriggerIfMissed: true });
+        },{ singleUse:true ,autoTriggerIfMissed: true });
+    });
+
+    it("DB should connect successfully", (done) => {
+        eventManager.listen("DB_READY",function(){
+            done();
+        },{ singleUse:true, autoTriggerIfMissed: true });
     });
 
 });

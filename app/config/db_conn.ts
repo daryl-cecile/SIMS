@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const cert = require('../config/cert_info');
+const eventManager = require("../config/GlobalEvents");
 
 let conn = mysql.createConnection({
     host: process.env.SQL_IP,
@@ -15,7 +16,7 @@ conn.connect(function(err) {
         throw err;
     }
     else{
-        console.log("DB Connected!");
+        eventManager.trigger("DB_READY");
     }
 });
 
