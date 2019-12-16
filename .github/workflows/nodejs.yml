@@ -24,6 +24,3 @@ jobs:
         npm test
       env:
         CI: true
-        SQL_IP: ${{ secrets.SQL_IP }}
-        SQL_USER: ${{ secrets.SQL_USER }}
-        SQL_PASS: ${{ secrets.SQL_PASS }}
