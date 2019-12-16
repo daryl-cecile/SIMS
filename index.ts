@@ -1,5 +1,5 @@
 const express = require('express');
 
-let app = require("./app/config/setup")(express);
+let server = require("./app/config/setup")(express);
 
-export default app; // for tests
+module.exports = server; // for tests

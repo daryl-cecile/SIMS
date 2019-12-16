@@ -11,7 +11,7 @@ module.exports = (express) => {
     app.use(express.static("/public"));
     app.use("/", require('../controllers/base'));
     app.use('/api', require('../controllers/apis'));
-    app.listen(PORT, () => {
+    return app.listen(PORT, () => {
         console.log(`App is running on port ${PORT}`);
     });
 };
