@@ -17,9 +17,13 @@ class GlobalEventManager{
     }
 
     public trigger(eventName:string,...params:any[]){
-        this.eventRegister.forEach(e => {
+        this.eventRegister = this.eventRegister.filter(e => {
             if (e.eventName.toLowerCase() === eventName.toLowerCase()){
                 e.trigger(...params);
+                return true;
+            }
+            else if (e.isInvalid === true){
+                return false;
             }
         });
         this.triggeredEventNames.push(eventName);
@@ -42,7 +46,10 @@ class GlobalEvent{
     }
 
     public trigger(...params:any[]){
-        if (this.props.singleUse === true && this.triggeredCount > 0) return;
+        if (this.props.singleUse === true && this.triggeredCount > 0){
+            this.isInvalid = true;
+            return;
+        }
         this.handler.apply(this,params);
         this.triggeredCount ++;
     }

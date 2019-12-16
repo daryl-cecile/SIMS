@@ -6,9 +6,9 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 
-describe('Server', ()=>{
+describe('Server start', ()=>{
 
-    it("should start successfully with db connection", (done) => {
+    it("server should start successfully with db connection", (done) => {
 
         eventManager.listen("APP_READY",function(){
             done();
@@ -39,4 +39,15 @@ describe('Requests', () => {
                 done();
             });
     });
+});
+
+describe('Server close', ()=>{
+
+    it("server should end successfully", (done) => {
+        server.on("close", function() {
+            done();
+        });
+        server.close();
+    });
+
 });
