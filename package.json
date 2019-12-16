@@ -4,9 +4,7 @@
   "description": "Slackers Inventory Management System",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/*.js --exit",
-    "local_test": "mocha -r dotenv/config test/*.js --exit",
-    "default_test": "echo \"Result: no test specified\" && exit 0",
+    "test": "echo \"Result: no test specified\" && exit 0",
     "fix": "npm i && npm run build",
     "build": "tsc --project tsconfig.json",
     "local": "npm run build && node -r dotenv/config index.js",
