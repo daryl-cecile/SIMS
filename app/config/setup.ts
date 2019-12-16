@@ -22,4 +22,5 @@ module.exports = (express)=>{
         console.log(`App is running on port ${ PORT }`);
     });
 
+    return app;
 };

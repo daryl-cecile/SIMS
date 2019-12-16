@@ -1,3 +1,5 @@
 const express = require('express');
 
-require("./app/config/setup")(express);
+let app = require("./app/config/setup")(express);
+
+export default app; // for tests
