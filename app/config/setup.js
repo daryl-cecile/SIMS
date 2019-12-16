@@ -2,6 +2,7 @@ const PORT = process.env.PORT || 3000;
 module.exports = (express) => {
     const app = express();
     const conn = require('./db_conn');
+    const eventManager = require('./GlobalEvents');
     app.set('views', require("path").resolve(__dirname, "../views"));
     app.set('view engine', 'ejs');
     app.use(express.json());
@@ -13,6 +14,7 @@ module.exports = (express) => {
     app.use('/api', require('../controllers/apis'));
     return app.listen(PORT, () => {
         console.log(`App is running on port ${PORT}`);
+        eventManager.trigger("APP_READY", PORT);
     });
 };
 //# sourceMappingURL=setup.js.map
