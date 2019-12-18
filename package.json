@@ -8,7 +8,7 @@
     "test_local": "mocha -r dotenv/config",
     "old_test": "echo \"Result: no test specified\" && exit 0",
     "fix": "npm i && npm run build",
-    "build": "tsc --project tsconfig.json",
+    "build": "node build.js && tsc --project tsconfig.json",
     "local": "npm run build && node -r dotenv/config index.js",
     "start": "node index.js"
   },
@@ -36,6 +36,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "dotenv": "^8.2.0",
+    "less": "^3.10.3",
     "mocha": "^6.2.2"
   }
 }
