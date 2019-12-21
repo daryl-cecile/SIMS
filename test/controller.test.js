@@ -57,7 +57,6 @@ describe('Server close', ()=>{
 
     it("server should end successfully", (done) => {
         server.on("close", async function() {
-            console.log("out");
             await sqlConn.end();
             done();
         });

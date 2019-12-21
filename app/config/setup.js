@@ -19,7 +19,6 @@ module.exports = (express) => {
         console.log(`App is running on port ${PORT}`);
         eventManager.trigger("APP_READY", PORT);
         eventManager.listen("DB_READY", () => {
-            console.log("HIT HIT HIT");
             eventManager.trigger("STACK_READY");
         }, { singleUse: true, autoTriggerIfMissed: true });
     });
