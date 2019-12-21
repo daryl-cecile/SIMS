@@ -1,13 +1,20 @@
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../index');
-let sqlConn = require("./../app/config/db_conn");
+let sqlConn = require("./../app/config/DBConnection");
 let eventManager = require("./../app/config/GlobalEvents");
 let should = chai.should();
 
 chai.use(chaiHttp);
 
 describe('Server start', ()=>{
+
+
+    it("Stack should load successfully", (done) => {
+        eventManager.listen("STACK_READY",function(){
+            done();
+        },{ singleUse:true, autoTriggerIfMissed: true });
+    });
 
     it("server should start successfully", (done) => {
         eventManager.listen("APP_READY",function(){
@@ -49,9 +56,10 @@ describe('Requests', () => {
 describe('Server close', ()=>{
 
     it("server should end successfully", (done) => {
-        server.on("close", function() {
+        server.on("close", async function() {
+            console.log("out");
+            await sqlConn.end();
             done();
-            sqlConn.end();
         });
         server.close();
     });

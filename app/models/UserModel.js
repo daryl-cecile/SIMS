@@ -9,25 +9,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const UserModel_1 = require("./UserModel");
 const typeorm_1 = require("typeorm");
-let TestModel = class TestModel {
+const TestModel_1 = require("./TestModel");
+let UserModel = class UserModel {
 };
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
     __metadata("design:type", Number)
-], TestModel.prototype, "id", void 0);
+], UserModel.prototype, "id", void 0);
 __decorate([
     typeorm_1.Column("varchar", { length: 255 }),
     __metadata("design:type", String)
-], TestModel.prototype, "name", void 0);
+], UserModel.prototype, "firstName", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => UserModel_1.UserModel, user => user.tests, { cascade: ["insert", "update"] }),
-    typeorm_1.JoinColumn(),
-    __metadata("design:type", UserModel_1.UserModel)
-], TestModel.prototype, "user", void 0);
-TestModel = __decorate([
-    typeorm_1.Entity("test_table")
-], TestModel);
-exports.TestModel = TestModel;
-//# sourceMappingURL=TestModel.js.map
+    typeorm_1.Column("varchar", { length: 255 }),
+    __metadata("design:type", String)
+], UserModel.prototype, "lastName", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => TestModel_1.TestModel, test => test.user, { cascade: ["insert", "update"] }),
+    __metadata("design:type", Array)
+], UserModel.prototype, "tests", void 0);
+UserModel = __decorate([
+    typeorm_1.Entity("user_table")
+], UserModel);
+exports.UserModel = UserModel;
+//# sourceMappingURL=UserModel.js.map

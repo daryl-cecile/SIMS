@@ -1,26 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const BaseModel_1 = require("../models/BaseModel");
 class BaseRepository {
-    constructor(tableName) {
+    constructor(tableName, modelType) {
         this.tableName = tableName;
-        this.db_connection = require('./../config/db_conn');
+        this.modelType = modelType;
+        this.dbConnector = require('../config/DBConnection');
     }
-    async getSingleById(id) {
-        return new Promise((resolve, reject) => {
-            let o = new BaseModel_1.BaseModel();
-            this.db_connection.query(`SELECT * FROM ?? WHERE id = ? LIMIT 1`, [this.tableName, id], function (err, res, fields) {
-                if (err) {
-                    reject(err);
-                }
-                else {
-                    Object.keys(res[0]).forEach(columnName => {
-                        o[columnName] = res[0][columnName];
-                    });
-                    resolve(o);
-                }
-            });
-        });
+    async save(model) {
+        return await this.dbConnector.connection.manager.save(model);
     }
 }
 exports.BaseRepository = BaseRepository;
