@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class initial1576891332108 {
+class initial1576892785140 {
     constructor() {
-        this.name = 'initial1576891332108';
+        this.name = 'initial1576892785140';
     }
     async up(queryRunner) {
         await queryRunner.query("CREATE TABLE `user_table` (`id` int NOT NULL AUTO_INCREMENT, `firstName` varchar(255) NOT NULL, `lastName` varchar(255) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
@@ -15,5 +15,5 @@ class initial1576891332108 {
         await queryRunner.query("DROP TABLE `user_table`", undefined);
     }
 }
-exports.initial1576891332108 = initial1576891332108;
-//# sourceMappingURL=1576891332108-initial.js.map
+exports.initial1576892785140 = initial1576892785140;
+//# sourceMappingURL=1576892785140-initial.js.map

@@ -14,7 +14,8 @@
     "typeorm": "ts-node --project tsconfig.json -r dotenv/config ./node_modules/typeorm/cli.js",
     "new_migration": "npm run typeorm migration:generate -- -n",
     "apply_migration": "npm run typeorm migration:run",
-    "blank_migration": "npm run typeorm migration:create"
+    "blank_migration": "npm run typeorm migration:create",
+    "revert_migration": "npm run typeorm migration:revert"
   },
   "repository": {
     "type": "git",
