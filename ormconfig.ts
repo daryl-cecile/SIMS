@@ -38,7 +38,7 @@ let x:IConnectionInfo = {
         UserModel
     ],
     migrationsTableName:'db_migrations',
-    migrations: ["orm_migrations/*.ts"],
+    migrations: ["orm_migrations/*.js"],
     cli: {
         migrationsDir: "orm_migrations"
     }

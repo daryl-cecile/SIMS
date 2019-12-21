@@ -18,7 +18,7 @@ let x = {
         UserModel_1.UserModel
     ],
     migrationsTableName: 'db_migrations',
-    migrations: ["orm_migrations/*.ts"],
+    migrations: ["orm_migrations/*.js"],
     cli: {
         migrationsDir: "orm_migrations"
     }
