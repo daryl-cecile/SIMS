@@ -1,8 +1,10 @@
+import "reflect-metadata";
+
 const PORT = process.env.PORT || 3000;
 
 module.exports = (express)=>{
     const app = express();
-    const conn = require('./db_conn');
+    let dbConnection = require('./DBConnection');
     const eventManager = require('./GlobalEvents');
 
     app.set('views', require("path").resolve(__dirname,"../views") );
@@ -22,5 +24,10 @@ module.exports = (express)=>{
     return app.listen(PORT, () => {
         console.log(`App is running on port ${PORT}`);
         eventManager.trigger("APP_READY", PORT);
+
+        eventManager.listen("DB_READY", ()=>{
+            eventManager.trigger("STACK_READY");
+        },{singleUse:true,autoTriggerIfMissed:true});
+
     });
 };

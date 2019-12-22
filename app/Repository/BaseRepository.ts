@@ -1,28 +1,14 @@
-import {BaseModel, IModel} from "../models/BaseModel";
+import {IModel} from "../models/IModel";
 
-export class BaseRepository{
+export class BaseRepository<T extends IModel>{
 
-    protected readonly db_connection = require('./../config/db_conn');
+    protected readonly dbConnector = require('../config/DBConnection');
 
-    constructor(public tableName:string) {}
+    constructor(public tableName:string, public modelType:{new(): T}) { }
 
-    async getSingleById<T extends IModel>(id:number):Promise<T>{
-        return new Promise<T>((resolve, reject) => {
-            let o:IModel = new BaseModel();
-
-            this.db_connection.query(`SELECT * FROM ?? WHERE id = ? LIMIT 1`,[this.tableName,id],function(err, res,fields){
-                if (err){
-                    reject(err);
-                }
-                else{
-                    Object.keys(res[0]).forEach(columnName => {
-                        o[columnName] = res[0][columnName];
-                    });
-                    resolve(<T>o)
-                }
-            });
-
-        });
+    async save(model:T):Promise<T>{
+        return await this.dbConnector.connection.manager.save(model);
     }
+
 
 }
