@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <% include('../partials/meta.ejs') %>
+    <%- include('../partials/meta') %>
     <title>Home</title>
-    <% include('../partials/imports.ejs') %>
+    <%- include('../partials/imports') %>
 </head>
 <body>
 
@@ -11,7 +11,7 @@
         <h1>Hello World (<%= i %>)</h1>
     <% } %>
 
-    <% include('../partials/footer.ejs') %>
+    <%- include('../partials/footer') %>
 
 </body>
 </html>
