@@ -1,5 +1,7 @@
-const express = require('express');
+import * as express from "express";
 
-let server = require("./app/config/setup")(express);
+let bootstrapper = require("./app/config/setup");
 
-module.exports = server; // for tests
+bootstrapper.bootstrap(express); // run server setup
+
+module.exports = bootstrapper; // for tests

@@ -20,7 +20,8 @@ entries.forEach(entry => {
 
             lessc.render( fs.readFileSync(entryPath, {encoding:"utf8"}) , {
                 env: "development",
-                sourceMap: { sourceMapFileInline: false }
+                sourceMap: { sourceMapFileInline: false },
+                paths: [STYLES_FOLDER]
             }).then(function(out){
                 fs.writeFileSync(outputPath,out.css,{encoding:"utf8"});
                 fs.writeFileSync(sourceMapPath,out.map,{encoding:"utf8"});
