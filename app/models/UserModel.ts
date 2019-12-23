@@ -1,19 +1,24 @@
-import {IModel} from "./IModel";
-import {Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {TestModel} from "./TestModel";
+import {BaseModel, IModel} from "./IModel";
+import {Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne} from "typeorm";
+import {AuthModel} from "./AuthModel";
 
-@Entity("user_table")
-export class UserModel implements IModel{
+@Entity("users")
+export class UserModel extends BaseModel{
 
-    @PrimaryGeneratedColumn()
-    public id: number;
-
-    @Column("varchar",{length:255})
+    @Column("varchar",{length:255, nullable: true})
     public firstName:string;
 
-    @Column("varchar",{length:255})
+    @Column("varchar",{length:255, nullable: true})
     public lastName:string;
 
-    @OneToMany(type => TestModel, test => test.user, {cascade:["insert","update"]})
-    public tests:TestModel[];
+    @Column("varchar", {length:255, nullable:true})
+    public email:string;
+
+    @Column("varchar",{length:8, unique: true})
+    public identifier:string;
+
+    @ManyToMany(type => AuthModel)
+    @JoinTable()
+    public authentication:AuthModel;
+
 }

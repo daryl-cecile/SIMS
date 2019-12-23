@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const PORT = process.env.PORT || 3000;
 const eventManager = require('./GlobalEvents');
+const DEVELOPER_MODE = true;
 let server = null;
 module.exports = {
     bootstrap: (express) => {
@@ -22,6 +23,8 @@ module.exports = {
             eventManager.listen("DB_READY", () => {
                 eventManager.trigger("STACK_READY", _server);
                 console.log(`DB is running on port 3306`);
+                if (DEVELOPER_MODE)
+                    require("./seeder");
                 server = _server;
             }, { singleUse: true, autoTriggerIfMissed: true });
         });

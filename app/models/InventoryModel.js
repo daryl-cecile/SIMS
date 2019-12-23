@@ -9,25 +9,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const UserModel_1 = require("./UserModel");
 const typeorm_1 = require("typeorm");
-let TestModel = class TestModel {
+const IModel_1 = require("./IModel");
+const ItemModel_1 = require("./ItemModel");
+const StorageLocationModel_1 = require("./StorageLocationModel");
+let InventoryModel = class InventoryModel extends IModel_1.BaseModel {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
-    __metadata("design:type", Number)
-], TestModel.prototype, "id", void 0);
-__decorate([
-    typeorm_1.Column("varchar", { length: 255 }),
-    __metadata("design:type", String)
-], TestModel.prototype, "name", void 0);
-__decorate([
-    typeorm_1.ManyToOne(type => UserModel_1.UserModel, user => user.tests, { cascade: ["insert", "update"] }),
+    typeorm_1.OneToOne(type => ItemModel_1.ItemModel, item => item.inventoryEntry),
     typeorm_1.JoinColumn(),
-    __metadata("design:type", UserModel_1.UserModel)
-], TestModel.prototype, "user", void 0);
-TestModel = __decorate([
-    typeorm_1.Entity("test_table")
-], TestModel);
-exports.TestModel = TestModel;
-//# sourceMappingURL=TestModel.js.map
+    __metadata("design:type", ItemModel_1.ItemModel)
+], InventoryModel.prototype, "item", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], InventoryModel.prototype, "quantity", void 0);
+__decorate([
+    typeorm_1.OneToOne(type => StorageLocationModel_1.StorageLocationModel),
+    typeorm_1.JoinColumn(),
+    __metadata("design:type", StorageLocationModel_1.StorageLocationModel)
+], InventoryModel.prototype, "storageLocation", void 0);
+InventoryModel = __decorate([
+    typeorm_1.Entity("stocks")
+], InventoryModel);
+exports.InventoryModel = InventoryModel;
+//# sourceMappingURL=InventoryModel.js.map
