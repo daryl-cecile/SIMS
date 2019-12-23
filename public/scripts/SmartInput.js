@@ -43,15 +43,18 @@ class SmartInput extends HTMLElement {
         this._name = "";
         this._shadow = null;
         this._timeout = null;
+        this._type = "text";
         this.suggestions = [];
     }
-    static get observedAttributes() { return ['value', 'placeholder', 'name']; }
+    static get observedAttributes() { return ['value', 'placeholder', 'name', 'type']; }
     get value() { return this._value; }
     get placeholder() { return this._placeholder; }
     get name() { return this._name; }
+    get type() { return this._type; }
     set value(v) { this._value = v; this.updateVisuals(); }
     set placeholder(v) { this._placeholder = v; this.updateVisuals(); }
     set name(v) { this._name = v; this.updateVisuals(); }
+    set type(v) { this._type = v; this.updateVisuals(true); }
     connectedCallback() {
         if (this._shadow === null)
             this._shadow = this.attachShadow({ mode: 'open' });
@@ -94,7 +97,9 @@ class SmartInput extends HTMLElement {
             e.stopPropagation();
         });
         inp.addEventListener("blur", (e) => {
-            this.hideSuggestions();
+            setTimeout(() => {
+                this.hideSuggestions();
+            }, 100);
         });
         this._shadow.appendChild(inp);
         let dd = document.createElement("ul");
@@ -116,14 +121,21 @@ class SmartInput extends HTMLElement {
             case "value":
                 this.value = newValue;
                 break;
+            case "type":
+                this.type = newValue;
+                break;
         }
     }
-    updateVisuals() {
+    updateVisuals(updateType = false) {
         if (!this.isConnected)
             return this;
         let inp = this._shadow.getElementById("text-input");
         inp.placeholder = this._placeholder;
         inp.value = this._value;
+        if (updateType === true && ["text", "password"].indexOf(this._type) !== -1) {
+            inp.type = this._type;
+            inp.setAttribute("type", this._type);
+        }
         return this;
     }
     clearSuggestions() {
@@ -146,7 +158,7 @@ class SmartInput extends HTMLElement {
         this.suggestions.forEach((suggestion) => {
             let li = document.createElement("li");
             li.innerHTML = suggestion.htmlText;
-            li.addEventListener("click", () => {
+            li.addEventListener("click", (e) => {
                 suggestion.handle.call(suggestion);
                 this.hideSuggestions();
             });

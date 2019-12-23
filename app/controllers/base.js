@@ -8,7 +8,7 @@ home.get("/login", async function (req, res) {
 home.get("/login/user", async function (req, res) {
     res.render("pages/login");
 });
-home.get("/login/manage", async function (req, res) {
+home.get("/login/staff", async function (req, res) {
     res.render("pages/admin-login");
 });
 module.exports = home;

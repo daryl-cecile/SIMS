@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <%- include('../partials/meta') %>
-    <title>Home</title>
+    <title>Sign In</title>
     <%- include('../partials/imports') %>
     <link rel="stylesheet" href="/public/styles/login.css">
 </head>
 <body>
-    <%- include('../partials/nav') %>
+    <%- include('../partials/nav', {isAdminLogin:false}) %>
 
     <main>
 
@@ -38,21 +38,21 @@
             return new Promise(resolve => {
                 $.get("/api/list/users", res => {
                     let result = JSON.parse(res);
-                    console.log(result);
                     resolve(result);
                 });
             })
         }
 
         inp.addEventListener("value_changed", async e => {
-            console.log(e);
 
             let u = await getUsers();
 
             inp.suggestions = [];
 
             Object.keys(u).forEach(email => {
-                inp.suggestions.push( new SmartInputSuggestionItem(email, u[email], (v) => updateHandler(u[email]) ) );
+                inp.suggestions.push( new SmartInputSuggestionItem(email, u[email], (v) => {
+                    updateHandler(v);
+                } ) );
             });
 
             inp.updateSuggestions();

@@ -12,7 +12,7 @@ home.get("/login/user", async function(req,res){
     res.render("pages/login"); // user-mode login
 });
 
-home.get("/login/manage", async function(req,res){
+home.get("/login/staff", async function(req,res){
     res.render("pages/admin-login"); // admin-mode login
 });
 

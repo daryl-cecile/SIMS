@@ -45,22 +45,25 @@ class SmartInputSuggestionItem{
 
 class SmartInput extends HTMLElement{
 
-    static get observedAttributes() { return ['value','placeholder','name']; }
+    static get observedAttributes() { return ['value','placeholder','name','type']; }
 
     private _value = "";
     private _placeholder = "";
     private _name = "";
     private _shadow:ShadowRoot = null;
     private _timeout = null;
+    private _type = "text";
 
     public suggestions:SmartInputSuggestionItem[] = [];
 
     public get value(){ return this._value; }
     public get placeholder(){ return this._placeholder; }
     public get name(){ return this._name; }
+    public get type(){ return this._type; }
     public set value(v){ this._value = v; this.updateVisuals() }
     public set placeholder(v){ this._placeholder = v; this.updateVisuals() }
     public set name(v){ this._name = v; this.updateVisuals() }
+    public set type(v){ this._type = v; this.updateVisuals(true) }
 
     connectedCallback() { // Added to page
         if (this._shadow === null) this._shadow = this.attachShadow({mode: 'open'});
@@ -113,7 +116,9 @@ class SmartInput extends HTMLElement{
             e.stopPropagation();
         });
         inp.addEventListener("blur",(e)=>{
-            this.hideSuggestions();
+            setTimeout(()=>{
+                this.hideSuggestions();
+            },100);
         });
         this._shadow.appendChild(inp);
 
@@ -137,14 +142,21 @@ class SmartInput extends HTMLElement{
             case "value":
                 this.value = newValue;
                 break;
+            case "type":
+                this.type = newValue;
+                break;
         }
     }
 
-    private updateVisuals(){
+    private updateVisuals(updateType:boolean=false){
         if (!this.isConnected) return this;
         let inp = <HTMLInputElement>this._shadow.getElementById("text-input");
         inp.placeholder = this._placeholder;
         inp.value = this._value;
+        if (updateType === true && ["text","password"].indexOf(this._type) !== -1) {
+            inp.type = this._type;
+            inp.setAttribute("type", this._type);
+        }
         return this;
     }
 
@@ -169,7 +181,7 @@ class SmartInput extends HTMLElement{
         this.suggestions.forEach((suggestion) => {
             let li = document.createElement("li");
             li.innerHTML = suggestion.htmlText;
-            li.addEventListener("click", ()=>{
+            li.addEventListener("click", (e)=>{
                 suggestion.handle.call(suggestion);
                 this.hideSuggestions();
             });

@@ -1,0 +1,19 @@
+<nav>
+
+    <% if (isAdminLogin){ %>
+
+        <ul>
+            <li> <a href="/login/user">User Mode</a> </li>
+            <li> <a href="/help">Help</a> </li>
+        </ul>
+
+    <% } else { %>
+
+        <ul>
+            <li> <a href="/login/staff">Admin</a> </li>
+            <li> <a href="/help">Help</a> </li>
+        </ul>
+
+    <% } %>
+
+</nav>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('../partials/meta') %>
+    <title>Staff Log In</title>
+    <%- include('../partials/imports') %>
+    <link rel="stylesheet" href="/public/styles/login.css">
+</head>
+<body>
+    <%- include('../partials/nav', {isAdminLogin:true}) %>
+
+<main>
+
+    <div class="login-box">
+        <h1 class="no-margin">S.I.M.S</h1>
+
+        <label class="input">
+            <span>Enter NTU ID:</span>
+            <smart-input name="uid" placeholder=""></smart-input>
+        </label>
+
+        <label class="input">
+            <span>Password:</span>
+            <smart-input name="upw" type="password"></smart-input>
+        </label>
+
+        <button>Continue</button>
+
+        <p>Can't sign in? Click <a href="/help">Here</a></p>
+    </div>
+
+</main>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>
