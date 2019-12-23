@@ -9,20 +9,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const IModel_1 = require("./IModel");
 const typeorm_1 = require("typeorm");
-class BaseModel {
-}
+let PermissionModel = class PermissionModel extends IModel_1.BaseModel {
+};
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
-    __metadata("design:type", Number)
-], BaseModel.prototype, "id", void 0);
-__decorate([
-    typeorm_1.CreateDateColumn({ name: "created_at" }),
-    __metadata("design:type", Date)
-], BaseModel.prototype, "createdAt", void 0);
-__decorate([
-    typeorm_1.UpdateDateColumn({ name: "updated_at" }),
-    __metadata("design:type", Date)
-], BaseModel.prototype, "updatedAt", void 0);
-exports.BaseModel = BaseModel;
-//# sourceMappingURL=IModel.js.map
+    typeorm_1.Column("varchar", { length: 255, nullable: false }),
+    __metadata("design:type", String)
+], PermissionModel.prototype, "name", void 0);
+PermissionModel = __decorate([
+    typeorm_1.Entity("permission")
+], PermissionModel);
+exports.PermissionModel = PermissionModel;
+//# sourceMappingURL=PermissionModel.js.map

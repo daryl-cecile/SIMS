@@ -1,5 +1,13 @@
-import {TestModel} from "./app/models/TestModel";
 import {UserModel} from "./app/models/UserModel";
+import {AuthModel} from "./app/models/AuthModel";
+import {InventoryModel} from "./app/models/InventoryModel";
+import {ItemModel} from "./app/models/ItemModel";
+import {NoticeModel} from "./app/models/NoticeModel";
+import {OrderModel} from "./app/models/OrderModel";
+import {PermissionModel} from "./app/models/PermissionModel";
+import {StaffModel} from "./app/models/StaffModel";
+import {StorageLocationModel} from "./app/models/StorageLocationModel";
+import {SessionModel} from "./app/models/SessionModel";
 
 const cert = require('./app/config/cert_info');
 
@@ -34,8 +42,16 @@ let x:IConnectionInfo = {
     synchronize: false,
     logging: false,
     entities: [
-        TestModel,
-        UserModel
+        AuthModel,
+        InventoryModel,
+        ItemModel,
+        NoticeModel,
+        OrderModel,
+        PermissionModel,
+        StaffModel,
+        StorageLocationModel,
+        UserModel,
+        SessionModel
     ],
     migrationsTableName:'db_migrations',
     migrations: ["orm_migrations/*.js"],
