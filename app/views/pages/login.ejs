@@ -34,14 +34,26 @@
             inp.value = v;
         }
 
-        inp.addEventListener("value_changed", e => {
+        async function getUsers(){
+            return new Promise(resolve => {
+                $.get("/api/list/users", res => {
+                    let result = JSON.parse(res);
+                    console.log(result);
+                    resolve(result);
+                });
+            })
+        }
+
+        inp.addEventListener("value_changed", async e => {
             console.log(e);
 
-            inp.suggestions = [
-                new SmartInputSuggestionItem("Test","test 1", (v)=> { updateHandler(v) }),
-                new SmartInputSuggestionItem("Hello","test 2", (v)=> { updateHandler(v) }),
-                new SmartInputSuggestionItem("Bye","test 3", (v)=> { updateHandler(v) })
-            ];
+            let u = await getUsers();
+
+            inp.suggestions = [];
+
+            Object.keys(u).forEach(email => {
+                inp.suggestions.push( new SmartInputSuggestionItem(email, u[email], (v) => updateHandler(u[email]) ) );
+            });
 
             inp.updateSuggestions();
 
