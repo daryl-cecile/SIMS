@@ -14,11 +14,11 @@ module.exports = {
         app.set('views', require("path").resolve(__dirname,"../views") );
         app.set('view engine', 'ejs');
 
-        app.use(express.json());                    // to support JSON-encoded bodies
+        app.use(express.json());                                    // to support JSON-encoded bodies
         app.use(express.urlencoded({
             extended: true
-        }));              // to support URL-encoded bodies
-        app.use(express.static("/public"));    // makes public folder directly accessible
+        }));                                                        // to support URL-encoded bodies
+        app.use('/public',express.static("public"));     // makes public folder directly accessible
 
 
         // Routes

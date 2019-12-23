@@ -50,45 +50,46 @@
   background: #E4032E;
   color: #eeeeee;
 }
-body {
-  margin: 0;
-  padding: 5px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+:host {
+  height: 38px;
+  border: 1px solid gainsboro;
+  border-radius: 2px;
+  position: relative;
   box-sizing: border-box;
 }
-body *:focus {
+input#text-input {
+  position: absolute;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 5px 12px;
+  font-size: 14px;
+  border: none;
+  background: transparent;
+}
+input#text-input:focus {
   outline-color: #E8005A;
 }
-h1 {
-  font-family: 'Open Sans', sans-serif;
-  color: #303030;
-  font-size: 30px;
-  letter-spacing: 2px;
-  font-weight: 700;
-}
-h3 {
-  font-family: 'Open Sans', sans-serif;
-  color: #282828;
-  font-size: 21px;
-  letter-spacing: 1.2px;
-  font-weight: 600;
-}
-p {
-  font-family: 'Open Sans', sans-serif;
-  color: #252525;
-  font-size: 15px;
-  letter-spacing: 1px;
-  font-weight: 400;
-}
-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.no-margin {
+ul#suggestions {
+  list-style: none;
   margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 38px;
+  width: 100%;
+  background: white;
+  z-index: 999;
+}
+ul#suggestions li {
+  padding: 2px 14px;
+}
+ul#suggestions li:hover {
+  background: #3c3c3c;
+  color: #eeeeee;
+}
+ul#suggestions li span {
+  opacity: 0.7;
+  font-style: italic;
 }

@@ -4,14 +4,16 @@ home.get("/", async function (req, res) {
     res.render("pages/index");
 });
 
-home.get("/a", async function(req,res){
-    res.send("Hello World");
+home.get("/login", async function(req,res){
+    res.redirect("/login/user"); // redirect to user-mode login
 });
 
-home.get("/b", async function(req,res){
-    res.write("Hello,");
-    res.write("World");
-    res.end();
+home.get("/login/user", async function(req,res){
+    res.render("pages/login"); // user-mode login
+});
+
+home.get("/login/manage", async function(req,res){
+    res.render("pages/admin-login"); // admin-mode login
 });
 
 module.exports = home;

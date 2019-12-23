@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('../partials/meta') %>
+    <title>Home</title>
+    <%- include('../partials/imports') %>
+    <link rel="stylesheet" href="/public/styles/login.css">
+</head>
+<body>
+    <%- include('../partials/nav') %>
+
+    <main>
+
+        <div class="login-box">
+            <h1 class="no-margin">S.I.M.S</h1>
+
+            <label class="input">
+                <span>Enter NTU ID or Email:</span>
+                <smart-input name="uid" placeholder=""></smart-input>
+            </label>
+
+            <button>Continue</button>
+
+            <p>Can't sign in? Click <a href="/help">Here</a></p>
+        </div>
+
+    </main>
+
+    <script>
+
+        let inp = $('[name="uid"]').get(0);
+
+        function updateHandler(v){
+            inp.value = v;
+        }
+
+        inp.addEventListener("value_changed", e => {
+            console.log(e);
+
+            inp.suggestions = [
+                new SmartInputSuggestionItem("Test","test 1", (v)=> { updateHandler(v) }),
+                new SmartInputSuggestionItem("Hello","test 2", (v)=> { updateHandler(v) }),
+                new SmartInputSuggestionItem("Bye","test 3", (v)=> { updateHandler(v) })
+            ];
+
+            inp.updateSuggestions();
+
+        });
+
+    </script>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

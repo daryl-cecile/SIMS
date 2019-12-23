@@ -13,7 +13,7 @@ module.exports = {
         app.use(express.urlencoded({
             extended: true
         }));
-        app.use(express.static("/public"));
+        app.use('/public', express.static("public"));
         app.use("/", require('../controllers/base'));
         app.use('/api', require('../controllers/apis'));
         let _server = app.listen(PORT, () => {
