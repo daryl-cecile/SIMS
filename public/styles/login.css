@@ -58,6 +58,9 @@
   height: 280px;
   width: 340px;
 }
+.login-box.admin-box {
+  height: 380px;
+}
 .login-box label.input {
   font-family: 'Open Sans', sans-serif;
   color: #252525;
@@ -68,7 +71,7 @@
   flex-direction: column;
   width: 100%;
 }
-.login-box label.input > * {
+.login-box label.input smart-input {
   margin-top: 8px;
 }
 .login-box button {
@@ -82,4 +85,7 @@
 }
 .login-box button:hover {
   opacity: 0.8;
+}
+.login-box button.m-up {
+  margin-top: 12px;
 }

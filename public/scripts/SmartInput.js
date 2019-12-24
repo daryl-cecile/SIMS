@@ -70,6 +70,7 @@ class SmartInput extends HTMLElement {
         inp.id = "text-input";
         inp.value = this._value;
         inp.placeholder = this._placeholder;
+        inp.type = this._type;
         inp.addEventListener("input", (e) => {
             if (inp.value !== this._value) {
                 this._value = inp.value;
