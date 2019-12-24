@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800&display=swap');
+
+// Grayscale Colors
+@black: #0d0d0d;
+@gray: #3c3c3c;
+@light-gray: #5f5f5f;
+@white: #eeeeee;
+@bleach: white;
+
+// Palette Colors
+@action-color: #E8005A;
+@primary-color: #004877;
+@primary-dark: #333333;
+@primary-font: #666666;
+@primary-light: #999999;
+
+// Traffic Colors
+@success-color: #7FA024;
+@warning-color: #FF9900;
+@error-color: #E4032E;
+
+// Button Colors
+.button-default{
+	border-radius: 3px;
+	padding: 6px 14px;
+	font-size: 14px;
+	border: none;
+	background: gainsboro;
+	color: @primary-dark;
+}
+
+.button-primary{
+	border-radius: 3px;
+	padding: 6px 14px;
+	font-size: 14px;
+	border: none;
+	background: @primary-color;
+	color: @white;
+}
+
+.button-negative{
+	border-radius: 3px;
+	padding: 6px 14px;
+	font-size: 14px;
+	border: none;
+	background: @error-color;
+	color: @white;
+}
+
+// Cosmetics
+@smooth-shadow:
+	0 1.5px 2.2px rgba(0, 0, 0, 0.07),
+	0 3.6px 5.3px rgba(0, 0, 0, 0.05),
+	0 6.8px 10px rgba(0, 0, 0, 0.042),
+	0 12.1px 17.9px rgba(0, 0, 0, 0.035),
+	0 22.6px 33.4px rgba(0, 0, 0, 0.028),
+	0 54px 80px rgba(0, 0, 0, 0.02);
+
+@rounded-border: 2px;
+
+.header(@color: #303030; @family: 'Open Sans', sans-serif){
+	font-family: @family;
+	color: @color;
+	font-size: 30px;
+	letter-spacing: 2px;
+	font-weight: 700;
+}
+
+.sub-header(@color: #282828; @family: 'Open Sans', sans-serif){
+	font-family: @family;
+	color: @color;
+	font-size: 21px;
+	letter-spacing: 1.2px;
+	font-weight: 600;
+}
+
+.paragraph(@color: #252525; @family: 'Open Sans', sans-serif){
+	font-family: @family;
+	color: @color;
+	font-size: 15px;
+	letter-spacing: 1px;
+	font-weight: 400;
+}
+
+.dead-center(@direction: column, @justify: center){
+	display: flex;
+	flex-direction: @direction;
+	align-items: center;
+	justify-content: @justify;
+}

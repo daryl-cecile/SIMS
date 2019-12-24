@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('../partials/meta') %>
+    <title>Sign In</title>
+    <%- include('../partials/imports') %>
+    <link rel="stylesheet" href="/public/styles/login.css">
+</head>
+<body>
+    <%- include('../partials/nav', {isAdminLogin:false}) %>
+
+    <main>
+
+        <div class="login-box">
+            <h1 class="no-margin">S.I.M.S</h1>
+
+            <label class="input">
+                <span>Enter NTU ID or Email:</span>
+                <smart-input name="uid" placeholder=""></smart-input>
+            </label>
+
+            <button>Continue</button>
+
+            <p>Can't sign in? Click <a href="/help">Here</a></p>
+        </div>
+
+    </main>
+
+    <script>
+
+        let inp = $('[name="uid"]').get(0);
+
+        function updateHandler(v){
+            inp.value = v;
+        }
+
+        async function getUsers(){
+            return new Promise(resolve => {
+                $.get("/api/list/users", res => {
+                    let result = JSON.parse(res);
+                    resolve(result);
+                });
+            })
+        }
+
+        inp.addEventListener("value_changed", async e => {
+
+            let u = await getUsers();
+
+            inp.suggestions = [];
+
+            Object.keys(u).forEach(email => {
+                inp.suggestions.push( new SmartInputSuggestionItem(email, u[email], (v) => {
+                    updateHandler(v);
+                } ) );
+            });
+
+            inp.updateSuggestions();
+
+        });
+
+    </script>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

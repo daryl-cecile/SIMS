@@ -1,4 +1,35 @@
+@import "_variables";
 
 body{
+	margin: 0;
+	padding: 5px;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
 
- }
+	*:focus{
+		outline-color: @action-color;
+	}
+}
+
+h1{
+	.header();
+}
+
+h3{
+	.sub-header();
+}
+
+p{
+	.paragraph();
+}
+
+main{
+	flex: 1;
+	.dead-center();
+}
+
+.no-margin{
+	margin:0;
+}

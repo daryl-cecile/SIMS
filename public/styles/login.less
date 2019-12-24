@@ -1,0 +1,38 @@
+@import "_variables";
+
+
+.login-box{
+	.dead-center(column, space-between);
+	height: 280px;
+	width: 340px;
+
+	&.admin-box{
+		height: 380px;
+	}
+
+	label.input{
+		.paragraph();
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+
+		smart-input{
+			margin-top: 8px;
+		}
+	}
+
+	button{
+		.button-default();
+		font-size: 15px;
+
+
+		&:hover{
+			opacity: 0.8;
+		}
+
+		&.m-up{
+			margin-top: 12px;
+		}
+
+	}
+}

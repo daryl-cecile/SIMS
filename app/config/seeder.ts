@@ -153,6 +153,8 @@ import * as Crypto from "crypto";
         await seedPermission("MANAGE")
     ];
 
+    let defaultAuth = await seedAuth("USER");
+
     await seedStaff("Daryl Cecile", "N0698705", adminPerms);
     await seedStaff("Rizwana Khan", "N0698041", adminPerms);
     await seedStaff("Maryanne Parkinson","N0676277",adminPerms);
@@ -160,4 +162,7 @@ import * as Crypto from "crypto";
     await seedStaff("Sean Skidmore","N0749370",adminPerms);
     await seedStaff("Aurimas Gykis","N0749369",adminPerms);
 
+    await seedUser("Test User","N0000100",defaultAuth);
+    await seedUser("Second User","N0000104",defaultAuth);
+    await seedUser("Third User","N0000103",defaultAuth);
 })();
