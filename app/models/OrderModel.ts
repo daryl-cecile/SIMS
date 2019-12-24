@@ -1,6 +1,6 @@
 import {Column, Entity, JoinColumn, OneToOne} from "typeorm";
 import {BaseModel} from "./IModel";
-import {StaffModel} from "./StaffModel";
+import {UserModel} from "./UserModel";
 
 @Entity("orders")
 export class OrderModel extends BaseModel{
@@ -8,8 +8,8 @@ export class OrderModel extends BaseModel{
     @Column("varchar",{length:255, name:"order_reference"})
     public orderReference:string;
 
-    @OneToOne(type => StaffModel)
+    @OneToOne(type => UserModel,{eager: true})
     @JoinColumn()
-    public employee:StaffModel;
+    public employee:UserModel;
 
 }

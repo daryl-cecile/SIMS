@@ -37,7 +37,9 @@ __decorate([
     __metadata("design:type", Date)
 ], ItemModel.prototype, "expiry", void 0);
 __decorate([
-    typeorm_1.OneToOne(type => InventoryModel_1.InventoryModel, inventory => inventory.item, { cascade: ['update', 'insert'] }),
+    typeorm_1.OneToOne(type => InventoryModel_1.InventoryModel, inventory => inventory.item, {
+        cascade: ['update', 'insert']
+    }),
     __metadata("design:type", InventoryModel_1.InventoryModel)
 ], ItemModel.prototype, "inventoryEntry", void 0);
 ItemModel = __decorate([

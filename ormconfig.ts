@@ -1,11 +1,9 @@
 import {UserModel} from "./app/models/UserModel";
-import {AuthModel} from "./app/models/AuthModel";
 import {InventoryModel} from "./app/models/InventoryModel";
 import {ItemModel} from "./app/models/ItemModel";
 import {NoticeModel} from "./app/models/NoticeModel";
 import {OrderModel} from "./app/models/OrderModel";
 import {PermissionModel} from "./app/models/PermissionModel";
-import {StaffModel} from "./app/models/StaffModel";
 import {StorageLocationModel} from "./app/models/StorageLocationModel";
 import {SessionModel} from "./app/models/SessionModel";
 
@@ -42,13 +40,11 @@ let x:IConnectionInfo = {
     synchronize: false,
     logging: false,
     entities: [
-        AuthModel,
         InventoryModel,
         ItemModel,
         NoticeModel,
         OrderModel,
         PermissionModel,
-        StaffModel,
         StorageLocationModel,
         UserModel,
         SessionModel

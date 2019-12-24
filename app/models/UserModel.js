@@ -11,7 +11,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const IModel_1 = require("./IModel");
 const typeorm_1 = require("typeorm");
-const AuthModel_1 = require("./AuthModel");
+const SessionModel_1 = require("./SessionModel");
+const PermissionModel_1 = require("./PermissionModel");
 let UserModel = class UserModel extends IModel_1.BaseModel {
 };
 __decorate([
@@ -31,10 +32,29 @@ __decorate([
     __metadata("design:type", String)
 ], UserModel.prototype, "identifier", void 0);
 __decorate([
-    typeorm_1.ManyToMany(type => AuthModel_1.AuthModel),
+    typeorm_1.Column("varchar", { length: 255, nullable: true, name: "password_hash" }),
+    __metadata("design:type", String)
+], UserModel.prototype, "passHash", void 0);
+__decorate([
+    typeorm_1.Column("varchar", { length: 255, nullable: true, name: "saltine" }),
+    __metadata("design:type", String)
+], UserModel.prototype, "saltine", void 0);
+__decorate([
+    typeorm_1.OneToOne(type => SessionModel_1.SessionModel, session => session.owner, {
+        nullable: true,
+        cascade: ['insert', 'update', 'remove'],
+        eager: true
+    }),
+    typeorm_1.JoinColumn(),
+    __metadata("design:type", SessionModel_1.SessionModel)
+], UserModel.prototype, "currentSession", void 0);
+__decorate([
+    typeorm_1.ManyToMany(type => PermissionModel_1.PermissionModel, {
+        eager: true
+    }),
     typeorm_1.JoinTable(),
-    __metadata("design:type", AuthModel_1.AuthModel)
-], UserModel.prototype, "authentication", void 0);
+    __metadata("design:type", Array)
+], UserModel.prototype, "permissions", void 0);
 UserModel = __decorate([
     typeorm_1.Entity("users")
 ], UserModel);

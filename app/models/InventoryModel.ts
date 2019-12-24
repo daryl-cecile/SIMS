@@ -6,14 +6,18 @@ import {StorageLocationModel} from "./StorageLocationModel";
 @Entity("stocks")
 export class InventoryModel extends BaseModel{
 
-    @OneToOne(type => ItemModel, item => item.inventoryEntry)
+    @OneToOne(type => ItemModel, item => item.inventoryEntry, {
+        eager: true
+    })
     @JoinColumn()
     public item:ItemModel;
 
     @Column("int")
     public quantity:number;
 
-    @OneToOne(type => StorageLocationModel)
+    @OneToOne(type => StorageLocationModel, {
+        eager: true
+    })
     @JoinColumn()
     public storageLocation: StorageLocationModel;
 

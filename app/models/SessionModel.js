@@ -11,10 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const IModel_1 = require("./IModel");
-const StaffModel_1 = require("./StaffModel");
+const UserModel_1 = require("./UserModel");
 let SessionModel = class SessionModel extends IModel_1.BaseModel {
     get IsValid() {
-        return (this.invalid === true || (Date.now() > this.expiry.getTime() + (30 * 60 * 1000)));
+        return (this.invalid === false && (Date.now() < this.expiry.getTime() + (30 * 60 * 1000)));
     }
 };
 __decorate([
@@ -30,8 +30,8 @@ __decorate([
     __metadata("design:type", Boolean)
 ], SessionModel.prototype, "invalid", void 0);
 __decorate([
-    typeorm_1.OneToOne(type => StaffModel_1.StaffModel, staff => staff.currentSession),
-    __metadata("design:type", StaffModel_1.StaffModel)
+    typeorm_1.OneToOne(type => UserModel_1.UserModel, user => user.currentSession),
+    __metadata("design:type", UserModel_1.UserModel)
 ], SessionModel.prototype, "owner", void 0);
 SessionModel = __decorate([
     typeorm_1.Entity("sessions")

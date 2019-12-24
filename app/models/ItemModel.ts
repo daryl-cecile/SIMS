@@ -23,7 +23,9 @@ export class ItemModel extends BaseModel{
     @Column("datetime", {nullable:true})
     public expiry:Date;
 
-    @OneToOne(type => InventoryModel, inventory => inventory.item, {cascade:['update','insert']})
+    @OneToOne(type => InventoryModel, inventory => inventory.item, {
+        cascade:['update','insert']
+    })
     public inventoryEntry: InventoryModel;
 
 }

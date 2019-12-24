@@ -16,7 +16,9 @@ const StorageLocationModel_1 = require("./StorageLocationModel");
 let InventoryModel = class InventoryModel extends IModel_1.BaseModel {
 };
 __decorate([
-    typeorm_1.OneToOne(type => ItemModel_1.ItemModel, item => item.inventoryEntry),
+    typeorm_1.OneToOne(type => ItemModel_1.ItemModel, item => item.inventoryEntry, {
+        eager: true
+    }),
     typeorm_1.JoinColumn(),
     __metadata("design:type", ItemModel_1.ItemModel)
 ], InventoryModel.prototype, "item", void 0);
@@ -25,7 +27,9 @@ __decorate([
     __metadata("design:type", Number)
 ], InventoryModel.prototype, "quantity", void 0);
 __decorate([
-    typeorm_1.OneToOne(type => StorageLocationModel_1.StorageLocationModel),
+    typeorm_1.OneToOne(type => StorageLocationModel_1.StorageLocationModel, {
+        eager: true
+    }),
     typeorm_1.JoinColumn(),
     __metadata("design:type", StorageLocationModel_1.StorageLocationModel)
 ], InventoryModel.prototype, "storageLocation", void 0);

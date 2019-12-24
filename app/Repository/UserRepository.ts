@@ -1,12 +1,31 @@
 import {BaseRepository} from "./BaseRepository";
 import {UserModel} from "../models/UserModel";
 
-class UserRepository extends BaseRepository<UserModel>{
+class repo extends BaseRepository<UserModel>{
 
     constructor() {
-        super("user_table", UserModel);
+        super(UserModel);
+    }
+
+    async getUserByIdentifierOrEmail(identifierOrEmail:string){
+
+        return await this.repo.findOne({
+            where : [
+                {identifier: identifierOrEmail},
+                {email: identifierOrEmail}
+            ]
+        });
+
+    }
+
+    async getUserByIdentifier(identifier:string){
+
+        return await this.repo.findOne({
+            where : {identifier}
+        });
+
     }
 
 }
 
-module.exports = new UserRepository();
+export const UserRepository = new repo();
