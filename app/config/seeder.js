@@ -1,14 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const StaffModel_1 = require("../models/StaffModel");
 const PermissionModel_1 = require("../models/PermissionModel");
-const AuthModel_1 = require("../models/AuthModel");
 const UserModel_1 = require("../models/UserModel");
 const StorageLocationModel_1 = require("../models/StorageLocationModel");
 const ItemModel_1 = require("../models/ItemModel");
 const InventoryModel_1 = require("../models/InventoryModel");
 const NoticeModel_1 = require("../models/NoticeModel");
-const Crypto = require("crypto");
+const Passport_1 = require("../Services/Passport");
 (async function () {
     const db = require("./DBConnection");
     async function seedPermission(name) {
@@ -22,39 +20,29 @@ const Crypto = require("crypto");
         return existingPerm;
     }
     async function seedStaff(firstLastName, identifier, perms) {
-        let staff = new StaffModel_1.StaffModel();
+        let staff = new UserModel_1.UserModel();
         staff.email = firstLastName.replace(" ", ".") + "@sims.app";
         staff.identifier = identifier;
         staff.firstName = firstLastName.split(" ")[0];
         staff.lastName = firstLastName.split(" ")[1];
-        staff.passHash = Crypto.createHash('sha256').update("test123").digest('hex');
+        staff.saltine = Passport_1.Passport.createSaltine();
+        staff.passHash = await Passport_1.Passport.hashPassword("test123", staff.saltine);
         if (perms)
             staff.permissions = perms;
-        let staffRepo = db.connection.getRepository(StaffModel_1.StaffModel);
-        let existingStaff = await staffRepo.findOne({ where: { identifier } });
+        let userRepo = db.connection.getRepository(UserModel_1.UserModel);
+        let existingStaff = await userRepo.findOne({ where: { identifier } });
         if (existingStaff === undefined) {
-            return await staffRepo.save(staff);
+            return await userRepo.save(staff);
         }
         return existingStaff;
     }
-    async function seedAuth(name) {
-        let auth = new AuthModel_1.AuthModel();
-        auth.name = name;
-        let authRepo = db.connection.getRepository(AuthModel_1.AuthModel);
-        let existingAuth = await authRepo.findOne({ where: { name } });
-        if (existingAuth === undefined) {
-            return await authRepo.save(auth);
-        }
-        return existingAuth;
-    }
-    async function seedUser(firstLastName, identifier, auth) {
+    async function seedUser(firstLastName, identifier) {
         let user = new UserModel_1.UserModel();
         user.email = firstLastName.replace(" ", ".") + "@example.com";
         user.identifier = identifier;
         user.firstName = firstLastName.split(" ")[0];
         user.lastName = firstLastName.split(" ")[1];
-        if (auth)
-            user.authentication = auth;
+        user.permissions = [await seedPermission("CUSTOMER")];
         let userRepo = db.connection.getRepository(UserModel_1.UserModel);
         let existingUser = await userRepo.findOne({ where: { identifier } });
         if (existingUser === undefined) {
@@ -110,19 +98,20 @@ const Crypto = require("crypto");
         return existingNotice;
     }
     console.log("SEEDING...");
+    let staffPerm = await seedPermission("STAFF");
     let adminPerms = [
         await seedPermission("ADMIN"),
-        await seedPermission("MANAGE")
+        await seedPermission("MANAGE"),
+        staffPerm
     ];
-    let defaultAuth = await seedAuth("USER");
     await seedStaff("Daryl Cecile", "N0698705", adminPerms);
     await seedStaff("Rizwana Khan", "N0698041", adminPerms);
     await seedStaff("Maryanne Parkinson", "N0676277", adminPerms);
     await seedStaff("Alex McBean", "N0696066", adminPerms);
     await seedStaff("Sean Skidmore", "N0749370", adminPerms);
     await seedStaff("Aurimas Gykis", "N0749369", adminPerms);
-    await seedUser("Test User", "N0000100", defaultAuth);
-    await seedUser("Second User", "N0000104", defaultAuth);
-    await seedUser("Third User", "N0000103", defaultAuth);
+    await seedStaff("Staff User", "N9000109", [staffPerm]);
+    await seedUser("Test User", "N0000100");
+    await seedUser("Second User", "N0000104");
 })();
 //# sourceMappingURL=seeder.js.map

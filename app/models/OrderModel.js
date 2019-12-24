@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const IModel_1 = require("./IModel");
-const StaffModel_1 = require("./StaffModel");
+const UserModel_1 = require("./UserModel");
 let OrderModel = class OrderModel extends IModel_1.BaseModel {
 };
 __decorate([
@@ -19,9 +19,9 @@ __decorate([
     __metadata("design:type", String)
 ], OrderModel.prototype, "orderReference", void 0);
 __decorate([
-    typeorm_1.OneToOne(type => StaffModel_1.StaffModel),
+    typeorm_1.OneToOne(type => UserModel_1.UserModel, { eager: true }),
     typeorm_1.JoinColumn(),
-    __metadata("design:type", StaffModel_1.StaffModel)
+    __metadata("design:type", UserModel_1.UserModel)
 ], OrderModel.prototype, "employee", void 0);
 OrderModel = __decorate([
     typeorm_1.Entity("orders")

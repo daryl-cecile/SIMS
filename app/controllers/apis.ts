@@ -1,44 +1,48 @@
-import {StaffModel} from "../models/StaffModel";
-import {UserModel} from "../models/UserModel";
+import {Passport} from "../Services/Passport";
+import {UserService} from "../Services/UserService";
 
 const apis = require('express').Router();
-const db = require("./../config/DBConnection");
 
-apis.post("/login", async function (req, res) {
+apis.post("/login/staff", async function (req, res) {
 
     let username = req.body['username'];    // set using form data
     let password = req.body['password'];    // set using form data
 
+    let result = await Passport.authenticate(username, password, req, res);
+
+    res. json( result.object );
+    res.end();
+
+});
+
+apis.post("/login/customer", async function(req, res){
+
+    let username = req.body['username'];
+
+    let result = await Passport.authenticateCustomer(username,req, res);
+
+    res.json( result.object );
     res.end();
 
 });
 
 apis.get('/list/users', async function(req, res){
 
-    let userRepo = db.connection.getRepository(UserModel);
+    let term = (req.query['hint'] || "=").toLowerCase();
+
+    if (term.length < 1) {
+        res.end();
+        return;
+    }
 
     let finalList = {};
 
-    (await userRepo.find()).forEach((user) => {
-        finalList[ user.email ] = user.identifier;
+    (await UserService.getAllCustomers()).forEach((user) => {
+        if ( user.email.toLowerCase().startsWith(term) || user.identifier.toLowerCase().indexOf(term) > -1 )
+            finalList[ user.email ] = user.identifier;
     });
 
-    res.write(JSON.stringify(finalList));
-    res.end();
-
-});
-
-apis.get('/list/staffs', async function(req, res){
-
-    let staffRepo = db.connection.getRepository(StaffModel);
-
-    let finalList = {};
-
-    (await staffRepo.find()).forEach((staff) => {
-        finalList[ staff.email ] = staff.identifier;
-    });
-
-    res.write(JSON.stringify(finalList));
+    res.json(finalList);
     res.end();
 
 });
