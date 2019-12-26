@@ -16,7 +16,12 @@ class service extends BaseService{
     }
 
     async hasPermission(userAccount:UserModel, permissionName:string){
-        return userAccount.permissions.indexOf( await PermissionRepository.getPermissionByName(permissionName) );
+        for (const perm of userAccount.permissions){
+            if (perm.name === permissionName){
+                return true;
+            }
+        }
+        return false;
     }
 
     async getAllCustomers(){

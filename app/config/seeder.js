@@ -7,15 +7,16 @@ const ItemModel_1 = require("../models/ItemModel");
 const InventoryModel_1 = require("../models/InventoryModel");
 const NoticeModel_1 = require("../models/NoticeModel");
 const Passport_1 = require("../Services/Passport");
+const PermissionRepository_1 = require("../Repository/PermissionRepository");
+const UserRepository_1 = require("../Repository/UserRepository");
 (async function () {
     const db = require("./DBConnection");
     async function seedPermission(name) {
         let perm = new PermissionModel_1.PermissionModel();
         perm.name = name;
-        let permRepo = db.connection.getRepository(PermissionModel_1.PermissionModel);
-        let existingPerm = await permRepo.findOne({ where: { name } });
+        let existingPerm = await PermissionRepository_1.PermissionRepository.getPermissionByName(name);
         if (existingPerm === undefined) {
-            return await permRepo.save(perm);
+            return await PermissionRepository_1.PermissionRepository.save(perm);
         }
         return existingPerm;
     }
@@ -29,10 +30,9 @@ const Passport_1 = require("../Services/Passport");
         staff.passHash = await Passport_1.Passport.hashPassword("test123", staff.saltine);
         if (perms)
             staff.permissions = perms;
-        let userRepo = db.connection.getRepository(UserModel_1.UserModel);
-        let existingStaff = await userRepo.findOne({ where: { identifier } });
+        let existingStaff = await UserRepository_1.UserRepository.getUserByIdentifier(identifier);
         if (existingStaff === undefined) {
-            return await userRepo.save(staff);
+            return await UserRepository_1.UserRepository.save(staff);
         }
         return existingStaff;
     }
@@ -43,10 +43,9 @@ const Passport_1 = require("../Services/Passport");
         user.firstName = firstLastName.split(" ")[0];
         user.lastName = firstLastName.split(" ")[1];
         user.permissions = [await seedPermission("CUSTOMER")];
-        let userRepo = db.connection.getRepository(UserModel_1.UserModel);
-        let existingUser = await userRepo.findOne({ where: { identifier } });
+        let existingUser = await UserRepository_1.UserRepository.getUserByIdentifier(identifier);
         if (existingUser === undefined) {
-            return await userRepo.save(user);
+            return await UserRepository_1.UserRepository.save(user);
         }
         return existingUser;
     }

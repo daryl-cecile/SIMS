@@ -128,4 +128,5 @@ var Passport;
     }
     Passport.voidSession = voidSession;
 })(Passport = exports.Passport || (exports.Passport = {}));
+module.exports.default = Passport;
 //# sourceMappingURL=Passport.js.map

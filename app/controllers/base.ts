@@ -12,6 +12,8 @@ home.get("/", async function (req, res) {
 
         let acc = authCheck.object.payload['user'];
 
+        console.log(acc);
+
         if ( await UserService.hasPermission(acc, "MANAGE") ){
             res.render("pages/manage", { user: acc });
         }
