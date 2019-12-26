@@ -7,7 +7,6 @@ home.get("/", async function (req, res) {
     let authCheck = await Passport_1.Passport.isAuthenticated(req, res);
     if (authCheck.object.isSuccessful) {
         let acc = authCheck.object.payload['user'];
-        console.log(acc);
         if (await UserService_1.UserService.hasPermission(acc, "MANAGE")) {
             res.render("pages/manage", { user: acc });
         }

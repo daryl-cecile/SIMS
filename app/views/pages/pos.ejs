@@ -4,13 +4,70 @@
     <%- include('../partials/meta') %>
     <title>POS</title>
     <%- include('../partials/imports') %>
+    <link rel="stylesheet" href="/public/styles/flex.css">
+    <link rel="stylesheet" href="/public/styles/xbasket.css">
+
+    <script src="/public/scripts/XBasket.js"></script>
 </head>
 <body>
     <%- include('../partials/nav', {isAdmin:false}) %>
 
-    <h1>POS</h1>
+    <div id="main-container" class="f h s-1 limit-height-100">
+
+        <x-basket id="basket" class="f w-third"></x-basket>
+
+    </div>
 
     <%- include('../partials/footer') %>
+
+    <script>
+
+        let basket = $("#basket").get(0);
+        let itemCollection = new BasketCollection();
+
+        itemCollection.addItem( new BasketItem({
+            name: "Whiteboard Pens 3 Pack (Black)",
+            description: "Dry-erase whiteboard pens",
+            quantity: 30,
+            itemReference: "wbp3k"
+        }) );
+
+        itemCollection.addItem( new BasketItem({
+            name: "Whiteboard Pens 5 Pack (Blue)",
+            description: "Dry-erase whiteboard pens",
+            quantity: 30,
+            itemReference: "wbp5b"
+        }) );
+
+        itemCollection.addItem( new BasketItem({
+            name: "Whiteboard Pens 4 Pack (Red)",
+            description: "Dry-erase whiteboard pens",
+            quantity: 30,
+            itemReference: "wbp4r"
+        }) );
+
+        itemCollection.addItem( new BasketItem({
+            name: "Blu-Tack",
+            quantity: 12,
+            itemReference: "bts0x"
+        }) );
+
+        itemCollection.addItem( new BasketItem({
+            name: "White-Tack",
+            quantity: 20,
+            itemReference: "wts0x"
+        }) );
+
+        itemCollection.addItem( new BasketItem({
+            name: "A3 Cardboard",
+            quantity: 8,
+            itemReference: "acb0x"
+        }) );
+
+        basket.attachCollection(itemCollection);
+
+
+    </script>
 
 </body>
 </html>

@@ -1,6 +1,5 @@
 import {BaseService} from "./BaseService";
 import {UserModel} from "../models/UserModel";
-import {PermissionRepository} from "../Repository/PermissionRepository";
 import {UserRepository} from "../Repository/UserRepository";
 
 class service extends BaseService{
