@@ -27,8 +27,6 @@ class XModal extends HTMLElement{
     private _message:string = "";
     private _type:XModalType = XModalType.INFORMATION;
 
-    private _isAttached:boolean = false;
-
     static get observedAttributes() { return ['type','open']; }
 
     constructor(message:string, title:string=null, type:XModalType=XModalType.INFORMATION) {
@@ -37,14 +35,6 @@ class XModal extends HTMLElement{
         this._type = type;
         this._message = message;
         this._title = title ? title : this._getTitle();
-    }
-
-    connectedCallback() {
-        this._isAttached = true;
-    }
-
-    disconnectedCallback(){
-        this._isAttached = false;
     }
 
     private _getTitle(){
@@ -73,6 +63,7 @@ class XModal extends HTMLElement{
     }
 
     close(){
+        this.setAttribute("open","close");
         return new Promise(resolve => {
             setTimeout(()=>{
                 this.remove();
@@ -104,15 +95,10 @@ class XModal extends HTMLElement{
                     class: this._getButtonClass(buttonInfo.type)
                 }, buttonInfo.text).create();
 
-                if (buttonInfo.callback){
-                    button.addEventListener("click", (e)=>{
-                        buttonInfo.callback(e);
-                        this.close();
-                    });
-                }
-                else{
+                button.addEventListener("click", (e)=>{
+                    if (buttonInfo.callback) buttonInfo.callback(e);
                     this.close();
-                }
+                });
 
                 el.appendChild(button);
 
@@ -125,8 +111,11 @@ class XModal extends HTMLElement{
         this._shadow.appendChild(p);
         this._shadow.appendChild(div);
 
-        if (!this._isAttached){
+        if (this.isConnected === false){
             document.body.appendChild(this);
+            setTimeout(()=>{
+                this.setAttribute("open","true");
+            },300);
         }
     }
 

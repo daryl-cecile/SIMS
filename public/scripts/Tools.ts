@@ -20,11 +20,11 @@ namespace Tools{
 
         let element = document.createElement(elementTagName);
 
-        Object.keys(elementAttrs).forEach(key => {
+        if (elementAttrs) Object.keys(elementAttrs).forEach(key => {
             element.setAttribute(key, <string>elementAttrs[key]);
         });
 
-        element.innerHTML = html;
+        if (html) element.innerHTML = html;
 
         return {
             create: function(changeInterceptor?:(element:HTMLElement)=>void){

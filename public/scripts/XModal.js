@@ -18,19 +18,12 @@ class XModal extends HTMLElement {
         this._title = "";
         this._message = "";
         this._type = XModalType.INFORMATION;
-        this._isAttached = false;
         this._shadow = this.attachShadow({ mode: "closed" });
         this._type = type;
         this._message = message;
         this._title = title ? title : this._getTitle();
     }
     static get observedAttributes() { return ['type', 'open']; }
-    connectedCallback() {
-        this._isAttached = true;
-    }
-    disconnectedCallback() {
-        this._isAttached = false;
-    }
     _getTitle() {
         switch (this._type) {
             case XModalType.INFORMATION:
@@ -55,6 +48,7 @@ class XModal extends HTMLElement {
         }
     }
     close() {
+        this.setAttribute("open", "close");
         return new Promise(resolve => {
             setTimeout(() => {
                 this.remove();
@@ -78,15 +72,11 @@ class XModal extends HTMLElement {
                     id: buttonIdentifier,
                     class: this._getButtonClass(buttonInfo.type)
                 }, buttonInfo.text).create();
-                if (buttonInfo.callback) {
-                    button.addEventListener("click", (e) => {
+                button.addEventListener("click", (e) => {
+                    if (buttonInfo.callback)
                         buttonInfo.callback(e);
-                        this.close();
-                    });
-                }
-                else {
                     this.close();
-                }
+                });
                 el.appendChild(button);
             });
         });
@@ -94,8 +84,11 @@ class XModal extends HTMLElement {
         this._shadow.appendChild(h3);
         this._shadow.appendChild(p);
         this._shadow.appendChild(div);
-        if (!this._isAttached) {
+        if (this.isConnected === false) {
             document.body.appendChild(this);
+            setTimeout(() => {
+                this.setAttribute("open", "true");
+            }, 300);
         }
     }
 }

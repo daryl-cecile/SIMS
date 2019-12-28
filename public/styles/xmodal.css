@@ -1,0 +1,95 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0e.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UNirkOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN7rgOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Open Sans ExtraBold'), local('OpenSans-ExtraBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN8rsOUuhs.ttf) format('truetype');
+}
+.button-default {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: gainsboro;
+  color: #333333;
+}
+.button-primary {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #004877;
+  color: #eeeeee;
+}
+.button-negative {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #E4032E;
+  color: #eeeeee;
+}
+:host {
+  position: fixed;
+  transform: translate(-50%, -30%) scale(0.7);
+  transform-origin: center center;
+  left: 50%;
+  top: 50%;
+  opacity: 0;
+  border-radius: 2px;
+  box-shadow: 0 1.5px 2.2px rgba(0, 0, 0, 0.07), 0 3.6px 5.3px rgba(0, 0, 0, 0.05), 0 6.8px 10px rgba(0, 0, 0, 0.042), 0 12.1px 17.9px rgba(0, 0, 0, 0.035), 0 22.6px 33.4px rgba(0, 0, 0, 0.028), 0 54px 80px rgba(0, 0, 0, 0.02);
+  width: 450px;
+  height: 250px;
+  padding: 25px;
+  box-sizing: border-box;
+  background: white;
+  z-index: 99999;
+  transition: all 0.3s;
+}
+:host([open="true"]) {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+h3 {
+  font-family: sans-serif;
+}
+p {
+  font-family: sans-serif;
+}
+div {
+  position: absolute;
+  bottom: 25px;
+  width: calc(100% - 50px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+div button {
+  width: 130px;
+  padding: 3px 0;
+  margin-left: 15px;
+  height: 32px;
+}

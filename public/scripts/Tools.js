@@ -8,10 +8,12 @@ var Tools;
         if (innerHtml)
             html = innerHtml;
         let element = document.createElement(elementTagName);
-        Object.keys(elementAttrs).forEach(key => {
-            element.setAttribute(key, elementAttrs[key]);
-        });
-        element.innerHTML = html;
+        if (elementAttrs)
+            Object.keys(elementAttrs).forEach(key => {
+                element.setAttribute(key, elementAttrs[key]);
+            });
+        if (html)
+            element.innerHTML = html;
         return {
             create: function (changeInterceptor) {
                 if (changeInterceptor)
