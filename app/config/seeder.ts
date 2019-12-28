@@ -4,8 +4,9 @@ import {StorageLocationModel} from "../models/StorageLocationModel";
 import {ItemModel} from "../models/ItemModel";
 import {InventoryModel} from "../models/InventoryModel";
 import {NoticeModel} from "../models/NoticeModel";
-import * as Crypto from "crypto";
 import {Passport} from "../Services/Passport";
+import {PermissionRepository} from "../Repository/PermissionRepository";
+import {UserRepository} from "../Repository/UserRepository";
 
 (async function(){
 
@@ -16,11 +17,9 @@ import {Passport} from "../Services/Passport";
         let perm = new PermissionModel();
         perm.name = name;
 
-        let permRepo = db.connection.getRepository(PermissionModel);
-
-        let existingPerm = await permRepo.findOne({ where: {name} });
+        let existingPerm = await PermissionRepository.getPermissionByName(name);
         if (existingPerm === undefined){
-            return await permRepo.save(perm);
+            return await PermissionRepository.save(perm);
         }
         return existingPerm;
 
@@ -38,11 +37,9 @@ import {Passport} from "../Services/Passport";
 
         if (perms) staff.permissions = perms;
 
-        let userRepo = db.connection.getRepository(UserModel);
-
-        let existingStaff = await userRepo.findOne({ where: {identifier} });
+        let existingStaff = await UserRepository.getUserByIdentifier(identifier);
         if (existingStaff === undefined ){
-            return await userRepo.save(staff);
+            return await UserRepository.save(staff);
         }
         return existingStaff;
 
@@ -57,11 +54,9 @@ import {Passport} from "../Services/Passport";
 
         user.permissions = [ await seedPermission("CUSTOMER") ];
 
-        let userRepo = db.connection.getRepository(UserModel);
-
-        let existingUser = await userRepo.findOne({ where: {identifier} });
+        let existingUser = await UserRepository.getUserByIdentifier(identifier);
         if (existingUser === undefined ){
-            return await userRepo.save(user);
+            return await UserRepository.save(user);
         }
         return existingUser;
     }

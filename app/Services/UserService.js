@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseService_1 = require("./BaseService");
-const PermissionRepository_1 = require("../Repository/PermissionRepository");
 const UserRepository_1 = require("../Repository/UserRepository");
 class service extends BaseService_1.BaseService {
     async isUserStaffMember(userAccount) {
@@ -14,7 +13,12 @@ class service extends BaseService_1.BaseService {
         return false;
     }
     async hasPermission(userAccount, permissionName) {
-        return userAccount.permissions.indexOf(await PermissionRepository_1.PermissionRepository.getPermissionByName(permissionName));
+        for (const perm of userAccount.permissions) {
+            if (perm.name === permissionName) {
+                return true;
+            }
+        }
+        return false;
     }
     async getAllCustomers() {
         let users = await UserRepository_1.UserRepository.getAll();

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/public/styles/login.css">
 </head>
 <body>
-    <%- include('../partials/nav', {isAdminLogin:true}) %>
+    <%- include('../partials/login_nav', {isAdminLogin:true}) %>
 
 <main>
 
@@ -24,12 +24,30 @@
             <smart-input name="upw" type="password"></smart-input>
         </label>
 
-        <button class="m-up">Continue</button>
+        <button class="m-up" onclick="login()">Continue</button>
 
         <p>Can't sign in? Click <a href="/help">Here</a></p>
     </div>
 
 </main>
+
+    <script>
+        function login(){
+
+            let uid = $('[name="uid"]').get(0);
+            let pwd = $('[name="upw"]').get(0);
+
+            $.post("/api/login/staff",{
+                username : uid.value,
+                password : pwd.value
+            }, res => {
+                if (res.isSuccessful){
+                    location.href = "/";
+                }
+            });
+
+        }
+    </script>
 
     <%- include('../partials/footer') %>
 </body>

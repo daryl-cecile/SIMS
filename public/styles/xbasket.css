@@ -1,0 +1,255 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0e.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UNirkOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN7rgOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Open Sans ExtraBold'), local('OpenSans-ExtraBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN8rsOUuhs.ttf) format('truetype');
+}
+.button-default {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: gainsboro;
+  color: #333333;
+}
+.button-primary {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #004877;
+  color: #eeeeee;
+}
+.button-negative {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #E4032E;
+  color: #eeeeee;
+}
+.f {
+  display: flex;
+  box-sizing: border-box;
+}
+.f.h,
+.f .h {
+  flex-direction: row;
+}
+.f.v,
+.f .v {
+  flex-direction: column;
+}
+.f .w-half {
+  width: 50%;
+}
+.f .w-quarter {
+  width: 25%;
+}
+.f .w-third {
+  width: 33.33333333%;
+}
+.f .s-1 {
+  flex: 1;
+}
+.f .s-2 {
+  flex: 2;
+}
+.f .s-3 {
+  flex: 3;
+}
+.if {
+  display: inline-flex;
+  box-sizing: border-box;
+}
+.if.h,
+.if .h {
+  flex-direction: row;
+}
+.if.v,
+.if .v {
+  flex-direction: column;
+}
+.if .w-half {
+  width: 50%;
+}
+.if .w-quarter {
+  width: 25%;
+}
+.if .w-third {
+  width: 33.33333333%;
+}
+.if .s-1 {
+  flex: 1;
+}
+.if .s-2 {
+  flex: 2;
+}
+.if .s-3 {
+  flex: 3;
+}
+.limit-height-100 {
+  max-height: 100%;
+}
+.w-half {
+  width: 50%;
+}
+.w-quarter {
+  width: 25%;
+}
+.w-third {
+  width: 33.33333333%;
+}
+.s-1 {
+  flex: 1;
+}
+.s-2 {
+  flex: 2;
+}
+.s-3 {
+  flex: 3;
+}
+:host {
+  border: 2px solid #3c3c3c;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+*:focus {
+  outline-color: #E8005A;
+}
+.title {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 30px;
+  border-bottom: 1px solid #3c3c3c;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(6px);
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+  font-family: 'Open Sans', sans-serif;
+  color: #252525;
+}
+.title > * {
+  margin-right: 5px;
+}
+ul.b-list {
+  margin: 0;
+  padding: 30px 0 60px;
+  overflow: auto;
+}
+ul.b-list li {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  opacity: 1;
+  padding: 15px;
+  height: 80px;
+  transition: all 0.24s;
+}
+ul.b-list li img {
+  width: 50px;
+  height: auto;
+  margin-right: 15px;
+  transition: all 0.3s;
+}
+ul.b-list li img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 1.5px 2.2px rgba(0, 0, 0, 0.07), 0 3.6px 5.3px rgba(0, 0, 0, 0.05), 0 6.8px 10px rgba(0, 0, 0, 0.042), 0 12.1px 17.9px rgba(0, 0, 0, 0.035), 0 22.6px 33.4px rgba(0, 0, 0, 0.028), 0 54px 80px rgba(0, 0, 0, 0.02);
+}
+ul.b-list li div {
+  font-family: 'Open Sans', sans-serif;
+  color: #252525;
+  width: 100%;
+}
+ul.b-list li div p {
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+ul.b-list li div p span:nth-of-type(2) a {
+  margin-left: 4px;
+  font-family: 'Open Sans', sans-serif;
+  color: #252525;
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+ul.b-list li div p span:nth-of-type(2) a i {
+  font-size: 20px;
+}
+ul.b-list li div p span:nth-of-type(2) a:hover {
+  opacity: 0.6;
+}
+ul.b-list li div p span:nth-of-type(2) a:last-of-type {
+  margin-left: 12px;
+}
+ul.b-list li.hiding {
+  height: 0;
+  padding: 0 15px;
+  opacity: 0;
+  transform: scale(1, 0);
+}
+.checkout-btn {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, transparent, white 90%);
+}
+.checkout-btn button {
+  font-family: 'Open Sans', sans-serif;
+  color: #252525;
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: 400;
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  background: #004877;
+  color: #eeeeee;
+  box-shadow: 0 1.5px 2.2px rgba(0, 0, 0, 0.07), 0 3.6px 5.3px rgba(0, 0, 0, 0.05), 0 6.8px 10px rgba(0, 0, 0, 0.042), 0 12.1px 17.9px rgba(0, 0, 0, 0.035), 0 22.6px 33.4px rgba(0, 0, 0, 0.028), 0 54px 80px rgba(0, 0, 0, 0.02);
+  border-radius: 2px;
+  border: none;
+  padding: 5px 12px;
+}
+.checkout-btn button:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}

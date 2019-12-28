@@ -58,25 +58,27 @@
 
 @rounded-border: 2px;
 
-.header(@color: #303030; @family: 'Open Sans', sans-serif){
+.smooth-font(@color: #252525; @family: 'Open Sans', sans-serif){
 	font-family: @family;
 	color: @color;
+}
+
+.header(@color: #303030; @family: 'Open Sans', sans-serif){
+	.smooth-font(@color, @family);
 	font-size: 30px;
 	letter-spacing: 2px;
 	font-weight: 700;
 }
 
 .sub-header(@color: #282828; @family: 'Open Sans', sans-serif){
-	font-family: @family;
-	color: @color;
+	.smooth-font(@color, @family);
 	font-size: 21px;
 	letter-spacing: 1.2px;
 	font-weight: 600;
 }
 
 .paragraph(@color: #252525; @family: 'Open Sans', sans-serif){
-	font-family: @family;
-	color: @color;
+	.smooth-font(@color, @family);
 	font-size: 15px;
 	letter-spacing: 1px;
 	font-weight: 400;
