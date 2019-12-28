@@ -1,0 +1,53 @@
+@import "_variables";
+
+:host{
+	position: fixed;
+	transform: translate(-50%, -30%) scale(0.7);
+	transform-origin: center center;
+	left: 50%;
+	top: 50%;
+	opacity:0;
+	border-radius: @rounded-border;
+	box-shadow: @smooth-shadow;
+
+	width: 450px;
+	height: 250px;
+	padding: 25px;
+	box-sizing: border-box;
+	background: @bleach;
+	z-index: 99999;
+
+	transition: all .3s;
+}
+
+:host([open="true"]){
+	opacity: 1;
+	transform: translate(-50%, -50%) scale(1);
+}
+
+h3{
+	font-family: sans-serif;
+}
+
+p{
+	font-family: sans-serif;
+}
+
+div{
+	position: absolute;
+	bottom:25px;
+	width: calc(100% - 50px);
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+
+	button {
+		width: 130px;
+		padding: 3px 0;
+		margin-left: 15px;
+		height: 32px;
+	}
+}
+
