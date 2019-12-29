@@ -1,7 +1,8 @@
 import {BaseModel, IModel} from "./IModel";
-import {Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne} from "typeorm";
+import {Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne} from "typeorm";
 import {SessionModel} from "./SessionModel";
 import {PermissionModel} from "./PermissionModel";
+import {TransactionsModel} from "./TransactionsModel";
 
 @Entity("users")
 export class UserModel extends BaseModel{
@@ -23,6 +24,12 @@ export class UserModel extends BaseModel{
 
     @Column("varchar", {length:255,nullable:true, name:"saltine"})
     public saltine:string;
+
+    @OneToMany(type => TransactionsModel, transaction => transaction.userOwner, {
+        cascade:true,
+        eager:true
+    })
+    public transactions:TransactionsModel[];
 
     @OneToOne( type => SessionModel, session => session.owner ,   {
         nullable: true,

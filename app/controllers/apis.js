@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Passport_1 = require("../Services/Passport");
 const UserService_1 = require("../Services/UserService");
 const apis = require('express').Router();
+apis.post("/transaction/issue", async function (req, res) {
+    res.end();
+});
 apis.post("/login/staff", async function (req, res) {
     let username = req.body['username'];
     let password = req.body['password'];
@@ -24,8 +27,9 @@ apis.get('/list/users', async function (req, res) {
     }
     let finalList = {};
     (await UserService_1.UserService.getAllCustomers()).forEach((user) => {
-        if (user.email.toLowerCase().startsWith(term) || user.identifier.toLowerCase().indexOf(term) > -1)
+        if (user.email.toLowerCase().startsWith(term) || user.identifier.toLowerCase().indexOf(term) > -1) {
             finalList[user.email] = user.identifier;
+        }
     });
     res.json(finalList);
     res.end();

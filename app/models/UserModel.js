@@ -13,6 +13,7 @@ const IModel_1 = require("./IModel");
 const typeorm_1 = require("typeorm");
 const SessionModel_1 = require("./SessionModel");
 const PermissionModel_1 = require("./PermissionModel");
+const TransactionsModel_1 = require("./TransactionsModel");
 let UserModel = class UserModel extends IModel_1.BaseModel {
 };
 __decorate([
@@ -39,6 +40,13 @@ __decorate([
     typeorm_1.Column("varchar", { length: 255, nullable: true, name: "saltine" }),
     __metadata("design:type", String)
 ], UserModel.prototype, "saltine", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => TransactionsModel_1.TransactionsModel, transaction => transaction.userOwner, {
+        cascade: true,
+        eager: true
+    }),
+    __metadata("design:type", Array)
+], UserModel.prototype, "transactions", void 0);
 __decorate([
     typeorm_1.OneToOne(type => SessionModel_1.SessionModel, session => session.owner, {
         nullable: true,

@@ -3,6 +3,11 @@ import {UserService} from "../Services/UserService";
 
 const apis = require('express').Router();
 
+apis.post("/transaction/issue", async  function (req, res)  {
+    // TODO Complete this
+    res.end();
+})
+
 apis.post("/login/staff", async function (req, res) {
 
     let username = req.body['username'];    // set using form data
@@ -39,7 +44,12 @@ apis.get('/list/users', async function(req, res){
 
     (await UserService.getAllCustomers()).forEach((user) => {
         if ( user.email.toLowerCase().startsWith(term) || user.identifier.toLowerCase().indexOf(term) > -1 )
+        {
+
             finalList[ user.email ] = user.identifier;
+        }
+
+
     });
 
     res.json(finalList);
