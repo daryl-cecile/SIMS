@@ -6,6 +6,7 @@ import {InventoryModel} from "../models/InventoryModel";
 import {NoticeModel} from "../models/NoticeModel";
 import * as Crypto from "crypto";
 import {Passport} from "../Services/Passport";
+import {System} from "./System";
 
 (async function(){
 
@@ -130,7 +131,7 @@ import {Passport} from "../Services/Passport";
     }
 
 
-    console.log("SEEDING...");
+    System.log('Status',"SEEDING...", System.ERRORS.NORMAL);
 
 
     let staffPerm = await seedPermission("STAFF");

@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import {Connection, createConnection} from "typeorm";
+import {System} from "./System";
 
 const eventManager = require("../config/GlobalEvents");
 const ORMConfig = require("./../../ormconfig");
@@ -12,7 +13,7 @@ class DBConnector {
             this._conn = conn;
             eventManager.trigger("DB_READY");
         }).catch(err => {
-            console.error(err);
+            System.err(err, System.ERRORS.DB_BOOT);
             throw err;
         });
 

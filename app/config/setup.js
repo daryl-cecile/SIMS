@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const System_1 = require("./System");
 const PORT = process.env.PORT || 3000;
 const eventManager = require('./GlobalEvents');
 const DEVELOPER_MODE = true;
@@ -19,12 +20,18 @@ module.exports = {
         app.use('/api', require('../controllers/apis'));
         let _server = app.listen(PORT, () => {
             eventManager.trigger("APP_READY", PORT);
-            console.log(`App is running on port ${PORT}`);
+            System_1.System.log('Status', `App is running on port ${PORT}`);
             eventManager.listen("DB_READY", () => {
                 eventManager.trigger("STACK_READY", _server);
-                console.log(`DB is running on port 3306`);
+                System_1.System.log('Status', `DB is running on port 3306`);
                 if (DEVELOPER_MODE)
                     require("./seeder");
+                try {
+                    throw new Error("ABC");
+                }
+                catch (ex) {
+                    System_1.System.err(ex, System_1.System.ERRORS.APP_BOOT);
+                }
                 server = _server;
             }, { singleUse: true, autoTriggerIfMissed: true });
         });

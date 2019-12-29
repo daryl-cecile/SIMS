@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const typeorm_1 = require("typeorm");
+const System_1 = require("./System");
 const eventManager = require("../config/GlobalEvents");
 const ORMConfig = require("./../../ormconfig");
 class DBConnector {
@@ -10,7 +11,7 @@ class DBConnector {
             this._conn = conn;
             eventManager.trigger("DB_READY");
         }).catch(err => {
-            console.error(err);
+            System_1.System.err(err, System_1.System.ERRORS.DB_BOOT);
             throw err;
         });
     }

@@ -1,4 +1,5 @@
 import * as http from "http";
+import {System} from "./System";
 
 const PORT = process.env.PORT || 3000;
 const eventManager = require('./GlobalEvents');
@@ -29,13 +30,20 @@ module.exports = {
 
         let _server =  app.listen(PORT, () => {
             eventManager.trigger("APP_READY", PORT);
-            console.log(`App is running on port ${PORT}`);
+            System.log('Status',`App is running on port ${PORT}`);
 
             eventManager.listen("DB_READY", ()=>{
                 eventManager.trigger("STACK_READY", _server);
-                console.log(`DB is running on port 3306`);
+                System.log('Status',`DB is running on port 3306`);
 
                 if (DEVELOPER_MODE) require("./seeder");
+
+                try{
+                    throw new Error("ABC");
+                }
+                catch(ex){
+                    System.err(ex,System.ERRORS.APP_BOOT);
+                }
 
                 server = _server;
             },{singleUse:true,autoTriggerIfMissed:true});
