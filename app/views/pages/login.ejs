@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/public/styles/login.css">
 </head>
 <body>
-    <%- include('../partials/nav', {isAdminLogin:false}) %>
+    <%- include('../partials/login_nav', {isAdminLogin:false}) %>
 
     <main>
 
@@ -19,7 +19,7 @@
                 <smart-input name="uid" placeholder=""></smart-input>
             </label>
 
-            <button>Continue</button>
+            <button onclick="login()">Continue</button>
 
             <p>Can't sign in? Click <a href="/help">Here</a></p>
         </div>
@@ -36,8 +36,7 @@
 
         async function getUsers(){
             return new Promise(resolve => {
-                $.get("/api/list/users", res => {
-                    let result = JSON.parse(res);
+                $.get("/api/list/users?hint=" + inp.value, result => {
                     resolve(result);
                 });
             })
@@ -59,6 +58,18 @@
 
         });
 
+        function login(){
+
+            $.post("/api/login/customer",{
+                username : inp.value
+            }, res => {
+                console.log(res);
+                if (res.isSuccessful){
+                    location.href = "/";
+                }
+            });
+
+        }
     </script>
 
     <%- include('../partials/footer') %>

@@ -164,3 +164,5 @@ export namespace Passport{
     }
 
 }
+
+module.exports.default = Passport; // for tests

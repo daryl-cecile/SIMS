@@ -1,0 +1,56 @@
+
+@f-direction:{
+	&.h, .h{
+		flex-direction: row;
+	}
+	&.v, .v{
+		flex-direction: column;
+	}
+}
+
+@f-fill:{
+
+	.w-half {
+		width: 50%;
+	}
+
+	.w-quarter {
+		width: 25%;
+	}
+
+	.w-third {
+		width: 100% / 3;
+	}
+
+	.s-1 {
+		flex: 1;
+	}
+
+	.s-2 {
+		flex: 2;
+	}
+
+	.s-3 {
+		flex: 3;
+	}
+}
+
+.f {
+	display: flex;
+	box-sizing: border-box;
+	@f-direction();
+	@f-fill();
+}
+
+.if {
+	display: inline-flex;
+	box-sizing: border-box;
+	@f-direction();
+	@f-fill();
+}
+
+.limit-height-100{
+	max-height: 100%;
+}
+
+@f-fill();

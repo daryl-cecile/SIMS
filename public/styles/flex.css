@@ -1,0 +1,81 @@
+.f {
+  display: flex;
+  box-sizing: border-box;
+}
+.f.h,
+.f .h {
+  flex-direction: row;
+}
+.f.v,
+.f .v {
+  flex-direction: column;
+}
+.f .w-half {
+  width: 50%;
+}
+.f .w-quarter {
+  width: 25%;
+}
+.f .w-third {
+  width: 33.33333333%;
+}
+.f .s-1 {
+  flex: 1;
+}
+.f .s-2 {
+  flex: 2;
+}
+.f .s-3 {
+  flex: 3;
+}
+.if {
+  display: inline-flex;
+  box-sizing: border-box;
+}
+.if.h,
+.if .h {
+  flex-direction: row;
+}
+.if.v,
+.if .v {
+  flex-direction: column;
+}
+.if .w-half {
+  width: 50%;
+}
+.if .w-quarter {
+  width: 25%;
+}
+.if .w-third {
+  width: 33.33333333%;
+}
+.if .s-1 {
+  flex: 1;
+}
+.if .s-2 {
+  flex: 2;
+}
+.if .s-3 {
+  flex: 3;
+}
+.limit-height-100 {
+  max-height: 100%;
+}
+.w-half {
+  width: 50%;
+}
+.w-quarter {
+  width: 25%;
+}
+.w-third {
+  width: 33.33333333%;
+}
+.s-1 {
+  flex: 1;
+}
+.s-2 {
+  flex: 2;
+}
+.s-3 {
+  flex: 3;
+}
