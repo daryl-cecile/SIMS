@@ -1,6 +1,5 @@
 import * as http from "http";
 import {System} from "./System";
-import error = System.error;
 
 const PORT = process.env.PORT || 3000;
 const eventManager = require('./GlobalEvents');
@@ -26,7 +25,7 @@ module.exports = {
 
         // log request
         app.use(function(req,res,next){
-            System.log("Request", req.url, System.ERRORS.NORMAL);
+            System.log("Request", req.url, System.ERRORS.NONE);
             next();
         });
 
@@ -34,22 +33,7 @@ module.exports = {
         app.use("/", require('../controllers/base'));
         app.use('/api', require('../controllers/apis'));
 
-        // catch app level errors in case
-        process.on("uncaughtException",err => {
-            System.fatal(err, System.ERRORS.APP_BOOT,"uncaughtException");
-        });
-
-        // listen for terminate events and gracefully release resources
-        eventManager.listen("TERMINATE", ()=>{
-            db.end().then(()=>{
-                server.close(()=>{
-                    eventManager.trigger("UNLOAD");
-                });
-            }).catch(x => {
-                console.error(x);
-                // process.exit(1); //couldnt end the connection so force exit
-            });
-        },{ singleUse: true });
+        System.attachTerminateListeners(db, server);
 
         server =  app.listen(PORT, () => {
             eventManager.trigger("APP_READY", PORT);
