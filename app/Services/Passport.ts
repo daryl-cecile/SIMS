@@ -110,7 +110,7 @@ export namespace Passport{
         let user = await UserRepository.getUserByIdentifier(username);
 
         if (user === undefined){
-            return new JSONResp(false,"Incorrect username or password",{
+            return new JSONResp(false,"Incorrect username","No users with that username was found",{
                 username: username
             });
         }

@@ -86,7 +86,7 @@ var Passport;
     async function isStaffCredentialsValid(username, password) {
         let user = await UserRepository_1.UserRepository.getUserByIdentifier(username);
         if (user === undefined) {
-            return new JSONResponse_1.JSONResp(false, "Incorrect username or password", {
+            return new JSONResponse_1.JSONResp(false, "Incorrect username", "No users with that username was found", {
                 username: username
             });
         }

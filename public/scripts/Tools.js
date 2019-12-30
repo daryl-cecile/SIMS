@@ -43,5 +43,25 @@ var Tools;
         return getCookie("_csrf");
     }
     Tools.csrfToken = csrfToken;
+    function ButtonStateSwapper(btn) {
+        let content = "";
+        let originalPointerEvent = "";
+        let l = {
+            setLoading: () => {
+                content = btn.innerHTML;
+                originalPointerEvent = btn.style.pointerEvents;
+                btn.innerHTML = `<i class="fas fa-spinner fa-pulse"></i>`;
+                btn.style.pointerEvents = "none";
+                return l;
+            },
+            reset: () => {
+                btn.innerHTML = content;
+                btn.style.pointerEvents = originalPointerEvent;
+                return l;
+            }
+        };
+        return l;
+    }
+    Tools.ButtonStateSwapper = ButtonStateSwapper;
 })(Tools || (Tools = {}));
 //# sourceMappingURL=Tools.js.map
