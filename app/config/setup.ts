@@ -1,6 +1,5 @@
 import * as http from "http";
 import {System} from "./System";
-import error = System.error;
 
 const PORT = process.env.PORT || 3000;
 const eventManager = require('./GlobalEvents');
@@ -19,16 +18,17 @@ module.exports = {
         app.set('view engine', 'ejs');
 
         app.use(express.json());                                    // to support JSON-encoded bodies
-        app.use(express.urlencoded({
-            extended: true
-        }));                                                        // to support URL-encoded bodies
-        app.use('/public',express.static("public"));     // makes public folder directly accessible
+        app.use(express.urlencoded({ extended: true }));    // to support URL-encoded bodies
+        app.use('/public',express.static("public"));    // makes public folder directly accessible
 
-        // log request
-        app.use(function(req,res,next){
-            System.log("Request", req.url, System.ERRORS.NORMAL);
-            next();
-        });
+        // Cookies
+        app.use(System.Middlewares.CookieHandler());
+
+        // Log request
+        app.use(System.Middlewares.LogRequest());
+
+        // CSRF tokens
+        app.use(System.Middlewares.CSRFHandler());
 
         // Routes
         app.use("/", require('../controllers/base'));

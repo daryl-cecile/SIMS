@@ -1,7 +1,7 @@
 import {SystemLogEntryModel} from "../models/SystemLogEntryModel";
 import {SystemLogRepository} from "../Repository/SystemLogRepository";
 import {XError} from "./XError";
-
+import {CookieStore} from "./CookieHelper";
 
 export namespace System{
 
@@ -9,6 +9,8 @@ export namespace System{
     let interval = null;
     let isProd:boolean = null;
     let ignoreOutput:boolean = false;
+
+    export let cookieStore:CookieStore;
 
     export const InstanceId = require("crypto").randomBytes(12).toString('hex');
 
@@ -134,4 +136,54 @@ export namespace System{
 
         eventManager.trigger("TERMINATE"); // tell app to shutdown
     }
+
+    export namespace Middlewares{
+
+        export function LogRequest(){
+            return function(req,res,next){
+                System.log("Request", req.url, System.ERRORS.NORMAL);
+                next();
+            }
+        }
+
+        export function CookieHandler(){
+            return function(req, res, next){
+                cookieStore = new CookieStore(req, res);
+                next();
+            }
+        }
+
+        export function CSRFHandler(){
+            const CSRFCookieName = "_csrf";
+            return function (req, res, next){
+                if ( req.url.startsWith("/api/") ){
+                    let cookieCSRF = cookieStore.get(CSRFCookieName);
+
+                    if (cookieCSRF === undefined){
+                        res.status(403);
+                        res.send('CSRF token invalid');
+                    }
+                    else{
+                        let providedCSRFToken = req.header('CSRF-Token') ?? req.header('X-CSRF-TOKEN') ?? req.query['CSRF_Token'] ?? req.body['CSRF_Token'];
+                        if (providedCSRFToken === undefined || providedCSRFToken !== cookieCSRF){
+                            res.status(403);
+                            res.send('CSRF token mismatch');
+                        }
+                        else{
+                            next();
+                        }
+                    }
+
+                }
+                else{
+                    let csrfToken = require("crypto").randomBytes(32).toString('hex');
+                    cookieStore.set(CSRFCookieName, csrfToken, {overwrite: true});
+                    req.csrfToken = function(){ return csrfToken };
+                    next();
+                }
+            }
+        }
+
+    }
+
 }

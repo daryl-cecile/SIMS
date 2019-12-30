@@ -39,7 +39,8 @@
 
             $.post("/api/login/staff",{
                 username : uid.value,
-                password : pwd.value
+                password : pwd.value,
+                CSRF_Token : Tools.csrfToken()
             }, res => {
                 if (res.isSuccessful){
                     location.href = "/";

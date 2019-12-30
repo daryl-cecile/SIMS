@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const SystemLogEntryModel_1 = require("../models/SystemLogEntryModel");
 const SystemLogRepository_1 = require("../Repository/SystemLogRepository");
 const XError_1 = require("./XError");
+const CookieHelper_1 = require("./CookieHelper");
 var System;
 (function (System) {
     const backlog = [];
@@ -123,5 +124,52 @@ var System;
         eventManager.trigger("TERMINATE");
     }
     System.attemptSafeTerminate = attemptSafeTerminate;
+    let Middlewares;
+    (function (Middlewares) {
+        function LogRequest() {
+            return function (req, res, next) {
+                System.log("Request", req.url, System.ERRORS.NORMAL);
+                next();
+            };
+        }
+        Middlewares.LogRequest = LogRequest;
+        function CookieHandler() {
+            return function (req, res, next) {
+                System.cookieStore = new CookieHelper_1.CookieStore(req, res);
+                next();
+            };
+        }
+        Middlewares.CookieHandler = CookieHandler;
+        function CSRFHandler() {
+            const CSRFCookieName = "_csrf";
+            return function (req, res, next) {
+                var _a, _b, _c;
+                if (req.url.startsWith("/api/")) {
+                    let cookieCSRF = System.cookieStore.get(CSRFCookieName);
+                    if (cookieCSRF === undefined) {
+                        res.status(403);
+                        res.send('CSRF token invalid');
+                    }
+                    else {
+                        let providedCSRFToken = (_c = (_b = (_a = req.header('CSRF-Token'), (_a !== null && _a !== void 0 ? _a : req.header('X-CSRF-TOKEN'))), (_b !== null && _b !== void 0 ? _b : req.query['CSRF_Token'])), (_c !== null && _c !== void 0 ? _c : req.body['CSRF_Token']));
+                        if (providedCSRFToken === undefined || providedCSRFToken !== cookieCSRF) {
+                            res.status(403);
+                            res.send('CSRF token mismatch');
+                        }
+                        else {
+                            next();
+                        }
+                    }
+                }
+                else {
+                    let csrfToken = require("crypto").randomBytes(32).toString('hex');
+                    System.cookieStore.set(CSRFCookieName, csrfToken, { overwrite: true });
+                    req.csrfToken = function () { return csrfToken; };
+                    next();
+                }
+            };
+        }
+        Middlewares.CSRFHandler = CSRFHandler;
+    })(Middlewares = System.Middlewares || (System.Middlewares = {}));
 })(System = exports.System || (exports.System = {}));
 //# sourceMappingURL=System.js.map

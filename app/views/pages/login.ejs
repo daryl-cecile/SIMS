@@ -36,7 +36,10 @@
 
         async function getUsers(){
             return new Promise(resolve => {
-                $.get("/api/list/users?hint=" + inp.value, result => {
+                $.get("/api/list/users",{
+                    hint : inp.value,
+                    CSRF_Token : Tools.csrfToken()
+                }, result => {
                     resolve(result);
                 });
             })
@@ -61,7 +64,8 @@
         function login(){
 
             $.post("/api/login/customer",{
-                username : inp.value
+                username : inp.value,
+                CSRF_Token : Tools.csrfToken()
             }, res => {
                 console.log(res);
                 if (res.isSuccessful){
