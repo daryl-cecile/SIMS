@@ -12,14 +12,11 @@ module.exports = {
         app.set('views', require("path").resolve(__dirname, "../views"));
         app.set('view engine', 'ejs');
         app.use(express.json());
-        app.use(express.urlencoded({
-            extended: true
-        }));
+        app.use(express.urlencoded({ extended: true }));
         app.use('/public', express.static("public"));
-        app.use(function (req, res, next) {
-            System_1.System.log("Request", req.url, System_1.System.ERRORS.NONE);
-            next();
-        });
+        app.use(System_1.System.Middlewares.CookieHandler());
+        app.use(System_1.System.Middlewares.LogRequest());
+        app.use(System_1.System.Middlewares.CSRFHandler());
         app.use("/", require('../controllers/base'));
         app.use('/api', require('../controllers/apis'));
         System_1.System.attachTerminateListeners(db, server);

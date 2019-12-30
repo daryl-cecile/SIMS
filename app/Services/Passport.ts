@@ -6,10 +6,9 @@ import {SessionRepository} from "../Repository/SessionRepository";
 import {TimeHelper} from "../config/TimeHelper";
 import {PermissionRepository} from "../Repository/PermissionRepository";
 import {UserService} from "./UserService";
+import {System} from "../config/System";
 
 const Crypto = require("crypto");
-const db = require("../config/DBConnection");
-const Cookies = require("cookies");
 const uuid = require("uuid/v4");
 
 export namespace Passport{
@@ -42,7 +41,6 @@ export namespace Passport{
 
     export async function authenticate(username:string, password:string, req, res){
 
-        let cookies = new Cookies(req, res, { keys: ["_SIMS_PASSPORT_KEY_"] });
         let result:JSONResp = await this.isStaffCredentialsValid(username,password);
 
         let acc = await UserRepository.getUserByIdentifier(username);
@@ -66,7 +64,7 @@ export namespace Passport{
             acc.currentSession = sesh;
             await UserRepository.save(acc);
 
-            cookies.set("_passport", sesh.sessionKey,{signed:true, expires: sesh.expiry});
+            System.cookieStore.set("_passport", sesh.sessionKey,{expires: sesh.expiry});
 
             return new JSONResp(true, "Success", {
                 token: sesh.sessionKey
@@ -81,7 +79,6 @@ export namespace Passport{
 
     export async function authenticateCustomer(usernameOrEmail:string, req, res){
 
-        let cookies = new Cookies(req, res, { keys: ["_SIMS_PASSPORT_KEY_"] });
         let account = await UserRepository.getUserByIdentifierOrEmail(usernameOrEmail);
 
         if (account !== undefined){
@@ -99,7 +96,7 @@ export namespace Passport{
             await UserRepository.save(account);
             await SessionRepository.save(session);
 
-            cookies.set("_passport", session.sessionKey,{signed:true, expires: session.expiry});
+            System.cookieStore.set("_passport", session.sessionKey,{expires: session.expiry});
 
             return new JSONResp(true, "Success", {
                 token: session.sessionKey
@@ -130,8 +127,7 @@ export namespace Passport{
 
     export async function isAuthenticated(req, res){
 
-        let cookies = new Cookies(req, res, { keys: ["_SIMS_PASSPORT_KEY_"] });
-        let passportToken = cookies.get("_passport",{ signed: true });
+        let passportToken = System.cookieStore.get("_passport");
 
         if (passportToken){
             let session = await SessionRepository.getBySessionKey(passportToken);
