@@ -17,23 +17,12 @@ module.exports = {
         }));
         app.use('/public', express.static("public"));
         app.use(function (req, res, next) {
-            System_1.System.log("Request", req.url, System_1.System.ERRORS.NORMAL);
+            System_1.System.log("Request", req.url, System_1.System.ERRORS.NONE);
             next();
         });
         app.use("/", require('../controllers/base'));
         app.use('/api', require('../controllers/apis'));
-        process.on("uncaughtException", err => {
-            System_1.System.fatal(err, System_1.System.ERRORS.APP_BOOT, "uncaughtException");
-        });
-        eventManager.listen("TERMINATE", () => {
-            db.end().then(() => {
-                server.close(() => {
-                    eventManager.trigger("UNLOAD");
-                });
-            }).catch(x => {
-                console.error(x);
-            });
-        }, { singleUse: true });
+        System_1.System.attachTerminateListeners(db, server);
         server = app.listen(PORT, () => {
             eventManager.trigger("APP_READY", PORT);
             System_1.System.log('Status', `App is running on port ${PORT}`);
