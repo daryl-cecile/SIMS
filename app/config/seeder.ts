@@ -126,7 +126,7 @@ import {UserRepository} from "../Repository/UserRepository";
     }
 
 
-    System.log('Status',"SEEDING...", System.ERRORS.NORMAL);
+    System.log('Status',"SEEDING...", System.ERRORS.NONE);
 
 
     let staffPerm = await seedPermission("STAFF");

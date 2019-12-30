@@ -4,6 +4,7 @@ const SystemLogEntryModel_1 = require("../models/SystemLogEntryModel");
 const SystemLogRepository_1 = require("../Repository/SystemLogRepository");
 const XError_1 = require("./XError");
 const CookieHelper_1 = require("./CookieHelper");
+const eventManager = require('./GlobalEvents');
 var System;
 (function (System) {
     const backlog = [];
@@ -21,9 +22,11 @@ var System;
     (function (ERRORS) {
         ERRORS[ERRORS["UNKNOWN"] = 153] = "UNKNOWN";
         ERRORS[ERRORS["CALLBACK_ERR"] = 5] = "CALLBACK_ERR";
+        ERRORS[ERRORS["SIGNAL_ERR"] = 3] = "SIGNAL_ERR";
         ERRORS[ERRORS["DB_BOOT"] = 2] = "DB_BOOT";
         ERRORS[ERRORS["APP_BOOT"] = 1] = "APP_BOOT";
         ERRORS[ERRORS["NORMAL"] = 0] = "NORMAL";
+        ERRORS[ERRORS["NONE"] = 0] = "NONE";
     })(ERRORS = System.ERRORS || (System.ERRORS = {}));
     async function fatal(err, errcode, extraInfo) {
         await System.error(err, errcode, extraInfo);
@@ -43,7 +46,7 @@ var System;
         if (ignoreOutput)
             return;
         if (!errCode)
-            errCode = System.ERRORS.NORMAL;
+            errCode = System.ERRORS.NONE;
         let err_code_normalized = System.ERRORS[errCode];
         if (System.isProduction()) {
             let entry = new SystemLogEntryModel_1.SystemLogEntryModel();
@@ -110,6 +113,15 @@ var System;
             console.groupEnd();
         }
     }
+    function signal(code) {
+        return err => {
+            if (err)
+                System.error(err, ERRORS.SIGNAL_ERR, "Signal received with error");
+            else
+                System.log("Signal", code, ERRORS.NONE);
+            System.attemptSafeTerminate();
+        };
+    }
     function attemptSafeTerminate() {
         System.log("Status", "Attempting safe terminate");
         let eventManager = require("./GlobalEvents");
@@ -117,7 +129,7 @@ var System;
             flushBacklog();
         let timeout = setTimeout(() => {
             process.exit(1);
-        }, 5000);
+        }, 5000).unref();
         eventManager.listen("UNLOAD", () => {
             clearTimeout(timeout);
         }, { singleUse: true });
@@ -171,5 +183,23 @@ var System;
         }
         Middlewares.CSRFHandler = CSRFHandler;
     })(Middlewares = System.Middlewares || (System.Middlewares = {}));
+    function attachTerminateListeners(db, server) {
+        process.on("uncaughtException", err => {
+            System.fatal(err, System.ERRORS.APP_BOOT, "uncaughtException");
+        });
+        process.on("SIGTERM", signal("SIGTERM"));
+        process.on("SIGINT", signal("SIGINT"));
+        eventManager.listen("TERMINATE", () => {
+            db.end().then(() => {
+                server.close(() => {
+                    eventManager.trigger("UNLOAD");
+                });
+            }).catch(x => {
+                console.error(x);
+                process.exit(1);
+            });
+        }, { singleUse: true });
+    }
+    System.attachTerminateListeners = attachTerminateListeners;
 })(System = exports.System || (exports.System = {}));
 //# sourceMappingURL=System.js.map

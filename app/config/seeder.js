@@ -97,7 +97,7 @@ const UserRepository_1 = require("../Repository/UserRepository");
         }
         return existingNotice;
     }
-    System_1.System.log('Status', "SEEDING...", System_1.System.ERRORS.NORMAL);
+    System_1.System.log('Status', "SEEDING...", System_1.System.ERRORS.NONE);
     let staffPerm = await seedPermission("STAFF");
     let adminPerms = [
         await seedPermission("ADMIN"),
