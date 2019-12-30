@@ -2,6 +2,7 @@ import {SystemLogEntryModel} from "../models/SystemLogEntryModel";
 import {SystemLogRepository} from "../Repository/SystemLogRepository";
 import {XError} from "./XError";
 import {CookieStore} from "./CookieHelper";
+import {dbConnector as db} from "./DBConnection";
 
 const eventManager = require('./GlobalEvents');
 
@@ -126,7 +127,7 @@ export namespace System{
 
     function signal(code:string){
         return err => {
-            if (err) System.error(err, ERRORS.SIGNAL_ERR, "Signal received with error");
+            if (err && err.stack) System.error(err, ERRORS.SIGNAL_ERR, "Signal received with error");
             else System.log("Signal", code, ERRORS.NONE);
             System.attemptSafeTerminate();
         }
@@ -149,7 +150,7 @@ export namespace System{
         eventManager.trigger("TERMINATE"); // tell app to shutdown
     }
 
-    export function attachTerminateListeners(db, server){
+    export function attachTerminateListeners(server){
 
         // catch app level errors in case
         process.on("uncaughtException",err => {

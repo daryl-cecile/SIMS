@@ -23,8 +23,17 @@ class DBConnector {
     ;
     async end() {
         this._ended = true;
-        return this._conn.close();
+        return new Promise(async (resolve) => {
+            if (this._conn.isConnected === false) {
+                resolve();
+            }
+            else {
+                await this._conn.close();
+                resolve();
+            }
+        });
     }
 }
-module.exports = new DBConnector(ORMConfig);
+exports.dbConnector = new DBConnector(ORMConfig);
+module.exports.default = exports.dbConnector;
 //# sourceMappingURL=DBConnection.js.map

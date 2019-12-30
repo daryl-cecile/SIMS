@@ -8,10 +8,9 @@ import {Passport} from "../Services/Passport";
 import {System} from "./System";
 import {PermissionRepository} from "../Repository/PermissionRepository";
 import {UserRepository} from "../Repository/UserRepository";
+import {dbConnector as db} from "./DBConnection";
 
 (async function(){
-
-    const db = require("./DBConnection");
 
     async function seedPermission(name:string){
 

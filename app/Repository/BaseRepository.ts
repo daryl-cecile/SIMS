@@ -1,18 +1,17 @@
 import {IModel} from "../models/IModel";
 import {Repository} from "typeorm";
+import {dbConnector as db} from "./../config/DBConnection";
 
 export class BaseRepository<T extends IModel>{
 
-    protected readonly db = require('../config/DBConnection');
-
     protected get repo():Repository<T>{
-        return this.db.connection.getRepository(this.modelType);
+        return db.connection.getRepository(this.modelType);
     }
 
     constructor(public modelType:{new(): T}) { }
 
     async save(model:T):Promise<T>{
-        return await this.db.connection.manager.save(model);
+        return await db.connection.manager.save(model);
     }
 
     async update(model:T):Promise<T>{
@@ -24,7 +23,7 @@ export class BaseRepository<T extends IModel>{
     }
 
     isConnectionReady():boolean{
-        return this.db.connection !== undefined;
+        return db.connection !== undefined;
     }
 
 }
