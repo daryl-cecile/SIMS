@@ -16,6 +16,10 @@ module.exports = {
             extended: true
         }));
         app.use('/public', express.static("public"));
+        app.use(function (req, res, next) {
+            System_1.System.log("Request", req.url, System_1.System.ERRORS.NORMAL);
+            next();
+        });
         app.use("/", require('../controllers/base'));
         app.use('/api', require('../controllers/apis'));
         process.on("uncaughtException", err => {
