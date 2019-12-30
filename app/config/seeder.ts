@@ -5,6 +5,7 @@ import {ItemModel} from "../models/ItemModel";
 import {InventoryModel} from "../models/InventoryModel";
 import {NoticeModel} from "../models/NoticeModel";
 import {Passport} from "../Services/Passport";
+import {System} from "./System";
 import {PermissionRepository} from "../Repository/PermissionRepository";
 import {UserRepository} from "../Repository/UserRepository";
 
@@ -125,7 +126,7 @@ import {UserRepository} from "../Repository/UserRepository";
     }
 
 
-    console.log("SEEDING...");
+    System.log('Status',"SEEDING...", System.ERRORS.NORMAL);
 
 
     let staffPerm = await seedPermission("STAFF");

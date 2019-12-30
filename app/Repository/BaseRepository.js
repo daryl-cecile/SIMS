@@ -17,6 +17,9 @@ class BaseRepository {
     async getAll() {
         return await this.repo.find();
     }
+    isConnectionReady() {
+        return this.db.connection !== undefined;
+    }
 }
 exports.BaseRepository = BaseRepository;
 //# sourceMappingURL=BaseRepository.js.map

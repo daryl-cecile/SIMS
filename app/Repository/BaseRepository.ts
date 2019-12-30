@@ -23,4 +23,8 @@ export class BaseRepository<T extends IModel>{
         return await this.repo.find();
     }
 
+    isConnectionReady():boolean{
+        return this.db.connection !== undefined;
+    }
+
 }

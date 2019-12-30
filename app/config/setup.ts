@@ -1,9 +1,10 @@
 import * as http from "http";
+import {System} from "./System";
 
 const PORT = process.env.PORT || 3000;
 const eventManager = require('./GlobalEvents');
 
-const DEVELOPER_MODE = true;
+let isTest:boolean = false;
 
 let server:http.Server = null;
 
@@ -11,7 +12,7 @@ module.exports = {
 
     bootstrap : (express)=>{
         const app = express();
-        require('./DBConnection');
+        const db = require('./DBConnection');
 
         app.set('views', require("path").resolve(__dirname,"../views") );
         app.set('view engine', 'ejs');
@@ -22,26 +23,45 @@ module.exports = {
         }));                                                        // to support URL-encoded bodies
         app.use('/public',express.static("public"));     // makes public folder directly accessible
 
-
         // Routes
         app.use("/", require('../controllers/base'));
         app.use('/api', require('../controllers/apis'));
 
-        let _server =  app.listen(PORT, () => {
+        // catch app level errors in case
+        process.on("uncaughtException",err => {
+            System.fatal(err, System.ERRORS.APP_BOOT,"uncaughtException");
+        });
+
+        // listen for terminate events and gracefully release resources
+        eventManager.listen("TERMINATE", ()=>{
+            db.end().then(()=>{
+                server.close(()=>{
+                    eventManager.trigger("UNLOAD");
+                });
+            }).catch(x => {
+                console.error(x);
+                // process.exit(1); //couldnt end the connection so force exit
+            });
+        },{ singleUse: true });
+
+        server =  app.listen(PORT, () => {
             eventManager.trigger("APP_READY", PORT);
-            console.log(`App is running on port ${PORT}`);
+            System.log('Status',`App is running on port ${PORT}`);
 
             eventManager.listen("DB_READY", ()=>{
-                eventManager.trigger("STACK_READY", _server);
-                console.log(`DB is running on port 3306`);
+                eventManager.trigger("STACK_READY",server);
+                System.log('Status',`DB is running on port 3306`);
 
-                if (DEVELOPER_MODE) require("./seeder");
-
-                server = _server;
+                if (!System.isProduction() && !isTest) require("./seeder");
             },{singleUse:true,autoTriggerIfMissed:true});
         });
 
-        return _server;
+        return server;
+    },
+
+    enableTestMode: ()=>{
+        isTest = true;
+        System.haltOutput();
     },
 
     getServer: async ()=>{

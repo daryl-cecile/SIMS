@@ -25,6 +25,7 @@ class GlobalEventManager{
             else if (e.isInvalid === true){
                 return false;
             }
+            return true;
         });
         this.triggeredEventNames.push(eventName);
         return this;
@@ -46,12 +47,11 @@ class GlobalEvent{
     }
 
     public trigger(...params:any[]){
-        if (this.props.singleUse === true && this.triggeredCount > 0){
-            this.isInvalid = true;
-            return;
-        }
         this.handler.apply(this,params);
         this.triggeredCount ++;
+        if (this.props.singleUse === true && this.triggeredCount > 0){
+            this.isInvalid = true;
+        }
     }
 
     public static fixProperties(prop:GlobalEventProperties):GlobalEventProperties{

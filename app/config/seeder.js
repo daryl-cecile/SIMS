@@ -7,6 +7,7 @@ const ItemModel_1 = require("../models/ItemModel");
 const InventoryModel_1 = require("../models/InventoryModel");
 const NoticeModel_1 = require("../models/NoticeModel");
 const Passport_1 = require("../Services/Passport");
+const System_1 = require("./System");
 const PermissionRepository_1 = require("../Repository/PermissionRepository");
 const UserRepository_1 = require("../Repository/UserRepository");
 (async function () {
@@ -96,7 +97,7 @@ const UserRepository_1 = require("../Repository/UserRepository");
         }
         return existingNotice;
     }
-    console.log("SEEDING...");
+    System_1.System.log('Status', "SEEDING...", System_1.System.ERRORS.NORMAL);
     let staffPerm = await seedPermission("STAFF");
     let adminPerms = [
         await seedPermission("ADMIN"),
