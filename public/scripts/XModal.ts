@@ -29,12 +29,30 @@ class XModal extends HTMLElement{
 
     static get observedAttributes() { return ['type','open']; }
 
-    constructor(message:string, title:string=null, type:XModalType=XModalType.INFORMATION) {
+    constructor(message:string=null, title:string="SIMS", type:XModalType=XModalType.INFORMATION) {
         super();
         this._shadow = this.attachShadow({ mode: "closed" });
         this._type = type;
         this._message = message;
         this._title = title ? title : this._getTitle();
+
+        let eb = Tools.ElementBuilder;
+
+        let s = eb("link",{
+            href: "/public/styles/xmodal.css",
+            rel: "stylesheet"
+        }).create();
+        let h3 = eb("h3", {id:"title"} ,this._title).create();
+        let p = eb("p",{id:"message"}, this._message).create();
+        let div = eb("div",{id : "btn-container"}).create();
+
+        this._shadow.appendChild(s);
+        this._shadow.appendChild(h3);
+        this._shadow.appendChild(p);
+        this._shadow.appendChild(div);
+
+        this.style.display = "none";
+        document.body.appendChild(this);
     }
 
     private _getTitle(){
@@ -62,6 +80,21 @@ class XModal extends HTMLElement{
         }
     }
 
+    public setType(type:XModalType){
+        this._type = type;
+        return this;
+    }
+
+    public setTitle(title:string){
+        this._title = title;
+        return this;
+    }
+
+    public setMessage(message:string){
+        this._message = message;
+        return this;
+    }
+
     close(){
         this.setAttribute("open","close");
         return new Promise(resolve => {
@@ -73,18 +106,14 @@ class XModal extends HTMLElement{
     }
 
     open(buttons:XModalButtons){
+        setTimeout(()=>{
+            let eb = Tools.ElementBuilder;
 
-        this._shadow.innerHTML = "";
+            let el = this._shadow.querySelector("#btn-container");
+            el.innerHTML = "";
 
-        let eb = Tools.ElementBuilder;
-
-        let s = eb("link",{
-            href: "/public/styles/xmodal.css",
-            rel: "stylesheet"
-        }).create();
-        let h3 = eb("h3", this._title).create();
-        let p = eb("p", this._message).create();
-        let div = eb("div").create(el => {
+            this._shadow.querySelector("#title").innerHTML = this._title;
+            this._shadow.querySelector("#message").innerHTML = this._message;
 
             Object.keys(buttons).forEach(buttonIdentifier => {
 
@@ -104,19 +133,13 @@ class XModal extends HTMLElement{
 
             });
 
-        });
+            if (this.isConnected === false){ document.body.appendChild(this); }
 
-        this._shadow.appendChild(s);
-        this._shadow.appendChild(h3);
-        this._shadow.appendChild(p);
-        this._shadow.appendChild(div);
-
-        if (this.isConnected === false){
-            document.body.appendChild(this);
+            this.removeAttribute("style");
             setTimeout(()=>{
                 this.setAttribute("open","true");
             },300);
-        }
+        }, 10);
     }
 
 }

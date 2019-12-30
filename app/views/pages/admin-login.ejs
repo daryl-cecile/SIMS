@@ -24,7 +24,7 @@
             <smart-input name="upw" type="password"></smart-input>
         </label>
 
-        <button class="m-up" onclick="login()">Continue</button>
+        <button class="m-up" onclick="login(this)">Continue</button>
 
         <p>Can't sign in? Click <a href="/help">Here</a></p>
     </div>
@@ -32,7 +32,9 @@
 </main>
 
     <script>
-        function login(){
+        function login(btn){
+            let btnState = Tools.ButtonStateSwapper(btn);
+            btnState.setLoading();
 
             let uid = $('[name="uid"]').get(0);
             let pwd = $('[name="upw"]').get(0);
@@ -42,8 +44,18 @@
                 password : pwd.value,
                 CSRF_Token : Tools.csrfToken()
             }, res => {
+                btnState.reset();
                 if (res.isSuccessful){
                     location.href = "/";
+                }
+                else{
+                    let modal = new XModal(res.message, res.title, XModalType.ALERT);
+                    modal.open({
+                        okayBtn : {
+                            text : "Okay",
+                            type: XModalButtonType.PRIMARY
+                        }
+                    });
                 }
             });
 
