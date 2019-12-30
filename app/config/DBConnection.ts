@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import {Connection, createConnection} from "typeorm";
 import {System} from "./System";
-import {Passport} from "../Services/Passport";
 
 const eventManager = require("../config/GlobalEvents");
 const ORMConfig = require("./../../ormconfig");
