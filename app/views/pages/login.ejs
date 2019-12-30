@@ -51,8 +51,8 @@
 
             inp.suggestions = [];
 
-            Object.keys(u).forEach(email => {
-                inp.suggestions.push( new SmartInputSuggestionItem(email, u[email], (v) => {
+            u.forEach(user => {
+                inp.suggestions.push( new SmartInputSuggestionItem(user.email, user.identifier, (v) => {
                     updateHandler(v);
                 } ) );
             });
