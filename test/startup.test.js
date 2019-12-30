@@ -6,6 +6,8 @@ let eventManager = require("./../app/config/GlobalEvents");
 let should = chai.should();
 let server;
 
+bootstrapper.enableTestMode();
+
 chai.use(chaiHttp);
 
 describe('Server start', ()=>{
@@ -58,12 +60,14 @@ describe('Requests', () => {
 describe('Server close', ()=>{
 
     it("server should end successfully", async () => {
-        server = await bootstrapper.getServer();
+        // server = await bootstrapper.getServer();
+        //
+        // server.on("close", async function() {
+        //     await sqlConn.end();
+        // });
+        // server.close();
 
-        server.on("close", async function() {
-            await sqlConn.end();
-        });
-        server.close();
+        eventManager.trigger("TERMINATE");
     });
 
 });

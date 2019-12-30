@@ -8,6 +8,7 @@ var System;
     const backlog = [];
     let interval = null;
     let isProd = null;
+    let ignoreOutput = false;
     System.InstanceId = require("crypto").randomBytes(12).toString('hex');
     function isProduction() {
         if (isProd === null)
@@ -18,20 +19,28 @@ var System;
     let ERRORS;
     (function (ERRORS) {
         ERRORS[ERRORS["UNKNOWN"] = 153] = "UNKNOWN";
+        ERRORS[ERRORS["CALLBACK_ERR"] = 5] = "CALLBACK_ERR";
         ERRORS[ERRORS["DB_BOOT"] = 2] = "DB_BOOT";
         ERRORS[ERRORS["APP_BOOT"] = 1] = "APP_BOOT";
         ERRORS[ERRORS["NORMAL"] = 0] = "NORMAL";
     })(ERRORS = System.ERRORS || (System.ERRORS = {}));
-    async function err(err, errcode, extraInfo) {
+    async function fatal(err, errcode, extraInfo) {
+        await System.error(err, errcode, extraInfo);
+        attemptSafeTerminate();
+    }
+    System.fatal = fatal;
+    async function error(err, errcode, extraInfo) {
         let e = XError_1.XError.createFrom(err);
         let rSF = e.stackFrames[0];
         let message = e.message;
         if (extraInfo)
             message += "\n\n\t" + extraInfo;
-        return await System.log(e.type, `${rSF.fileName}:${rSF.lineNumber}:${rSF.columnNumber}\n\t${message}`, errcode);
+        await System.log(e.type, `${rSF.fileName}:${rSF.lineNumber}:${rSF.columnNumber}\n\t${message}`, errcode);
     }
-    System.err = err;
+    System.error = error;
     async function log(title, message, errCode) {
+        if (ignoreOutput)
+            return;
         if (!errCode)
             errCode = System.ERRORS.NORMAL;
         let err_code_normalized = System.ERRORS[errCode];
@@ -58,6 +67,22 @@ var System;
         }
     }
     System.log = log;
+    function AutoErrorHandler(err, optionalExtraInfo, callback) {
+        if (err) {
+            System.error(err, ERRORS.CALLBACK_ERR, optionalExtraInfo);
+        }
+        if (callback)
+            callback(err);
+    }
+    System.AutoErrorHandler = AutoErrorHandler;
+    function haltOutput() {
+        ignoreOutput = true;
+    }
+    System.haltOutput = haltOutput;
+    function releaseOutput() {
+        ignoreOutput = false;
+    }
+    System.releaseOutput = releaseOutput;
     function pushToBacklog(logEntry) {
         backlog.push(logEntry);
         if (backlog.length !== 0 && interval === null) {
@@ -73,5 +98,30 @@ var System;
             }, 500);
         }
     }
+    function flushBacklog() {
+        while (backlog.length > 0) {
+            let entry = backlog.shift();
+            console.group("System Log Flush");
+            console.log("Title: " + entry.title);
+            console.log("Message: " + entry.message);
+            console.log("ErrCode: " + entry.errorCode);
+            console.log("");
+            console.groupEnd();
+        }
+    }
+    function attemptSafeTerminate() {
+        System.log("Status", "Attempting safe terminate");
+        let eventManager = require("./GlobalEvents");
+        if (backlog.length > 0)
+            flushBacklog();
+        let timeout = setTimeout(() => {
+            process.exit(1);
+        }, 5000);
+        eventManager.listen("UNLOAD", () => {
+            clearTimeout(timeout);
+        }, { singleUse: true });
+        eventManager.trigger("TERMINATE");
+    }
+    System.attemptSafeTerminate = attemptSafeTerminate;
 })(System = exports.System || (exports.System = {}));
 //# sourceMappingURL=System.js.map

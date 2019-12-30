@@ -7,20 +7,23 @@ const eventManager = require("../config/GlobalEvents");
 const ORMConfig = require("./../../ormconfig");
 class DBConnector {
     constructor(info) {
+        this._ended = false;
         typeorm_1.createConnection(info).then(conn => {
             this._conn = conn;
             eventManager.trigger("DB_READY");
         }).catch(err => {
-            System_1.System.err(err, System_1.System.ERRORS.DB_BOOT);
-            throw err;
+            System_1.System.fatal(err, System_1.System.ERRORS.DB_BOOT);
         });
     }
     get connection() {
+        if (this._ended)
+            return undefined;
         return this._conn;
     }
     ;
     async end() {
-        return this.connection.close();
+        this._ended = true;
+        return this._conn.close();
     }
 }
 module.exports = new DBConnector(ORMConfig);

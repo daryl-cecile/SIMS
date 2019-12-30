@@ -7,24 +7,26 @@ const ORMConfig = require("./../../ormconfig");
 
 class DBConnector {
     private _conn:Connection;
+    private _ended:boolean = false;
     constructor(info) {
 
         createConnection(info).then(conn => {
             this._conn = conn;
             eventManager.trigger("DB_READY");
         }).catch(err => {
-            System.err(err, System.ERRORS.DB_BOOT);
-            throw err;
+            System.fatal(err, System.ERRORS.DB_BOOT);
         });
 
     }
 
     public get connection():Connection{
+        if (this._ended) return undefined;
         return this._conn;
     };
 
     async end(){
-        return this.connection.close();
+        this._ended = true;
+        return this._conn.close();
     }
 }
 

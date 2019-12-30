@@ -54,12 +54,24 @@ export class XError{
     public readonly originalError:Error;
     public readonly type:string;
     public readonly message:string;
+    public readonly details:string;
     public readonly stackFrames:XStackFrame[] = [];
 
     constructor(error:Error) {
         this.originalError = error;
 
+        let details = [];
         let stacks = error.stack.toString().split(/\r\n|\n/);
+
+        if (stacks[0].indexOf("Error:") === -1){
+            let line = stacks[0];
+            while (line.indexOf("Error:") === -1){
+                details.push( stacks.shift() );
+                line = stacks[0];
+            }
+        }
+
+        this.details = details.join("\n");
 
         this.type = stacks[0].split(":")[0];
         this.message = stacks[0].split(": ")[1];

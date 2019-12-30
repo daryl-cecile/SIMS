@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const System_1 = require("./System");
 const PORT = process.env.PORT || 3000;
 const eventManager = require('./GlobalEvents');
-const DEVELOPER_MODE = true;
+let isTest = false;
 let server = null;
 module.exports = {
     bootstrap: (express) => {
         const app = express();
-        require('./DBConnection');
+        const db = require('./DBConnection');
         app.set('views', require("path").resolve(__dirname, "../views"));
         app.set('view engine', 'ejs');
         app.use(express.json());
@@ -18,24 +18,33 @@ module.exports = {
         app.use('/public', express.static("public"));
         app.use("/", require('../controllers/base'));
         app.use('/api', require('../controllers/apis'));
-        let _server = app.listen(PORT, () => {
+        process.on("uncaughtException", err => {
+            System_1.System.fatal(err, System_1.System.ERRORS.APP_BOOT, "uncaughtException");
+        });
+        eventManager.listen("TERMINATE", () => {
+            db.end().then(() => {
+                server.close(() => {
+                    eventManager.trigger("UNLOAD");
+                });
+            }).catch(x => {
+                console.error(x);
+            });
+        }, { singleUse: true });
+        server = app.listen(PORT, () => {
             eventManager.trigger("APP_READY", PORT);
             System_1.System.log('Status', `App is running on port ${PORT}`);
             eventManager.listen("DB_READY", () => {
-                eventManager.trigger("STACK_READY", _server);
+                eventManager.trigger("STACK_READY", server);
                 System_1.System.log('Status', `DB is running on port 3306`);
-                if (DEVELOPER_MODE)
+                if (!System_1.System.isProduction() && !isTest)
                     require("./seeder");
-                try {
-                    throw new Error("ABC");
-                }
-                catch (ex) {
-                    System_1.System.err(ex, System_1.System.ERRORS.APP_BOOT);
-                }
-                server = _server;
             }, { singleUse: true, autoTriggerIfMissed: true });
         });
-        return _server;
+        return server;
+    },
+    enableTestMode: () => {
+        isTest = true;
+        System_1.System.haltOutput();
     },
     getServer: async () => {
         return new Promise(resolve => {
