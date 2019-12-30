@@ -19,18 +19,7 @@ module.exports = {
         app.use(System_1.System.Middlewares.CSRFHandler());
         app.use("/", require('../controllers/base'));
         app.use('/api', require('../controllers/apis'));
-        process.on("uncaughtException", err => {
-            System_1.System.fatal(err, System_1.System.ERRORS.APP_BOOT, "uncaughtException");
-        });
-        eventManager.listen("TERMINATE", () => {
-            db.end().then(() => {
-                server.close(() => {
-                    eventManager.trigger("UNLOAD");
-                });
-            }).catch(x => {
-                console.error(x);
-            });
-        }, { singleUse: true });
+        System_1.System.attachTerminateListeners(db, server);
         server = app.listen(PORT, () => {
             eventManager.trigger("APP_READY", PORT);
             System_1.System.log('Status', `App is running on port ${PORT}`);
