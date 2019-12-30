@@ -27,10 +27,12 @@ module.exports = {
         app.use("/", require('../controllers/base'));
         app.use('/api', require('../controllers/apis'));
 
+        // catch app level errors in case
         process.on("uncaughtException",err => {
             System.fatal(err, System.ERRORS.APP_BOOT,"uncaughtException");
         });
 
+        // listen for terminate events and gracefully release resources
         eventManager.listen("TERMINATE", ()=>{
             db.end().then(()=>{
                 server.close(()=>{
