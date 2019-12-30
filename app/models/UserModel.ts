@@ -1,4 +1,4 @@
-import {BaseModel, IModel} from "./IModel";
+import {BaseModel, jsonIgnore} from "./IModel";
 import {Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne} from "typeorm";
 import {SessionModel} from "./SessionModel";
 import {PermissionModel} from "./PermissionModel";
@@ -19,9 +19,11 @@ export class UserModel extends BaseModel{
     public identifier:string;
 
     @Column("varchar",{length:255, nullable:true, name:"password_hash"})
+    @jsonIgnore()
     public passHash:string;
 
     @Column("varchar", {length:255,nullable:true, name:"saltine"})
+    @jsonIgnore()
     public saltine:string;
 
     @OneToOne( type => SessionModel, session => session.owner ,   {
@@ -30,12 +32,14 @@ export class UserModel extends BaseModel{
         eager: true
     } )
     @JoinColumn()
+    @jsonIgnore()
     public currentSession:SessionModel;
 
     @ManyToMany(type => PermissionModel ,{
         eager: true
     })
     @JoinTable()
+    @jsonIgnore()
     public permissions:PermissionModel[];
 
 }

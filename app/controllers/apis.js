@@ -22,11 +22,9 @@ apis.get('/list/users', async function (req, res) {
         res.end();
         return;
     }
-    let finalList = {};
-    (await UserService_1.UserService.getAllCustomers()).forEach((user) => {
-        if (user.email.toLowerCase().startsWith(term) || user.identifier.toLowerCase().indexOf(term) > -1)
-            finalList[user.email] = user.identifier;
-    });
+    let finalList = (await UserService_1.UserService.getAllCustomers()).filter((user) => {
+        return (user.email.toLowerCase().startsWith(term) || user.identifier.toLowerCase().indexOf(term) > -1);
+    }).map(user => user.toJSON());
     res.json(finalList);
     res.end();
 });

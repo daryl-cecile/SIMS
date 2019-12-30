@@ -149,6 +149,31 @@ export namespace System{
         eventManager.trigger("TERMINATE"); // tell app to shutdown
     }
 
+    export function attachTerminateListeners(db, server){
+
+        // catch app level errors in case
+        process.on("uncaughtException",err => {
+            System.fatal(err, System.ERRORS.APP_BOOT,"uncaughtException");
+        });
+
+        // catch heroku shutdown requests
+        process.on("SIGTERM", signal("SIGTERM"));
+        process.on("SIGINT", signal("SIGINT"));
+
+        // listen for terminate events and gracefully release resources
+        eventManager.listen("TERMINATE", ()=>{
+            db.end().then(()=>{
+                server.close(()=>{
+                    eventManager.trigger("UNLOAD");
+                });
+            }).catch(x => {
+                console.error(x);
+                process.exit(1); //couldnt end the connection so force exit
+            });
+        },{ singleUse: true });
+
+    }
+
     export namespace Middlewares{
 
         export function LogRequest(){
@@ -195,31 +220,6 @@ export namespace System{
                 }
             }
         }
-
-    }
-
-    export function attachTerminateListeners(db, server){
-
-        // catch app level errors in case
-        process.on("uncaughtException",err => {
-            System.fatal(err, System.ERRORS.APP_BOOT,"uncaughtException");
-        });
-
-        // catch heroku shutdown requests
-        process.on("SIGTERM", signal("SIGTERM"));
-        process.on("SIGINT", signal("SIGINT"));
-
-        // listen for terminate events and gracefully release resources
-        eventManager.listen("TERMINATE", ()=>{
-            db.end().then(()=>{
-                server.close(()=>{
-                    eventManager.trigger("UNLOAD");
-                });
-            }).catch(x => {
-                console.error(x);
-                process.exit(1); //couldnt end the connection so force exit
-            });
-        },{ singleUse: true });
 
     }
 

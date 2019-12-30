@@ -136,6 +136,24 @@ var System;
         eventManager.trigger("TERMINATE");
     }
     System.attemptSafeTerminate = attemptSafeTerminate;
+    function attachTerminateListeners(db, server) {
+        process.on("uncaughtException", err => {
+            System.fatal(err, System.ERRORS.APP_BOOT, "uncaughtException");
+        });
+        process.on("SIGTERM", signal("SIGTERM"));
+        process.on("SIGINT", signal("SIGINT"));
+        eventManager.listen("TERMINATE", () => {
+            db.end().then(() => {
+                server.close(() => {
+                    eventManager.trigger("UNLOAD");
+                });
+            }).catch(x => {
+                console.error(x);
+                process.exit(1);
+            });
+        }, { singleUse: true });
+    }
+    System.attachTerminateListeners = attachTerminateListeners;
     let Middlewares;
     (function (Middlewares) {
         function LogRequest() {
@@ -183,23 +201,5 @@ var System;
         }
         Middlewares.CSRFHandler = CSRFHandler;
     })(Middlewares = System.Middlewares || (System.Middlewares = {}));
-    function attachTerminateListeners(db, server) {
-        process.on("uncaughtException", err => {
-            System.fatal(err, System.ERRORS.APP_BOOT, "uncaughtException");
-        });
-        process.on("SIGTERM", signal("SIGTERM"));
-        process.on("SIGINT", signal("SIGINT"));
-        eventManager.listen("TERMINATE", () => {
-            db.end().then(() => {
-                server.close(() => {
-                    eventManager.trigger("UNLOAD");
-                });
-            }).catch(x => {
-                console.error(x);
-                process.exit(1);
-            });
-        }, { singleUse: true });
-    }
-    System.attachTerminateListeners = attachTerminateListeners;
 })(System = exports.System || (exports.System = {}));
 //# sourceMappingURL=System.js.map
