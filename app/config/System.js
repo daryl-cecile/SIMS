@@ -4,6 +4,7 @@ const SystemLogEntryModel_1 = require("../models/SystemLogEntryModel");
 const SystemLogRepository_1 = require("../Repository/SystemLogRepository");
 const XError_1 = require("./XError");
 const CookieHelper_1 = require("./CookieHelper");
+const DBConnection_1 = require("./DBConnection");
 const eventManager = require('./GlobalEvents');
 var System;
 (function (System) {
@@ -115,7 +116,7 @@ var System;
     }
     function signal(code) {
         return err => {
-            if (err)
+            if (err && err.stack)
                 System.error(err, ERRORS.SIGNAL_ERR, "Signal received with error");
             else
                 System.log("Signal", code, ERRORS.NONE);
@@ -136,6 +137,24 @@ var System;
         eventManager.trigger("TERMINATE");
     }
     System.attemptSafeTerminate = attemptSafeTerminate;
+    function attachTerminateListeners(server) {
+        process.on("uncaughtException", err => {
+            System.fatal(err, System.ERRORS.APP_BOOT, "uncaughtException");
+        });
+        process.on("SIGTERM", signal("SIGTERM"));
+        process.on("SIGINT", signal("SIGINT"));
+        eventManager.listen("TERMINATE", () => {
+            DBConnection_1.dbConnector.end().then(() => {
+                server.close(() => {
+                    eventManager.trigger("UNLOAD");
+                });
+            }).catch(x => {
+                console.error(x);
+                process.exit(1);
+            });
+        }, { singleUse: true });
+    }
+    System.attachTerminateListeners = attachTerminateListeners;
     let Middlewares;
     (function (Middlewares) {
         function LogRequest() {
@@ -183,23 +202,5 @@ var System;
         }
         Middlewares.CSRFHandler = CSRFHandler;
     })(Middlewares = System.Middlewares || (System.Middlewares = {}));
-    function attachTerminateListeners(db, server) {
-        process.on("uncaughtException", err => {
-            System.fatal(err, System.ERRORS.APP_BOOT, "uncaughtException");
-        });
-        process.on("SIGTERM", signal("SIGTERM"));
-        process.on("SIGINT", signal("SIGINT"));
-        eventManager.listen("TERMINATE", () => {
-            db.end().then(() => {
-                server.close(() => {
-                    eventManager.trigger("UNLOAD");
-                });
-            }).catch(x => {
-                console.error(x);
-                process.exit(1);
-            });
-        }, { singleUse: true });
-    }
-    System.attachTerminateListeners = attachTerminateListeners;
 })(System = exports.System || (exports.System = {}));
 //# sourceMappingURL=System.js.map

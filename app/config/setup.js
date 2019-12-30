@@ -8,7 +8,7 @@ let server = null;
 module.exports = {
     bootstrap: (express) => {
         const app = express();
-        const db = require('./DBConnection');
+        require("./DBConnection");
         app.set('views', require("path").resolve(__dirname, "../views"));
         app.set('view engine', 'ejs');
         app.use(express.json());
@@ -19,7 +19,6 @@ module.exports = {
         app.use(System_1.System.Middlewares.CSRFHandler());
         app.use("/", require('../controllers/base'));
         app.use('/api', require('../controllers/apis'));
-        System_1.System.attachTerminateListeners(db, server);
         server = app.listen(PORT, () => {
             eventManager.trigger("APP_READY", PORT);
             System_1.System.log('Status', `App is running on port ${PORT}`);
@@ -30,6 +29,7 @@ module.exports = {
                     require("./seeder");
             }, { singleUse: true, autoTriggerIfMissed: true });
         });
+        System_1.System.attachTerminateListeners(server);
         return server;
     },
     enableTestMode: () => {

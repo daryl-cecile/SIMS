@@ -12,7 +12,7 @@ module.exports = {
 
     bootstrap : (express)=>{
         const app = express();
-        const db = require('./DBConnection');
+        require("./DBConnection");
 
         app.set('views', require("path").resolve(__dirname,"../views") );
         app.set('view engine', 'ejs');
@@ -34,8 +34,6 @@ module.exports = {
         app.use("/", require('../controllers/base'));
         app.use('/api', require('../controllers/apis'));
 
-        System.attachTerminateListeners(db, server);
-
         server =  app.listen(PORT, () => {
             eventManager.trigger("APP_READY", PORT);
             System.log('Status',`App is running on port ${PORT}`);
@@ -47,6 +45,8 @@ module.exports = {
                 if (!System.isProduction() && !isTest) require("./seeder");
             },{singleUse:true,autoTriggerIfMissed:true});
         });
+
+        System.attachTerminateListeners(server);
 
         return server;
     },

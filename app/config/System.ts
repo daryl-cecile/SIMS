@@ -2,6 +2,7 @@ import {SystemLogEntryModel} from "../models/SystemLogEntryModel";
 import {SystemLogRepository} from "../Repository/SystemLogRepository";
 import {XError} from "./XError";
 import {CookieStore} from "./CookieHelper";
+import {dbConnector as db} from "./DBConnection";
 
 const eventManager = require('./GlobalEvents');
 
@@ -126,7 +127,7 @@ export namespace System{
 
     function signal(code:string){
         return err => {
-            if (err) System.error(err, ERRORS.SIGNAL_ERR, "Signal received with error");
+            if (err && err.stack) System.error(err, ERRORS.SIGNAL_ERR, "Signal received with error");
             else System.log("Signal", code, ERRORS.NONE);
             System.attemptSafeTerminate();
         }
@@ -147,6 +148,31 @@ export namespace System{
         },{ singleUse: true });
 
         eventManager.trigger("TERMINATE"); // tell app to shutdown
+    }
+
+    export function attachTerminateListeners(server){
+
+        // catch app level errors in case
+        process.on("uncaughtException",err => {
+            System.fatal(err, System.ERRORS.APP_BOOT,"uncaughtException");
+        });
+
+        // catch heroku shutdown requests
+        process.on("SIGTERM", signal("SIGTERM"));
+        process.on("SIGINT", signal("SIGINT"));
+
+        // listen for terminate events and gracefully release resources
+        eventManager.listen("TERMINATE", ()=>{
+            db.end().then(()=>{
+                server.close(()=>{
+                    eventManager.trigger("UNLOAD");
+                });
+            }).catch(x => {
+                console.error(x);
+                process.exit(1); //couldnt end the connection so force exit
+            });
+        },{ singleUse: true });
+
     }
 
     export namespace Middlewares{
@@ -195,31 +221,6 @@ export namespace System{
                 }
             }
         }
-
-    }
-
-    export function attachTerminateListeners(db, server){
-
-        // catch app level errors in case
-        process.on("uncaughtException",err => {
-            System.fatal(err, System.ERRORS.APP_BOOT,"uncaughtException");
-        });
-
-        // catch heroku shutdown requests
-        process.on("SIGTERM", signal("SIGTERM"));
-        process.on("SIGINT", signal("SIGINT"));
-
-        // listen for terminate events and gracefully release resources
-        eventManager.listen("TERMINATE", ()=>{
-            db.end().then(()=>{
-                server.close(()=>{
-                    eventManager.trigger("UNLOAD");
-                });
-            }).catch(x => {
-                console.error(x);
-                process.exit(1); //couldnt end the connection so force exit
-            });
-        },{ singleUse: true });
 
     }
 

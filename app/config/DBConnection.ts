@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import {Connection, createConnection} from "typeorm";
 import {System} from "./System";
+import {Passport} from "../Services/Passport";
 
 const eventManager = require("../config/GlobalEvents");
 const ORMConfig = require("./../../ormconfig");
@@ -26,8 +27,17 @@ class DBConnector {
 
     async end(){
         this._ended = true;
-        return this._conn.close();
+        return new Promise<void>(async (resolve) => {
+            if (this._conn.isConnected === false){
+                resolve();
+            }
+            else{
+                await this._conn.close();
+                resolve();
+            }
+        });
     }
 }
 
-module.exports = new DBConnector( ORMConfig );
+export const dbConnector = new DBConnector( ORMConfig );
+module.exports.default = dbConnector;
