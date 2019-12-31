@@ -8,11 +8,25 @@ class GlobalEventManager{
     private eventRegister:Array<GlobalEvent> = [];
     private triggeredEventNames:Array<string> = [];
 
-    public listen(eventName:string, handler:Function, properties:GlobalEventProperties={}){
-        let p = GlobalEvent.fixProperties(properties);
-        let e = new GlobalEvent(eventName,handler,p);
-        this.eventRegister.push(e);
-        if (p.autoTriggerIfMissed === true && this.triggeredEventNames.indexOf(eventName) > -1) e.trigger();
+    public listen(eventNames:string[], handler:Function, properties?:GlobalEventProperties)
+    public listen(eventName:string, handler:Function, properties?:GlobalEventProperties)
+    public listen(eventNameOrNames:string|string[], handler:Function, properties:GlobalEventProperties={}){
+
+        let listOfEventNames:string[];
+        if (typeof eventNameOrNames === "string" || eventNameOrNames instanceof String){
+            listOfEventNames = [<string>eventNameOrNames];
+        }
+        else{
+            listOfEventNames = <string[]>eventNameOrNames;
+        }
+
+        listOfEventNames.forEach(eventName => {
+            let p = GlobalEvent.fixProperties(properties);
+            let e = new GlobalEvent(eventName,handler,p);
+            this.eventRegister.push(e);
+            if (p.autoTriggerIfMissed === true && this.triggeredEventNames.indexOf(eventName) > -1) e.trigger();
+        });
+
         return this;
     }
 

@@ -3,12 +3,21 @@ class GlobalEventManager {
         this.eventRegister = [];
         this.triggeredEventNames = [];
     }
-    listen(eventName, handler, properties = {}) {
-        let p = GlobalEvent.fixProperties(properties);
-        let e = new GlobalEvent(eventName, handler, p);
-        this.eventRegister.push(e);
-        if (p.autoTriggerIfMissed === true && this.triggeredEventNames.indexOf(eventName) > -1)
-            e.trigger();
+    listen(eventNameOrNames, handler, properties = {}) {
+        let listOfEventNames;
+        if (typeof eventNameOrNames === "string" || eventNameOrNames instanceof String) {
+            listOfEventNames = [eventNameOrNames];
+        }
+        else {
+            listOfEventNames = eventNameOrNames;
+        }
+        listOfEventNames.forEach(eventName => {
+            let p = GlobalEvent.fixProperties(properties);
+            let e = new GlobalEvent(eventName, handler, p);
+            this.eventRegister.push(e);
+            if (p.autoTriggerIfMissed === true && this.triggeredEventNames.indexOf(eventName) > -1)
+                e.trigger();
+        });
         return this;
     }
     trigger(eventName, ...params) {

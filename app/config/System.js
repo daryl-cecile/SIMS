@@ -128,11 +128,12 @@ var System;
         let eventManager = require("./GlobalEvents");
         if (backlog.length > 0)
             flushBacklog();
-        let timeout = setTimeout(() => {
-            process.exit(1);
-        }, 5000).unref();
-        eventManager.listen("UNLOAD", () => {
-            clearTimeout(timeout);
+        eventManager.listen("UNLOADED", () => {
+            setTimeout(process.exit, 1000).unref();
+        }, { singleUse: true });
+        eventManager.listen("QUIT", () => {
+            console.warn("Quitting...");
+            setTimeout(process.exit, 5000, 1).unref();
         }, { singleUse: true });
         eventManager.trigger("TERMINATE");
     }
@@ -146,7 +147,10 @@ var System;
         eventManager.listen("TERMINATE", () => {
             DBConnection_1.dbConnector.end().then(() => {
                 server.close(() => {
-                    eventManager.trigger("UNLOAD");
+                    if (DBConnection_1.dbConnector.isReleased)
+                        eventManager.trigger("UNLOADED");
+                    else
+                        eventManager.trigger("QUIT");
                 });
             });
         }, { singleUse: true });

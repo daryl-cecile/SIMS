@@ -140,13 +140,17 @@ export namespace System{
 
         if (backlog.length > 0) flushBacklog(); // flushes backlog into stdout
 
-        let timeout = setTimeout(()=>{ // give app 5s to respond to shutdown request
-            process.exit(1); // app took too long to comply with shutdown request, force shutdown
-        },5000).unref();
+        eventManager.listen("UNLOADED", ()=>{
+            setTimeout(process.exit,1000).unref()
+        }, { singleUse: true });
 
-        eventManager.listen("UNLOAD", ()=>{ // wait for app shutdown response
-            clearTimeout(timeout);
-        },{ singleUse: true });
+        eventManager.listen("QUIT", ()=>{
+            console.warn("Quitting...");
+
+            // give app 5s to respond to shutdown request. If it takes longer, it will be killed with code of 1
+            setTimeout(process.exit,5000, 1).unref()
+
+        }, { singleUse: true });
 
         eventManager.trigger("TERMINATE"); // tell app to shutdown
     }
@@ -166,7 +170,8 @@ export namespace System{
         eventManager.listen("TERMINATE", ()=>{
             db.end().then(()=>{
                 server.close(()=>{
-                    eventManager.trigger("UNLOAD");
+                    if (db.isReleased) eventManager.trigger("UNLOADED");
+                    else eventManager.trigger("QUIT");
                 });
             });
         },{ singleUse: true });

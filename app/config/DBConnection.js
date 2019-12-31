@@ -7,6 +7,7 @@ const ORMConfig = require("./../../ormconfig");
 class DBConnector {
     constructor(info) {
         this._conn = undefined;
+        this._disabled = false;
         typeorm_1.createConnection(info).then(conn => {
             this._conn = conn;
             eventManager.trigger("DB_READY");
@@ -14,14 +15,23 @@ class DBConnector {
             System_1.System.fatal(err, System_1.System.ERRORS.DB_BOOT);
         });
     }
+    get isReleased() {
+        return this._disabled;
+    }
     get connection() {
-        if (this._conn && this._conn.isConnected === false)
+        if (this._disabled || (this._conn && this._conn.isConnected === false))
             return undefined;
         return this._conn;
     }
     ;
     end() {
-        return typeorm_1.getConnection().driver.disconnect();
+        this._disabled = true;
+        this._conn = undefined;
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve();
+            }, 3000).unref();
+        });
     }
 }
 exports.dbConnector = new DBConnector(ORMConfig);
