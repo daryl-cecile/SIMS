@@ -100,7 +100,7 @@ var System;
                         await SystemLogRepository_1.SystemLogRepository.save(entry);
                     }
                 }
-            }, 500);
+            }, 500).unref();
         }
     }
     function flushBacklog() {
@@ -131,10 +131,6 @@ var System;
         eventManager.listen("UNLOADED", () => {
             setTimeout(process.exit, 1000).unref();
         }, { singleUse: true });
-        eventManager.listen("QUIT", () => {
-            console.warn("Quitting...");
-            setTimeout(process.exit, 5000, 1).unref();
-        }, { singleUse: true });
         eventManager.trigger("TERMINATE");
     }
     System.attemptSafeTerminate = attemptSafeTerminate;
@@ -144,6 +140,10 @@ var System;
         });
         process.on("SIGTERM", signal("SIGTERM"));
         process.on("SIGINT", signal("SIGINT"));
+        eventManager.listen("QUIT", () => {
+            console.warn("Quitting...");
+            setTimeout(process.exit, 5000, 1).unref();
+        }, { singleUse: true });
         eventManager.listen("TERMINATE", () => {
             DBConnection_1.dbConnector.end().then(() => {
                 server.close(() => {
@@ -204,4 +204,5 @@ var System;
         Middlewares.CSRFHandler = CSRFHandler;
     })(Middlewares = System.Middlewares || (System.Middlewares = {}));
 })(System = exports.System || (exports.System = {}));
+module.exports.default = System;
 //# sourceMappingURL=System.js.map

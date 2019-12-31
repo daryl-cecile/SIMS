@@ -3,7 +3,6 @@ import {SystemLogRepository} from "../Repository/SystemLogRepository";
 import {XError} from "./XError";
 import {CookieStore} from "./CookieHelper";
 import {dbConnector as db} from "./DBConnection";
-import {getConnection} from "typeorm";
 
 const eventManager = require('./GlobalEvents');
 
@@ -109,7 +108,7 @@ export namespace System{
                         await SystemLogRepository.save(entry);
                     }
                 }
-            },500);
+            },500).unref();
         }
 
     }
@@ -144,14 +143,6 @@ export namespace System{
             setTimeout(process.exit,1000).unref()
         }, { singleUse: true });
 
-        eventManager.listen("QUIT", ()=>{
-            console.warn("Quitting...");
-
-            // give app 5s to respond to shutdown request. If it takes longer, it will be killed with code of 1
-            setTimeout(process.exit,5000, 1).unref()
-
-        }, { singleUse: true });
-
         eventManager.trigger("TERMINATE"); // tell app to shutdown
     }
 
@@ -162,9 +153,15 @@ export namespace System{
             System.fatal(err, System.ERRORS.APP_BOOT,"uncaughtException");
         });
 
-        // catch heroku shutdown requests
+        // catch process shutdown requests
         process.on("SIGTERM", signal("SIGTERM"));
         process.on("SIGINT", signal("SIGINT"));
+
+        eventManager.listen("QUIT", ()=>{
+            console.warn("Quitting...");
+            // give app 5s to respond to shutdown request. If it takes longer, it will be killed with code of 1
+            setTimeout(process.exit,5000, 1).unref()
+        }, { singleUse: true });
 
         // listen for terminate events and gracefully release resources
         eventManager.listen("TERMINATE", ()=>{
@@ -228,3 +225,5 @@ export namespace System{
     }
 
 }
+
+module.exports.default = System;
