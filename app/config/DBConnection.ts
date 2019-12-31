@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import {Connection, createConnection} from "typeorm";
 import {System} from "./System";
 
@@ -6,8 +5,7 @@ const eventManager = require("../config/GlobalEvents");
 const ORMConfig = require("./../../ormconfig");
 
 class DBConnector {
-    private _conn:Connection;
-    private _ended:boolean = false;
+    private _conn:Connection = undefined;
     constructor(info) {
 
         createConnection(info).then(conn => {
@@ -20,22 +18,9 @@ class DBConnector {
     }
 
     public get connection():Connection{
-        if (this._ended) return undefined;
+        if (this._conn && this._conn.isConnected === false) return undefined;
         return this._conn;
     };
-
-    async end(){
-        this._ended = true;
-        return new Promise<void>(async (resolve) => {
-            if (this._conn.isConnected === false){
-                resolve();
-            }
-            else{
-                await this._conn.close();
-                resolve();
-            }
-        });
-    }
 }
 
 export const dbConnector = new DBConnector( ORMConfig );

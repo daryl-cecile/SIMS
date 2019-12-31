@@ -163,13 +163,8 @@ export namespace System{
 
         // listen for terminate events and gracefully release resources
         eventManager.listen("TERMINATE", ()=>{
-            db.end().then(()=>{
-                server.close(()=>{
-                    eventManager.trigger("UNLOAD");
-                });
-            }).catch(x => {
-                console.error(x);
-                process.exit(1); //couldnt end the connection so force exit
+            server.close(()=>{
+                eventManager.trigger("UNLOAD");
             });
         },{ singleUse: true });
 
