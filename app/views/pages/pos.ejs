@@ -5,9 +5,10 @@
     <title>POS</title>
     <%- include('../partials/imports') %>
     <link rel="stylesheet" href="/public/styles/flex.css">
-    <link rel="stylesheet" href="/public/styles/xbasket.css">
+	<link rel="stylesheet" href="/public/styles/xbasket.css">
 
-    <script src="/public/scripts/XBasket.js"></script>
+	<script src="/public/scripts/XBasket.js"></script>
+	
 </head>
 <body>
     <%- include('../partials/nav', {isAdmin:false}) %>
@@ -16,7 +17,22 @@
 
         <x-basket id="basket" class="f w-third"></x-basket>
 
+        <div class="f w-half">
+    
+    
+            <label class="input f">
+                <span>Find Item</span>
+                <smart-input name="utid" placeholder=""></smart-input>
+            </label>
+        
+    
+            <x-product id="product" class="f"></x-product>
+        </div>
+
     </div>
+
+            
+
 
     <%- include('../partials/footer') %>
 
@@ -62,12 +78,39 @@
             name: "A3 Cardboard",
             quantity: 8,
             itemReference: "acb0x"
+		}) );
+		
+		let product = $("#product").get(0);
+        let productCollection = new BasketCollection();
+
+        productCollection.addItem( new BasketItem({
+            name: "Whiteboard Pens 3 Pack (Black)",
+            description: "Dry-erase whiteboard pens",
+            quantity: 30,
+            itemReference: "wbp3k"
         }) );
 
+        productCollection.addItem( new BasketItem({
+            name: "Whiteboard Pens 5 Pack (Blue)",
+            description: "Dry-erase whiteboard pens",
+            quantity: 30,
+            itemReference: "wbp5b"
+        }) );
+
+        productCollection.addItem( new BasketItem({
+            name: "Whiteboard Pens 4 Pack (Red)",
+            description: "Dry-erase whiteboard pens",
+            quantity: 30,
+            itemReference: "wbp4r"
+        }) );
+
+
         basket.attachCollection(itemCollection);
+        product.attachCollection(productCollection);
 
 
-    </script>
+	</script>
+
 
 </body>
 </html>
