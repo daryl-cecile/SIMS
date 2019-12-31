@@ -148,9 +148,6 @@ var System;
                 server.close(() => {
                     eventManager.trigger("UNLOAD");
                 });
-            }).catch(x => {
-                console.error(x);
-                process.exit(1);
             });
         }, { singleUse: true });
     }

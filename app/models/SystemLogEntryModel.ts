@@ -1,4 +1,4 @@
-import {BeforeInsert, BeforeUpdate, Column, Entity} from "typeorm";
+import {BeforeInsert, Column, Entity} from "typeorm";
 import {BaseModel} from "./IModel";
 
 
@@ -16,7 +16,7 @@ export class SystemLogEntryModel extends BaseModel{
 
     @BeforeInsert()
     private setExpiry(){
-        this.expiry = new Date( Date.now() + 30 * 60_000 )
+        this.expiry = new Date( Date.now() + 30 * 60_000 );
     }
 
     @Column("varchar")

@@ -3,6 +3,7 @@ import {SystemLogRepository} from "../Repository/SystemLogRepository";
 import {XError} from "./XError";
 import {CookieStore} from "./CookieHelper";
 import {dbConnector as db} from "./DBConnection";
+import {getConnection} from "typeorm";
 
 const eventManager = require('./GlobalEvents');
 
@@ -167,9 +168,6 @@ export namespace System{
                 server.close(()=>{
                     eventManager.trigger("UNLOAD");
                 });
-            }).catch(x => {
-                console.error(x);
-                process.exit(1); //couldnt end the connection so force exit
             });
         },{ singleUse: true });
 
