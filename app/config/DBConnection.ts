@@ -6,6 +6,8 @@ const ORMConfig = require("./../../ormconfig");
 
 class DBConnector {
     private _conn:Connection = undefined;
+    private _disabled:boolean = false;
+
     constructor(info) {
 
         createConnection(info).then(conn => {
@@ -17,13 +19,24 @@ class DBConnector {
 
     }
 
+    public get isReleased():boolean{
+        return this._disabled;
+    }
+
     public get connection():Connection{
-        if (this._conn && this._conn.isConnected === false) return undefined;
+        if (this._disabled || (this._conn && this._conn.isConnected === false)) return undefined;
         return this._conn;
     };
 
     public end():Promise<void>{
-        return getConnection().driver.disconnect();
+        this._disabled = true;
+        this._conn = undefined; // release the reference to the object so GC can claim it
+        return new Promise<void>(resolve => {
+            setTimeout(()=>{
+                // wait 3s here to ensure the db connection hasn't been touched since it's reference was released
+                resolve();
+            },3000).unref();
+        });
     }
 }
 
