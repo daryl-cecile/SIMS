@@ -1,4 +1,4 @@
-import {Connection, createConnection} from "typeorm";
+import {Connection, createConnection, getConnection} from "typeorm";
 import {System} from "./System";
 
 const eventManager = require("../config/GlobalEvents");
@@ -21,6 +21,10 @@ class DBConnector {
         if (this._conn && this._conn.isConnected === false) return undefined;
         return this._conn;
     };
+
+    public end():Promise<void>{
+        return getConnection().driver.disconnect();
+    }
 }
 
 export const dbConnector = new DBConnector( ORMConfig );

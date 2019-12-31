@@ -20,6 +20,9 @@ class DBConnector {
         return this._conn;
     }
     ;
+    end() {
+        return typeorm_1.getConnection().driver.disconnect();
+    }
 }
 exports.dbConnector = new DBConnector(ORMConfig);
 module.exports.default = exports.dbConnector;

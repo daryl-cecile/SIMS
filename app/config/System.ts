@@ -3,6 +3,7 @@ import {SystemLogRepository} from "../Repository/SystemLogRepository";
 import {XError} from "./XError";
 import {CookieStore} from "./CookieHelper";
 import {dbConnector as db} from "./DBConnection";
+import {getConnection} from "typeorm";
 
 const eventManager = require('./GlobalEvents');
 
@@ -163,8 +164,10 @@ export namespace System{
 
         // listen for terminate events and gracefully release resources
         eventManager.listen("TERMINATE", ()=>{
-            server.close(()=>{
-                eventManager.trigger("UNLOAD");
+            db.end().then(()=>{
+                server.close(()=>{
+                    eventManager.trigger("UNLOAD");
+                });
             });
         },{ singleUse: true });
 

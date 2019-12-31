@@ -4,6 +4,7 @@ const SystemLogEntryModel_1 = require("../models/SystemLogEntryModel");
 const SystemLogRepository_1 = require("../Repository/SystemLogRepository");
 const XError_1 = require("./XError");
 const CookieHelper_1 = require("./CookieHelper");
+const DBConnection_1 = require("./DBConnection");
 const eventManager = require('./GlobalEvents');
 var System;
 (function (System) {
@@ -143,8 +144,10 @@ var System;
         process.on("SIGTERM", signal("SIGTERM"));
         process.on("SIGINT", signal("SIGINT"));
         eventManager.listen("TERMINATE", () => {
-            server.close(() => {
-                eventManager.trigger("UNLOAD");
+            DBConnection_1.dbConnector.end().then(() => {
+                server.close(() => {
+                    eventManager.trigger("UNLOAD");
+                });
             });
         }, { singleUse: true });
     }
