@@ -144,7 +144,13 @@ var System;
             console.warn("Quitting...");
             setTimeout(process.exit, 5000, 1).unref();
         }, { singleUse: true });
-        eventManager.listen("TERMINATE", () => {
+        eventManager.listen("TERMINATE", async () => {
+            let allLogs = await SystemLogRepository_1.SystemLogRepository.getAll();
+            allLogs.forEach(element => {
+                if (Date.now() >= element.expiry.getTime()) {
+                    SystemLogRepository_1.SystemLogRepository.delete(element);
+                }
+            });
             DBConnection_1.dbConnector.end().then(() => {
                 server.close(() => {
                     if (DBConnection_1.dbConnector.isReleased)

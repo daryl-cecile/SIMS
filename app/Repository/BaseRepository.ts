@@ -18,6 +18,10 @@ export class BaseRepository<T extends IModel>{
         return await this.save(model);
     }
 
+    async delete(model:T):Promise<T>{
+        return await this.repo.remove(model);
+    }
+
     async getAll():Promise<T[]>{
         return await this.repo.find();
     }
