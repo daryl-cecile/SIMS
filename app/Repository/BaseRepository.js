@@ -14,6 +14,9 @@ class BaseRepository {
     async update(model) {
         return await this.save(model);
     }
+    async delete(model) {
+        return await this.repo.remove(model);
+    }
     async getAll() {
         return await this.repo.find();
     }

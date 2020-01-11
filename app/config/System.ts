@@ -164,7 +164,15 @@ export namespace System{
         }, { singleUse: true });
 
         // listen for terminate events and gracefully release resources
-        eventManager.listen("TERMINATE", ()=>{
+        eventManager.listen("TERMINATE", async ()=>{
+
+            let allLogs = await SystemLogRepository.getAll();
+            allLogs.forEach(element => {
+                if(Date.now() >= element.expiry.getTime()){
+                    SystemLogRepository.delete(element);
+                }
+            });
+
             db.end().then(()=>{
                 server.close(()=>{
                     if (db.isReleased) eventManager.trigger("UNLOADED");
