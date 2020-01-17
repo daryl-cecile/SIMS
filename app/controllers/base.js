@@ -31,5 +31,8 @@ home.get("/logout", async function (req, res) {
     await Passport_1.Passport.voidSession(req, res);
     res.redirect("/");
 });
+home.get("/confirm", async function (req, res) {
+    res.render("pages/confirm_transaction");
+});
 module.exports = home;
 //# sourceMappingURL=base.js.map
