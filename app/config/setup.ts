@@ -31,8 +31,10 @@ module.exports = {
         app.use(System.Middlewares.CSRFHandler());
 
         // Routes
-        app.use("/", require('../controllers/base'));
-        app.use('/api', require('../controllers/apis'));
+        app.use('/api', require('../controllers/backend/LoginController'));
+        app.use('/api', require('../controllers/backend/UsersController'));
+        app.use('/api', require('../controllers/backend/TransactionController'));
+        app.use("/", require('../controllers/frontend/LoginController'));
 
         server =  app.listen(PORT, () => {
             eventManager.trigger("APP_READY", PORT);

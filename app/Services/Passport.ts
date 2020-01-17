@@ -13,6 +13,14 @@ const uuid = require("uuid/v4");
 
 export namespace Passport{
 
+    export async function getCurrentUser(req, res):Promise<UserModel>{
+        let authCheck = await Passport.isAuthenticated(req, res);
+        if (authCheck.object.isSuccessful) {
+            return authCheck.object.payload['user'];
+        }
+        return undefined;
+    }
+
     export function createSaltine(){
         let salt = Crypto.createHash("sha256").update(Crypto.randomBytes(128)).digest('hex');
         let iter = Math.random() * (32 - 8) + 8; // min 8 max 32

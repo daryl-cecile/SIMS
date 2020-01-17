@@ -7,6 +7,7 @@ import {PermissionModel} from "./app/models/PermissionModel";
 import {StorageLocationModel} from "./app/models/StorageLocationModel";
 import {SessionModel} from "./app/models/SessionModel";
 import {SystemLogEntryModel} from "./app/models/SystemLogEntryModel";
+import {TransactionsModel} from "./app/models/TransactionsModel";
 
 const cert = require('./app/config/cert_info');
 
@@ -49,7 +50,8 @@ let x:IConnectionInfo = {
         StorageLocationModel,
         UserModel,
         SessionModel,
-        SystemLogEntryModel
+        SystemLogEntryModel,
+        TransactionsModel
     ],
     migrationsTableName:'db_migrations',
     migrations: ["orm_migrations/*.js"],
