@@ -42,4 +42,9 @@ loginController.get("/logout", async function(req, res){
     res.redirect("/");
 });
 
+loginController.get("/confirm", async function(req, res){
+    res.render("pages/confirm_transaction");
+});
+
 module.exports = loginController;
+
