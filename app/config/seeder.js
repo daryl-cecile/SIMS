@@ -7,10 +7,11 @@ const ItemModel_1 = require("../models/ItemModel");
 const InventoryModel_1 = require("../models/InventoryModel");
 const NoticeModel_1 = require("../models/NoticeModel");
 const Passport_1 = require("../Services/Passport");
+const System_1 = require("./System");
 const PermissionRepository_1 = require("../Repository/PermissionRepository");
 const UserRepository_1 = require("../Repository/UserRepository");
+const DBConnection_1 = require("./DBConnection");
 (async function () {
-    const db = require("./DBConnection");
     async function seedPermission(name) {
         let perm = new PermissionModel_1.PermissionModel();
         perm.name = name;
@@ -53,7 +54,7 @@ const UserRepository_1 = require("../Repository/UserRepository");
         let loc = new StorageLocationModel_1.StorageLocationModel();
         loc.name = name;
         loc.location = location;
-        let locRepo = db.connection.getRepository(StorageLocationModel_1.StorageLocationModel);
+        let locRepo = DBConnection_1.dbConnector.connection.getRepository(StorageLocationModel_1.StorageLocationModel);
         let existingLoc = await locRepo.findOne({ where: { name } });
         if (existingLoc === undefined) {
             return await locRepo.save(loc);
@@ -65,7 +66,7 @@ const UserRepository_1 = require("../Repository/UserRepository");
         stock.item = item;
         stock.quantity = quantity;
         stock.storageLocation = storageLocation;
-        let stockRepo = db.connection.getRepository(InventoryModel_1.InventoryModel);
+        let stockRepo = DBConnection_1.dbConnector.connection.getRepository(InventoryModel_1.InventoryModel);
         let existingStock = await stockRepo.findOne({ where: { item, storageLocation } });
         if (existingStock === undefined) {
             return await stockRepo.save(stock);
@@ -79,7 +80,7 @@ const UserRepository_1 = require("../Repository/UserRepository");
         item.unitCount = unitCount;
         item.expiry = expiry;
         item.notices = notices;
-        let itemRepo = db.connection.getRepository(ItemModel_1.ItemModel);
+        let itemRepo = DBConnection_1.dbConnector.connection.getRepository(ItemModel_1.ItemModel);
         let existingItem = await itemRepo.findOne({ where: { name } });
         if (existingItem === undefined) {
             return await itemRepo.save(item);
@@ -89,14 +90,14 @@ const UserRepository_1 = require("../Repository/UserRepository");
     async function seedNotice(title) {
         let notice = new NoticeModel_1.NoticeModel();
         notice.title = title;
-        let noticeRepo = db.connection.getRepository(NoticeModel_1.NoticeModel);
+        let noticeRepo = DBConnection_1.dbConnector.connection.getRepository(NoticeModel_1.NoticeModel);
         let existingNotice = await noticeRepo.findOne({ where: { title } });
         if (existingNotice === undefined) {
             return await noticeRepo.save(notice);
         }
         return existingNotice;
     }
-    console.log("SEEDING...");
+    System_1.System.log('Status', "SEEDING...", System_1.System.ERRORS.NONE);
     let staffPerm = await seedPermission("STAFF");
     let adminPerms = [
         await seedPermission("ADMIN"),

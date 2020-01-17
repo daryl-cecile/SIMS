@@ -19,7 +19,7 @@
                 <smart-input name="uid" placeholder=""></smart-input>
             </label>
 
-            <button onclick="login()">Continue</button>
+            <button onclick="login(this)">Continue</button>
 
             <p>Can't sign in? Click <a href="/help">Here</a></p>
         </div>
@@ -36,7 +36,10 @@
 
         async function getUsers(){
             return new Promise(resolve => {
-                $.get("/api/list/users?hint=" + inp.value, result => {
+                $.get("/api/list/users",{
+                    hint : inp.value,
+                    CSRF_Token : Tools.csrfToken()
+                }, result => {
                     resolve(result);
                 });
             })
@@ -48,8 +51,8 @@
 
             inp.suggestions = [];
 
-            Object.keys(u).forEach(email => {
-                inp.suggestions.push( new SmartInputSuggestionItem(email, u[email], (v) => {
+            u.forEach(user => {
+                inp.suggestions.push( new SmartInputSuggestionItem(user.email, user.identifier, (v) => {
                     updateHandler(v);
                 } ) );
             });
@@ -58,14 +61,28 @@
 
         });
 
-        function login(){
+        function login(btn){
+            let btnState = Tools.ButtonStateSwapper(btn);
+            btnState.setLoading();
 
             $.post("/api/login/customer",{
-                username : inp.value
+                username : inp.value,
+                CSRF_Token : Tools.csrfToken()
             }, res => {
-                console.log(res);
+                btnState.reset();
                 if (res.isSuccessful){
                     location.href = "/";
+                }
+                else{
+
+                    let modal = new XModal(res.message, res.title, XModalType.ALERT);
+                    modal.open({
+                        okayBtn : {
+                            text : "Okay",
+                            type: XModalButtonType.PRIMARY
+                        }
+                    });
+
                 }
             });
 

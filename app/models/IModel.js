@@ -11,6 +11,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 class BaseModel {
+    toJSON() {
+        let ignores = this.constructor[Symbol.for(this.constructor.name)];
+        let finalObject = {};
+        Object.keys(this).forEach(propName => {
+            if (ignores && ignores.indexOf(propName) > -1)
+                return;
+            if (this[propName] && this[propName]['toJSON']) {
+                finalObject[propName] = this[propName].toJSON();
+            }
+            else {
+                finalObject[propName] = this[propName];
+            }
+        });
+        return finalObject;
+    }
 }
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
@@ -25,4 +40,13 @@ __decorate([
     __metadata("design:type", Date)
 ], BaseModel.prototype, "updatedAt", void 0);
 exports.BaseModel = BaseModel;
+function jsonIgnore() {
+    return function (target, propertyKey, descriptor) {
+        let symb = Symbol.for(target.constructor.name);
+        if (!target.constructor[symb])
+            target.constructor[symb] = [];
+        target.constructor[symb].push(propertyKey);
+    };
+}
+exports.jsonIgnore = jsonIgnore;
 //# sourceMappingURL=IModel.js.map

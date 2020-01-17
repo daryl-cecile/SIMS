@@ -34,10 +34,12 @@ __decorate([
 ], UserModel.prototype, "identifier", void 0);
 __decorate([
     typeorm_1.Column("varchar", { length: 255, nullable: true, name: "password_hash" }),
+    IModel_1.jsonIgnore(),
     __metadata("design:type", String)
 ], UserModel.prototype, "passHash", void 0);
 __decorate([
     typeorm_1.Column("varchar", { length: 255, nullable: true, name: "saltine" }),
+    IModel_1.jsonIgnore(),
     __metadata("design:type", String)
 ], UserModel.prototype, "saltine", void 0);
 __decorate([
@@ -54,6 +56,7 @@ __decorate([
         eager: true
     }),
     typeorm_1.JoinColumn(),
+    IModel_1.jsonIgnore(),
     __metadata("design:type", SessionModel_1.SessionModel)
 ], UserModel.prototype, "currentSession", void 0);
 __decorate([
@@ -61,6 +64,7 @@ __decorate([
         eager: true
     }),
     typeorm_1.JoinTable(),
+    IModel_1.jsonIgnore(),
     __metadata("design:type", Array)
 ], UserModel.prototype, "permissions", void 0);
 UserModel = __decorate([

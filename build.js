@@ -25,8 +25,8 @@ entries.forEach(entry => {
             }).then(function(out){
                 fs.writeFileSync(outputPath,out.css,{encoding:"utf8"});
                 fs.writeFileSync(sourceMapPath,out.map,{encoding:"utf8"});
-            }, function(err){
-                throw err;
+            }).catch(function(err){
+                console.error(err);
             });
 
         }

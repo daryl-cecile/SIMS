@@ -3,12 +3,21 @@ class GlobalEventManager {
         this.eventRegister = [];
         this.triggeredEventNames = [];
     }
-    listen(eventName, handler, properties = {}) {
-        let p = GlobalEvent.fixProperties(properties);
-        let e = new GlobalEvent(eventName, handler, p);
-        this.eventRegister.push(e);
-        if (p.autoTriggerIfMissed === true && this.triggeredEventNames.indexOf(eventName) > -1)
-            e.trigger();
+    listen(eventNameOrNames, handler, properties = {}) {
+        let listOfEventNames;
+        if (typeof eventNameOrNames === "string" || eventNameOrNames instanceof String) {
+            listOfEventNames = [eventNameOrNames];
+        }
+        else {
+            listOfEventNames = eventNameOrNames;
+        }
+        listOfEventNames.forEach(eventName => {
+            let p = GlobalEvent.fixProperties(properties);
+            let e = new GlobalEvent(eventName, handler, p);
+            this.eventRegister.push(e);
+            if (p.autoTriggerIfMissed === true && this.triggeredEventNames.indexOf(eventName) > -1)
+                e.trigger();
+        });
         return this;
     }
     trigger(eventName, ...params) {
@@ -20,6 +29,7 @@ class GlobalEventManager {
             else if (e.isInvalid === true) {
                 return false;
             }
+            return true;
         });
         this.triggeredEventNames.push(eventName);
         return this;
@@ -36,12 +46,11 @@ class GlobalEvent {
         this.props = GlobalEvent.fixProperties(prop);
     }
     trigger(...params) {
-        if (this.props.singleUse === true && this.triggeredCount > 0) {
-            this.isInvalid = true;
-            return;
-        }
         this.handler.apply(this, params);
         this.triggeredCount++;
+        if (this.props.singleUse === true && this.triggeredCount > 0) {
+            this.isInvalid = true;
+        }
     }
     static fixProperties(prop) {
         return (Object.assign({

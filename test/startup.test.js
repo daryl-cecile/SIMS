@@ -4,7 +4,10 @@ let bootstrapper = require('../index');
 let sqlConn = require("./../app/config/DBConnection");
 let eventManager = require("./../app/config/GlobalEvents");
 let should = chai.should();
+let system = require("./../app/config/System");
 let server;
+
+bootstrapper.enableTestMode();
 
 chai.use(chaiHttp);
 
@@ -58,12 +61,7 @@ describe('Requests', () => {
 describe('Server close', ()=>{
 
     it("server should end successfully", async () => {
-        server = await bootstrapper.getServer();
-
-        server.on("close", async function() {
-            await sqlConn.end();
-        });
-        server.close();
+        system.System.attemptSafeTerminate();
     });
 
 });

@@ -7,6 +7,8 @@ let should = chai.should();
 let {Passport} = require("./../app/Services/Passport");
 let server;
 
+bootstrapper.enableTestMode();
+
 chai.use(chaiHttp);
 
 describe('Passport Checks', ()=>{

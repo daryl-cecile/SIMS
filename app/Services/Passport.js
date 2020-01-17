@@ -7,9 +7,8 @@ const SessionRepository_1 = require("../Repository/SessionRepository");
 const TimeHelper_1 = require("../config/TimeHelper");
 const PermissionRepository_1 = require("../Repository/PermissionRepository");
 const UserService_1 = require("./UserService");
+const System_1 = require("../config/System");
 const Crypto = require("crypto");
-const db = require("../config/DBConnection");
-const Cookies = require("cookies");
 const uuid = require("uuid/v4");
 var Passport;
 (function (Passport) {
@@ -37,7 +36,6 @@ var Passport;
     }
     Passport.hashPassword = hashPassword;
     async function authenticate(username, password, req, res) {
-        let cookies = new Cookies(req, res, { keys: ["_SIMS_PASSPORT_KEY_"] });
         let result = await this.isStaffCredentialsValid(username, password);
         let acc = await UserRepository_1.UserRepository.getUserByIdentifier(username);
         if (acc === undefined)
@@ -54,7 +52,7 @@ var Passport;
             sesh.invalid = false;
             acc.currentSession = sesh;
             await UserRepository_1.UserRepository.save(acc);
-            cookies.set("_passport", sesh.sessionKey, { signed: true, expires: sesh.expiry });
+            System_1.System.cookieStore.set("_passport", sesh.sessionKey, { expires: sesh.expiry });
             return new JSONResponse_1.JSONResp(true, "Success", {
                 token: sesh.sessionKey
             });
@@ -65,7 +63,6 @@ var Passport;
     }
     Passport.authenticate = authenticate;
     async function authenticateCustomer(usernameOrEmail, req, res) {
-        let cookies = new Cookies(req, res, { keys: ["_SIMS_PASSPORT_KEY_"] });
         let account = await UserRepository_1.UserRepository.getUserByIdentifierOrEmail(usernameOrEmail);
         if (account !== undefined) {
             if (await UserService_1.UserService.isUserStaffMember(account) === true) {
@@ -78,7 +75,7 @@ var Passport;
             account.currentSession = session;
             await UserRepository_1.UserRepository.save(account);
             await SessionRepository_1.SessionRepository.save(session);
-            cookies.set("_passport", session.sessionKey, { signed: true, expires: session.expiry });
+            System_1.System.cookieStore.set("_passport", session.sessionKey, { expires: session.expiry });
             return new JSONResponse_1.JSONResp(true, "Success", {
                 token: session.sessionKey
             });
@@ -89,7 +86,7 @@ var Passport;
     async function isStaffCredentialsValid(username, password) {
         let user = await UserRepository_1.UserRepository.getUserByIdentifier(username);
         if (user === undefined) {
-            return new JSONResponse_1.JSONResp(false, "Incorrect username or password", {
+            return new JSONResponse_1.JSONResp(false, "Incorrect username", "No users with that username was found", {
                 username: username
             });
         }
@@ -104,8 +101,7 @@ var Passport;
     }
     Passport.isStaffCredentialsValid = isStaffCredentialsValid;
     async function isAuthenticated(req, res) {
-        let cookies = new Cookies(req, res, { keys: ["_SIMS_PASSPORT_KEY_"] });
-        let passportToken = cookies.get("_passport", { signed: true });
+        let passportToken = System_1.System.cookieStore.get("_passport");
         if (passportToken) {
             let session = await SessionRepository_1.SessionRepository.getBySessionKey(passportToken);
             if (session && session.IsValid) {

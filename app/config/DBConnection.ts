@@ -1,30 +1,44 @@
-import "reflect-metadata";
-import {Connection, createConnection} from "typeorm";
+import {Connection, createConnection, getConnection} from "typeorm";
+import {System} from "./System";
 
 const eventManager = require("../config/GlobalEvents");
 const ORMConfig = require("./../../ormconfig");
 
 class DBConnector {
-    private _conn:Connection;
+    private _conn:Connection = undefined;
+    private _disabled:boolean = false;
+
     constructor(info) {
 
         createConnection(info).then(conn => {
             this._conn = conn;
             eventManager.trigger("DB_READY");
         }).catch(err => {
-            console.error(err);
-            throw err;
+            System.fatal(err, System.ERRORS.DB_BOOT);
         });
 
     }
 
+    public get isReleased():boolean{
+        return this._disabled;
+    }
+
     public get connection():Connection{
+        if (this._disabled || (this._conn && this._conn.isConnected === false)) return undefined;
         return this._conn;
     };
 
-    async end(){
-        return this.connection.close();
+    public end():Promise<void>{
+        this._disabled = true;
+        this._conn = undefined; // release the reference to the object so GC can claim it
+        return new Promise<void>(resolve => {
+            setTimeout(()=>{
+                // wait 3s here to ensure the db connection hasn't been touched since it's reference was released
+                resolve();
+            },3000).unref();
+        });
     }
 }
 
-module.exports = new DBConnector( ORMConfig );
+export const dbConnector = new DBConnector( ORMConfig );
+module.exports.default = dbConnector;

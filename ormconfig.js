@@ -8,7 +8,7 @@ const OrderModel_1 = require("./app/models/OrderModel");
 const PermissionModel_1 = require("./app/models/PermissionModel");
 const StorageLocationModel_1 = require("./app/models/StorageLocationModel");
 const SessionModel_1 = require("./app/models/SessionModel");
-const TransactionsModel_1 = require("./app/models/TransactionsModel");
+const SystemLogEntryModel_1 = require("./app/models/SystemLogEntryModel");
 const cert = require('./app/config/cert_info');
 let x = {
     type: "mysql",
@@ -29,7 +29,7 @@ let x = {
         StorageLocationModel_1.StorageLocationModel,
         UserModel_1.UserModel,
         SessionModel_1.SessionModel,
-        TransactionsModel_1.TransactionsModel
+        SystemLogEntryModel_1.SystemLogEntryModel
     ],
     migrationsTableName: 'db_migrations',
     migrations: ["orm_migrations/*.js"],

@@ -5,12 +5,12 @@ import {ItemModel} from "../models/ItemModel";
 import {InventoryModel} from "../models/InventoryModel";
 import {NoticeModel} from "../models/NoticeModel";
 import {Passport} from "../Services/Passport";
+import {System} from "./System";
 import {PermissionRepository} from "../Repository/PermissionRepository";
 import {UserRepository} from "../Repository/UserRepository";
+import {dbConnector as db} from "./DBConnection";
 
 (async function(){
-
-    const db = require("./DBConnection");
 
     async function seedPermission(name:string){
 
@@ -125,7 +125,7 @@ import {UserRepository} from "../Repository/UserRepository";
     }
 
 
-    console.log("SEEDING...");
+    System.log('Status',"SEEDING...", System.ERRORS.NONE);
 
 
     let staffPerm = await seedPermission("STAFF");
