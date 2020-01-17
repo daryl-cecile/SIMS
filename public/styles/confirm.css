@@ -70,3 +70,6 @@ button.m-up {
 button:hover {
   opacity: 0.8;
 }
+.checkout-item {
+  padding: 20px;
+}
