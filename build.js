@@ -138,7 +138,7 @@ function buildLess(cb){
 buildLess(()=>{
 
     ignoreBuiltFiles({
-        ts:[".js.map",".d.ts"],
+        ts:[".js.map",".d.ts", ".js"],
         less:[".css",".css.map"]
     });
 
