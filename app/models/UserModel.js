@@ -43,13 +43,6 @@ __decorate([
     __metadata("design:type", String)
 ], UserModel.prototype, "saltine", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => TransactionsModel_1.TransactionsModel, transaction => transaction.userOwner, {
-        cascade: true,
-        eager: true
-    }),
-    __metadata("design:type", Array)
-], UserModel.prototype, "transactions", void 0);
-__decorate([
     typeorm_1.OneToOne(type => SessionModel_1.SessionModel, session => session.owner, {
         nullable: true,
         cascade: ['insert', 'update', 'remove'],
@@ -67,6 +60,13 @@ __decorate([
     IModel_1.jsonIgnore(),
     __metadata("design:type", Array)
 ], UserModel.prototype, "permissions", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => TransactionsModel_1.TransactionsModel, transaction => transaction.userOwner, {
+        cascade: true,
+        eager: true
+    }),
+    __metadata("design:type", Array)
+], UserModel.prototype, "transactions", void 0);
 UserModel = __decorate([
     typeorm_1.Entity("users")
 ], UserModel);

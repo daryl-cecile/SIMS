@@ -1,7 +1,8 @@
 import {BaseModel, jsonIgnore} from "./IModel";
-import {Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne} from "typeorm";
+import {Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne} from "typeorm";
 import {SessionModel} from "./SessionModel";
 import {PermissionModel} from "./PermissionModel";
+import {TransactionsModel} from "./TransactionsModel";
 
 @Entity("users")
 export class UserModel extends BaseModel{
@@ -41,5 +42,11 @@ export class UserModel extends BaseModel{
     @JoinTable()
     @jsonIgnore()
     public permissions:PermissionModel[];
+
+    @OneToMany(type => TransactionsModel, transaction => transaction.userOwner, {
+        cascade:true,
+        eager:true
+    })
+    public transactions:TransactionsModel[];
 
 }
