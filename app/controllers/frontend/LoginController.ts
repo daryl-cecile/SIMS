@@ -1,10 +1,9 @@
-import {Passport} from "../Services/Passport";
-import {UserModel} from "../models/UserModel";
-import {UserService} from "../Services/UserService";
+import {Passport} from "../../Services/Passport";
+import {UserService} from "../../Services/UserService";
 
-const home = require('express').Router();
+const loginController = require('express').Router();
 
-home.get("/", async function (req, res) {
+loginController.get("/", async function (req, res) {
     // default POS page
 
     let authCheck = await Passport.isAuthenticated(req, res);
@@ -26,21 +25,21 @@ home.get("/", async function (req, res) {
 
 });
 
-home.get("/login", async function(req,res){
+loginController.get("/login", async function(req, res){
     res.redirect("/login/user"); // redirect to user-mode login
 });
 
-home.get("/login/user", async function(req,res){
+loginController.get("/login/user", async function(req, res){
     res.render("pages/login"); // user-mode login
 });
 
-home.get("/login/staff", async function(req,res){
+loginController.get("/login/staff", async function(req, res){
     res.render("pages/admin-login"); // admin-mode login
 });
 
-home.get("/logout", async function(req, res){
+loginController.get("/logout", async function(req, res){
     await Passport.voidSession(req, res);
     res.redirect("/");
 });
 
-module.exports = home;
+module.exports = loginController;
