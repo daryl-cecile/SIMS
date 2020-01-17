@@ -4,6 +4,7 @@ import {UserService} from "../Services/UserService";
 
 const home = require('express').Router();
 
+
 home.get("/", async function (req, res) {
     // default POS page
 
