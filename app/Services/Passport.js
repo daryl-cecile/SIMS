@@ -12,6 +12,14 @@ const Crypto = require("crypto");
 const uuid = require("uuid/v4");
 var Passport;
 (function (Passport) {
+    async function getCurrentUser(req, res) {
+        let authCheck = await Passport.isAuthenticated(req, res);
+        if (authCheck.object.isSuccessful) {
+            return authCheck.object.payload['user'];
+        }
+        return undefined;
+    }
+    Passport.getCurrentUser = getCurrentUser;
     function createSaltine() {
         let salt = Crypto.createHash("sha256").update(Crypto.randomBytes(128)).digest('hex');
         let iter = Math.random() * (32 - 8) + 8;
