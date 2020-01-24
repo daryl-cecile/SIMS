@@ -3,6 +3,10 @@ import {SystemLogRepository} from "../Repository/SystemLogRepository";
 import {XError} from "./XError";
 import {CookieStore} from "./CookieHelper";
 import {dbConnector as db} from "./DBConnection";
+import * as e from "express";
+import * as core from "express-serve-static-core";
+import {Router} from "express";
+import {RouterSet} from "./RouterSet";
 
 const eventManager = require('./GlobalEvents');
 
@@ -181,6 +185,29 @@ export namespace System{
             });
         },{ singleUse: true });
 
+    }
+
+    export function loader(app:core.Express){
+        let loaders = {
+            registerBaseControllers : (...routers:RouterSet[])=>{
+                let hostRouter = require('express').Router();
+                routers.forEach(r => {
+                    hostRouter = r.getRouter(hostRouter);
+                    app.use("/", hostRouter);
+                });
+                return loaders;
+            },
+            registerEndpointControllers: (...routers:RouterSet[])=>{
+                let hostRouter = require('express').Router();
+                routers.forEach(r => {
+                    hostRouter = r.getRouter(hostRouter);
+                    app.use("/api", hostRouter);
+                });
+                return loaders;
+            }
+        };
+
+        return loaders;
     }
 
     export namespace Middlewares{

@@ -1,5 +1,10 @@
 import * as http from "http";
 import {System} from "./System";
+import {LoginEndpointController} from "../controllers/endpoints/LoginController";
+import {UserEndpointController} from "../controllers/endpoints/UsersController";
+import {TransactionEndpointController} from "../controllers/endpoints/TransactionController";
+import {LoginController} from "../controllers/frontend/LoginController";
+import {TransactionController} from "../controllers/frontend/TransactionController";
 
 const PORT = process.env.PORT || 3000;
 const eventManager = require('./GlobalEvents');
@@ -12,6 +17,7 @@ module.exports = {
 
     bootstrap : (express)=>{
         const app = express();
+        const loader = System.loader(app);
         require("./DBConnection");
 
         app.set('views', require("path").resolve(__dirname,"../views") );
@@ -31,10 +37,16 @@ module.exports = {
         app.use(System.Middlewares.CSRFHandler());
 
         // Routes
-        app.use('/api', require('../controllers/backend/LoginController'));
-        app.use('/api', require('../controllers/backend/UsersController'));
-        app.use('/api', require('../controllers/backend/TransactionController'));
-        app.use("/", require('../controllers/frontend/LoginController'));
+        loader.registerEndpointControllers(
+            LoginEndpointController,
+            UserEndpointController,
+            TransactionEndpointController
+        );
+
+        loader.registerBaseControllers(
+            LoginController,
+            TransactionController
+        );
 
         server =  app.listen(PORT, () => {
             eventManager.trigger("APP_READY", PORT);
