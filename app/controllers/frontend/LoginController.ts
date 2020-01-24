@@ -1,50 +1,51 @@
 import {Passport} from "../../Services/Passport";
 import {UserService} from "../../Services/UserService";
+import {RouterSet} from "../../config/RouterSet";
 
-const loginController = require('express').Router();
+export const LoginController = new RouterSet( (router) => {
 
-loginController.get("/", async function (req, res) {
-    // default POS page
+    router.get("/", async function (req, res) {
+        // default POS page
 
-    let authCheck = await Passport.isAuthenticated(req, res);
-    if (authCheck.object.isSuccessful){
+        let authCheck = await Passport.isAuthenticated(req, res);
+        if (authCheck.object.isSuccessful){
 
-        let acc = authCheck.object.payload['user'];
+            let acc = authCheck.object.payload['user'];
 
-        if ( await UserService.hasPermission(acc, "MANAGE") ){
-            res.render("pages/manage", { user: acc });
+            if ( await UserService.hasPermission(acc, "MANAGE") ){
+                res.render("pages/manage", { user: acc });
+            }
+            else{
+                res.render("pages/pos", { user: acc });
+            }
+
         }
         else{
-            res.render("pages/pos", { user: acc });
+            res.redirect("/login");
         }
 
-    }
-    else{
-        res.redirect("/login");
-    }
+    });
+
+    router.get("/login", async function(req, res){
+        res.redirect("/login/user"); // redirect to user-mode login
+    });
+
+    router.get("/login/user", async function(req, res){
+        res.render("pages/login"); // user-mode login
+    });
+
+    router.get("/login/staff", async function(req, res){
+        res.render("pages/admin-login"); // admin-mode login
+    });
+
+    router.get("/logout", async function(req, res){
+        await Passport.voidSession(req, res);
+        res.redirect("/");
+    });
+
+    return router;
 
 });
 
-loginController.get("/login", async function(req, res){
-    res.redirect("/login/user"); // redirect to user-mode login
-});
 
-loginController.get("/login/user", async function(req, res){
-    res.render("pages/login"); // user-mode login
-});
-
-loginController.get("/login/staff", async function(req, res){
-    res.render("pages/admin-login"); // admin-mode login
-});
-
-loginController.get("/logout", async function(req, res){
-    await Passport.voidSession(req, res);
-    res.redirect("/");
-});
-
-loginController.get("/confirm", async function(req, res){
-    res.render("pages/confirm_transaction");
-});
-
-module.exports = loginController;
 
