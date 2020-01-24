@@ -11,7 +11,7 @@ export class SystemLogEntryModel extends BaseModel{
     @Column("varchar", {length: 255})
     public message:string;
 
-    @Column("text")
+    @Column("text",{nullable:true})
     public extraInformation:string;
 
     @Column("varchar",{length:12, nullable: true, name:'err-code'})
