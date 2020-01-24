@@ -2,7 +2,7 @@ import * as http from "http";
 import {System} from "./System";
 import {LoginEndpointController} from "../controllers/endpoints/LoginController";
 import {UserEndpointController} from "../controllers/endpoints/UsersController";
-import {TransactionEndpointController} from "../controllers/endpoints/TransactionController";
+import {TransactionsEndpointController} from "../controllers/endpoints/TransactionController";
 import {LoginController} from "../controllers/frontend/LoginController";
 import {TransactionController} from "../controllers/frontend/TransactionController";
 
@@ -40,7 +40,7 @@ module.exports = {
         loader.registerEndpointControllers(
             LoginEndpointController,
             UserEndpointController,
-            TransactionEndpointController
+            TransactionsEndpointController
         );
 
         loader.registerBaseControllers(
