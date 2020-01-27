@@ -1,8 +1,11 @@
 import {SystemLogEntryModel} from "../models/SystemLogEntryModel";
 import {SystemLogRepository} from "../Repository/SystemLogRepository";
-import {XError} from "./XError";
+import {AppError} from "./AppError";
 import {CookieStore} from "./CookieHelper";
 import {dbConnector as db} from "./DBConnection";
+import * as core from "express-serve-static-core";
+import {RouterSet} from "./RouterSet";
+import {isNullOrUndefined} from "./convenienceHelpers";
 
 const eventManager = require('./GlobalEvents');
 
@@ -38,17 +41,21 @@ export namespace System{
         attemptSafeTerminate();
     }
 
-    export async function error(err:Error,errcode?:System.ERRORS,extraInfo?:string){
-        let e = XError.createFrom(err);
-        let rSF = e.stackFrames[0];
+    export async function error(err:Error|AppError,errcode?:System.ERRORS,extraInfo?:string){
+        let e = <AppError>(!isNullOrUndefined(err['isAppError']) ? err : AppError.createFrom(err));
         let message = e.message;
 
-        if (extraInfo) message += "\n\n\t" + extraInfo;
+        let xs = (err || err.stack).toString() + "\n\n\n";
 
-        await System.log(e.type, `${rSF.fileName}:${rSF.lineNumber}:${rSF.columnNumber}\n\t${message}`, errcode);
+        if (extraInfo) {
+            message += "\n\n\t" + extraInfo;
+            xs += extraInfo;
+        }
+
+        await System.log(e.type, `${e.originalStack ?? e.stack}\n\t${message}`, errcode, xs);
     }
 
-    export async function log(title:string, message:string, errCode?:System.ERRORS){
+    export async function log(title:string, message:string, errCode?:System.ERRORS, extras:string=""){
 
         if (ignoreOutput) return;
 
@@ -61,6 +68,7 @@ export namespace System{
             entry.message = message;
             entry.errorCode = err_code_normalized;
             entry.reference = System.InstanceId;
+            entry.extraInformation = extras;
 
             if ( backlog.length > 0 || SystemLogRepository.isConnectionReady() === false ){
                 pushToBacklog(entry);
@@ -77,13 +85,6 @@ export namespace System{
             console.log("");
             console.groupEnd();
         }
-    }
-
-    export function AutoErrorHandler(err , optionalExtraInfo?:string, callback?:Function){
-        if (err){
-            System.error(err, ERRORS.CALLBACK_ERR ,optionalExtraInfo);
-        }
-        if (callback) callback(err);
     }
 
     export function haltOutput(){
@@ -181,6 +182,29 @@ export namespace System{
             });
         },{ singleUse: true });
 
+    }
+
+    export function loader(app:core.Express){
+        let loaders = {
+            registerBaseControllers : (...routers:RouterSet[])=>{
+                let hostRouter = require('express').Router();
+                routers.forEach(r => {
+                    hostRouter = r.getRouter(hostRouter);
+                    app.use("/", hostRouter);
+                });
+                return loaders;
+            },
+            registerEndpointControllers: (...routers:RouterSet[])=>{
+                let hostRouter = require('express').Router();
+                routers.forEach(r => {
+                    hostRouter = r.getRouter(hostRouter);
+                    app.use("/api", hostRouter);
+                });
+                return loaders;
+            }
+        };
+
+        return loaders;
     }
 
     export namespace Middlewares{
