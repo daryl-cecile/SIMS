@@ -4,8 +4,7 @@ import {TransactionsModel} from "../../models/TransactionsModel";
 import {ItemModel} from "../../models/ItemModel";
 import {ItemRepository} from "../../Repository/ItemRepository";
 import {TransactionRepository} from "../../Repository/TransactionRepository";
-import {JSONResponse} from "../../config/JSONResponse";
-import {JSONResp} from "../../config/JSONResponse";
+import {JSONResp, JSONResponse} from "../../config/JSONResponse";
 import {RouterSet} from "../../config/RouterSet";
 
 export const TransactionEndpointController = new RouterSet((router) => {

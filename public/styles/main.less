@@ -1,15 +1,22 @@
 @import "__variables";
+@import "__modifiers";
+
+*{box-sizing: border-box}
+
+html{
+	font-size: 16px;
+}
 
 body{
 	margin: 0;
-	padding: 5px;
+	padding: 0;
 	height: 100vh;
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
 
 	*:focus{
-		outline-color: @action-color;
+		outline: none;
 	}
 }
 
@@ -28,6 +35,16 @@ p{
 main{
 	flex: 1;
 	.dead-center();
+}
+
+section{
+	height: 100vh;
+	overflow: auto;
+
+	&.subtle-bg{
+		background: @white;
+	}
+
 }
 
 .no-margin{

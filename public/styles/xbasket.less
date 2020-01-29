@@ -1,11 +1,19 @@
 @import "__variables";
-@import (once) "flex";
+
+@main-bg: #565656;
 
 :host {
-	border: 2px solid @gray;
 	display: flex;
 	flex-direction: column;
 	position: relative;
+	margin: 1rem 0 1rem 1rem;
+	min-height: calc(100% - 1rem);
+	.smooth-shadow-top();
+	border-radius: 5px 5px 0 0;
+	z-index: 99999;
+	background: @main-bg;
+
+	width: 25rem;
 }
 
 *:focus{
@@ -17,15 +25,17 @@
 	position:absolute;
 	top: 0;
 	left:0;
-	height: 30px;
+	height: 55px;
 	border-bottom: 1px solid @gray;
 	box-sizing: border-box;
-	background: rgba(255,255,255,0.6);
-	backdrop-filter: blur(6px);
-	padding: 5px;
+	background: rgba(@primary-dark,0.4);
+	backdrop-filter: blur(8px);
+	padding: 1rem;
+	border-radius: 5px 5px 0 0;
+	z-index: 5;
 
 	.dead-center(row, left);
-	.smooth-font();
+	.smooth-font(@bleach);
 
 	> *{
 		margin-right: 5px;
@@ -34,67 +44,8 @@
 
 ul.b-list{
 	margin: 0;
-	padding: 30px 0 60px;
+	padding: 55px 0 60px;
 	overflow: auto;
-
-	li{
-		display: flex;
-		flex-direction: row;
-		box-sizing: border-box;
-		opacity: 1;
-		padding: 15px;
-		height: 80px;
-		transition: all .24s;
-
-		img{
-			width: 50px;
-			height: auto;
-			margin-right: 15px;
-			transition: all .3s;
-		}
-
-		img:hover{
-			transform: scale(1.02);
-			box-shadow: @smooth-shadow
-		}
-
-		div {
-			.smooth-font();
-			width: 100%;
-
-			p{
-				margin: 0;
-				.dead-center(row, space-between);
-
-
-				span:nth-of-type(2){
-					a{
-						margin-left: 4px;
-						.paragraph();
-
-						i{
-							font-size: 20px;
-						}
-					}
-
-					a:hover{
-						opacity: 0.6;
-					}
-
-					a:last-of-type{
-						margin-left: 12px;
-					}
-				}
-			}
-		}
-	}
-
-	li.hiding{
-		height: 0;
-		padding: 0 15px;
-		opacity: 0;
-		transform: scale(1,0);
-	}
 }
 
 .checkout-btn{
@@ -105,7 +56,7 @@ ul.b-list{
 	box-sizing: border-box;
 	height: 60px;
 	.dead-center();
-	background: linear-gradient(to bottom, transparent, white 90%);
+	background: linear-gradient(to bottom, transparent, @primary-dark 90%);
 
 	button{
 		.paragraph();
@@ -113,11 +64,21 @@ ul.b-list{
 		box-shadow: @smooth-shadow;
 		border-radius: @rounded-border;
 		border: none;
-		padding: 5px 12px;
+		padding: 5px 24px;
+		height: 40px;
+		transition: all .25s;
 	}
 
 	button:hover{
-		opacity: 0.6;
 		cursor: pointer;
+		transform: scale(1.03);
+	}
+
+	button:active{
+		transform: scale(0.9);
+	}
+
+	button:focus{
+		outline: none;
 	}
 }

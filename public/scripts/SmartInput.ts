@@ -154,7 +154,7 @@ class SmartInput extends HTMLElement{
         let inp = <HTMLInputElement>this._shadow.getElementById("text-input");
         inp.placeholder = this._placeholder;
         inp.value = this._value;
-        if (updateType === true && ["text","password"].indexOf(this._type) !== -1) {
+        if (updateType === true && ["text","password","search"].indexOf(this._type) !== -1) {
             inp.type = this._type;
             inp.setAttribute("type", this._type);
         }
