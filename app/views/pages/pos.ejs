@@ -4,35 +4,23 @@
     <%- include('../partials/meta') %>
     <title>POS</title>
     <%- include('../partials/imports') %>
-    <link rel="stylesheet" href="/public/styles/flex.css">
 	<link rel="stylesheet" href="/public/styles/xbasket.css">
 
 	<script src="/public/scripts/XBasket.js"></script>
 	
 </head>
 <body>
-    <%- include('../partials/nav', {isAdmin:false}) %>
 
-    <div id="main-container" class="f h s-1 limit-height-100">
+    <section class="f h subtle-bg">
+        <x-basket id="basket"></x-basket>
 
-        <x-basket id="basket" class="f w-third"></x-basket>
+        <div class="f greedy relative">
+            <%- include('../partials/nav', {isAdmin:false}) %>
+            <h1>WO</h1>
 
-        <div class="f w-half">
-    
-    
-            <label class="input f">
-                <span>Find Item</span>
-                <smart-input name="utid" placeholder=""></smart-input>
-            </label>
-        
-    
-            <x-product id="product" class="f"></x-product>
+            <product-view></product-view>
         </div>
-
-    </div>
-
-            
-
+    </section>
 
     <%- include('../partials/footer') %>
 
