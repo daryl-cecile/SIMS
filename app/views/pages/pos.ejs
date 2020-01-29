@@ -6,19 +6,21 @@
     <%- include('../partials/imports') %>
 	<link rel="stylesheet" href="/public/styles/xbasket.css">
 
-	<script src="/public/scripts/XBasket.js"></script>
-	
+    <script src="/public/scripts/XCatalog.js"></script>
+    <script src="/public/scripts/XBasket.js"></script>
 </head>
 <body>
 
-    <section class="f h subtle-bg">
+    <section class="f h subtle-bg" style="overflow: hidden">
         <x-basket id="basket"></x-basket>
 
-        <div class="f greedy relative">
+        <div class="f v greedy relative">
             <%- include('../partials/nav', {isAdmin:false}) %>
-            <h1>WO</h1>
+            <section class="padded">
+                <smart-input name="find" placeholder="Find Item" type="search"></smart-input>
 
-            <product-view></product-view>
+                <x-catalog id="catalog"></x-catalog>
+            </section>
         </div>
     </section>
 
@@ -27,75 +29,91 @@
     <script>
 
         let basket = $("#basket").get(0);
+        let catalog = $("#catalog").get(0);
         let itemCollection = new BasketCollection();
+        let catalogCollection = new CatalogCollection();
 
-        itemCollection.addItem( new BasketItem({
-            name: "Whiteboard Pens 3 Pack (Black)",
-            description: "Dry-erase whiteboard pens",
-            quantity: 30,
-            itemReference: "wbp3k"
-        }) );
+        function seedBasket(){
+            itemCollection.addItem( new BasketItem({
+                name: "Whiteboard Pens",
+                description: "3 Pack (Black)",
+                quantity: 30,
+                itemReference: "wbp3k"
+            }) );
 
-        itemCollection.addItem( new BasketItem({
-            name: "Whiteboard Pens 5 Pack (Blue)",
-            description: "Dry-erase whiteboard pens",
-            quantity: 30,
-            itemReference: "wbp5b"
-        }) );
+            itemCollection.addItem( new BasketItem({
+                name: "Whiteboard Pens",
+                description: "5 Pack (Blue)",
+                quantity: 30,
+                itemReference: "wbp5b"
+            }) );
 
-        itemCollection.addItem( new BasketItem({
-            name: "Whiteboard Pens 4 Pack (Red)",
-            description: "Dry-erase whiteboard pens",
-            quantity: 30,
-            itemReference: "wbp4r"
-        }) );
+            itemCollection.addItem( new BasketItem({
+                name: "Whiteboard Pens",
+                description: "4 Pack (Red)",
+                quantity: 30,
+                itemReference: "wbp4r"
+            }) );
 
-        itemCollection.addItem( new BasketItem({
-            name: "Blu-Tack",
-            quantity: 12,
-            itemReference: "bts0x"
-        }) );
+            itemCollection.addItem( new BasketItem({
+                name: "Blu-Tack",
+                quantity: 12,
+                itemReference: "bts0x"
+            }) );
 
-        itemCollection.addItem( new BasketItem({
-            name: "White-Tack",
-            quantity: 20,
-            itemReference: "wts0x"
-        }) );
+            itemCollection.addItem( new BasketItem({
+                name: "White-Tack",
+                quantity: 20,
+                itemReference: "wts0x"
+            }) );
 
-        itemCollection.addItem( new BasketItem({
-            name: "A3 Cardboard",
-            quantity: 8,
-            itemReference: "acb0x"
-		}) );
-		
-		let product = $("#product").get(0);
-        let productCollection = new BasketCollection();
+            itemCollection.addItem( new BasketItem({
+                name: "A3 Cardboard",
+                quantity: 8,
+                itemReference: "acb0x"
+            }) );
 
-        productCollection.addItem( new BasketItem({
-            name: "Whiteboard Pens 3 Pack (Black)",
-            description: "Dry-erase whiteboard pens",
-            quantity: 30,
-            itemReference: "wbp3k"
-        }) );
+            basket.attachCollection(itemCollection);
+        }
+        function seedCatalog(){
+            catalogCollection.addItem( new CatalogItem({
+                name: "Whiteboard Pens",
+                description: "3 Pack (Black)",
+                itemReference: "wbp3k"
+            }) );
 
-        productCollection.addItem( new BasketItem({
-            name: "Whiteboard Pens 5 Pack (Blue)",
-            description: "Dry-erase whiteboard pens",
-            quantity: 30,
-            itemReference: "wbp5b"
-        }) );
+            catalogCollection.addItem( new CatalogItem({
+                name: "Whiteboard Pens",
+                description: "5 Pack (Blue)",
+                itemReference: "wbp5b"
+            }) );
 
-        productCollection.addItem( new BasketItem({
-            name: "Whiteboard Pens 4 Pack (Red)",
-            description: "Dry-erase whiteboard pens",
-            quantity: 30,
-            itemReference: "wbp4r"
-        }) );
+            catalogCollection.addItem( new CatalogItem({
+                name: "Whiteboard Pens",
+                description: "4 Pack (Red)",
+                itemReference: "wbp4r"
+            }) );
 
+            catalogCollection.addItem( new CatalogItem({
+                name: "Blu-Tack",
+                itemReference: "bts0x"
+            }) );
 
-        basket.attachCollection(itemCollection);
-        product.attachCollection(productCollection);
+            catalogCollection.addItem( new CatalogItem({
+                name: "White-Tack",
+                itemReference: "wts0x"
+            }) );
 
+            catalogCollection.addItem( new CatalogItem({
+                name: "A3 Cardboard",
+                itemReference: "acb0x"
+            }) );
+
+            catalog.attachCollection(catalogCollection);
+        }
+
+        seedCatalog();
+        seedBasket();
 
 	</script>
 

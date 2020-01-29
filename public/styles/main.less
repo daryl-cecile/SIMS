@@ -17,8 +17,6 @@ body{
 
 	*:focus{
 		outline: none;
-		border-radius: @rounded-border;
-		box-shadow: 0 0 0 2px rgba(@primary-color,0.2);
 	}
 }
 
@@ -40,12 +38,13 @@ main{
 }
 
 section{
-	display: flex;
 	height: 100vh;
+	overflow: auto;
 
 	&.subtle-bg{
 		background: @white;
 	}
+
 }
 
 .no-margin{
