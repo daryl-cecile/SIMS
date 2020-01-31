@@ -3,6 +3,7 @@ import {TransactionsModel} from "../../models/TransactionsModel";
 import {TransactionRepository} from "../../Repository/TransactionRepository";
 import {JSONResp, JSONResponse} from "../../config/JSONResponse";
 import {RouterSet} from "../../config/RouterSet";
+import {TransactionService} from "../../Services/TransactionService";
 
 export const TransactionsEndpointController = new RouterSet((router)=>{
 
@@ -27,7 +28,7 @@ export const TransactionsEndpointController = new RouterSet((router)=>{
         } else res.json((new JSONResp(false)).object);
     });
 
-    router.get("/transactions/usertransrec", async function (req, res) {
+    router.get("/transactions/list", async function (req, res) {
         // Gets the current user that is logged in.
         let currentUser = await Passport.getCurrentUser(req,res);
         // Gets all transactions on record for the current user.
