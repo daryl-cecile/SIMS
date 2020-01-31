@@ -4,6 +4,7 @@ import {Items} from "../payloads/ItemList";
 import {System} from "../config/System";
 import {ItemRepository} from "../Repository/ItemRepository";
 import {UserModel} from "../models/UserModel";
+import {RefundItemList} from "../payloads/refundItemList";
 
 class service extends BaseService {
     async updateInventory(itemsToUpdate:ItemModel[], receivedItems:Items[], currentUser:UserModel) {
@@ -25,9 +26,14 @@ class service extends BaseService {
         }
     }
 
-    async parseReceivedItems(res) {
-        let receivedItems:Items[] = Object.keys(res.body['items'])
-            .map(id => new Items(parseInt(id), res.body['items'][id]) );
+    async parseRefundItems(req) {
+        let itemsToRefund:RefundItemList = JSON.parse(req.body['data']);
+        return itemsToRefund
+    }
+
+    async parseReceivedItems(req) {
+        let receivedItems:Items[] = Object.keys(req.body['items'])
+            .map(id => new Items(parseInt(id), req.body['items'][id]) );
         let itemsToUpdate:ItemModel[] = await Promise.all(
             receivedItems.map(async i => {
                 return await ItemRepository.getByItemCode(i.id)

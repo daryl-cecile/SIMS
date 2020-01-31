@@ -11,7 +11,7 @@ export const TransactionsEndpointController = new RouterSet((router)=>{
         let currentUser = await Passport.getCurrentUser(req,res);
         if (currentUser != undefined) {
 
-            let {receivedItems, itemsToUpdate} = await TransactionService.parseReceivedItems(res);
+            let {receivedItems, itemsToUpdate} = await TransactionService.parseReceivedItems(req);
 
             let tempTransaction:TransactionsModel = new TransactionsModel();
             tempTransaction.userOwner = currentUser;
@@ -28,6 +28,12 @@ export const TransactionsEndpointController = new RouterSet((router)=>{
         } else res.json((new JSONResp(false)).object);
     });
 
+    router.post("/transactions/refund", async function(req, res) {
+        let {receivedItems, itemsToUpdate} = await TransactionService.parseReceivedItems(req);
+
+
+    });
+
     router.get("/transactions/list", async function (req, res) {
         // Gets the current user that is logged in.
         let currentUser = await Passport.getCurrentUser(req,res);
@@ -38,6 +44,8 @@ export const TransactionsEndpointController = new RouterSet((router)=>{
         res.json(JSONResponse(true, "transactionRecord", userTransactions));
 
     });
+
+
     return router;
 
 });
