@@ -1,12 +1,4 @@
 
-interface IBasketItemOption{
-    name:string;
-    description?:string;
-    quantity?:number;
-    itemReference:string;
-    imageUrl?:string;
-}
-
 class BasketItem{
 
     private _name:string = "";
@@ -56,7 +48,7 @@ class BasketItem{
         return this;
     }
 
-    constructor(options:IBasketItemOption) {
+    constructor(options:ICatalogItemOption) {
         this.name = options.name;
         this.description = options.description ?? "";
         this.itemReference = options.itemReference;
@@ -133,7 +125,7 @@ class XBasket extends HTMLElement{
 
     constructor() {
         super();
-        this._shadow = this.attachShadow({ mode: "open" });
+        this._shadow = this.attachShadow({ mode: "closed" });
     }
 
     public get collection(){
@@ -167,7 +159,7 @@ class XBasket extends HTMLElement{
         this._shadow.querySelector("#title").innerHTML = `<strong> Basket </strong> <span>(${this.itemCount} Items)</span>`;
         this._shadow.querySelector(".checkout-btn").innerHTML = `<button>Checkout ${this.itemCount} item(s)</span>`;
 
-        let currentItemElementIds = [... this._shadow.querySelectorAll("ul.b-list > li")].map(el => el.id.replace("item-",""));
+        let currentItemElementIds = [... this._shadow.querySelectorAll("ul.b-list > xbasket-item")].map(el => el.id.replace("item-",""));
 
         if (this.itemCount > 0){
             this.collection.eachItem((item,prev, next) => {
@@ -195,21 +187,11 @@ class XBasket extends HTMLElement{
 
                 }
                 else{
-                    existing.querySelector("img").src = item.imageUrl;
-                    existing.querySelector("p:nth-of-type(1)").innerHTML = item.name;
-
-                    existing.querySelector("p:nth-of-type(2)")
-                        .querySelector("span:nth-of-type(1)").innerHTML = `Quantity: ${item.quantity}`;
+                    existing.setAttribute('src', item.imageUrl);
+                    existing.setAttribute('title',item.name);
                 }
             });
 
-            currentItemElementIds.forEach(itemId => {
-                let itemEl = this._shadow.querySelector("#item-"+itemId);
-                itemEl.classList.add("hiding");
-                setTimeout(()=>{
-                    itemEl.remove();
-                },240);
-            });
         }
     }
 
@@ -268,62 +250,16 @@ class XBasket extends HTMLElement{
 
     private createItemElement(item:BasketItem){
 
-        let it = document.createElement("li");
-        it.id = "item-" + item.itemReference;
+        let it:XBasketItem = <any>document.createElement("xbasket-item");
+        it.setAttribute('id', "item-" + item.itemReference);
+        it.setAttribute('src', item.imageUrl);
+        it.setAttribute('title', item.name);
+        it.setAttribute('desc', item.description);
+        it.setAttribute('quantity', String(item.quantity));
 
-        let img = document.createElement("img");
-        img.src = item.imageUrl;
-        it.appendChild(img);
-
-        let div = document.createElement("div");
-        it.appendChild(div);
-
-        let nameEl = document.createElement("p");
-        nameEl.innerHTML = item.name;
-        div.appendChild(nameEl);
-
-        let infoEl = document.createElement("p");
-        infoEl.innerHTML = `<span>Quantity: ${item.quantity}</span>`;
-
-        let cntl = document.createElement("span");
-
-        let a_max = document.createElement("a");
-        a_max.href = "#";
-        a_max.onclick = ()=>{
-            let currentItem = this.collection.getItemByReference(item.itemReference);
-            if (currentItem) {
-                const MAX_STOCK_COUNT = 50;
-                if (currentItem.quantity < MAX_STOCK_COUNT){
-                    // TODO check MAX_STOCK_COUNT from endpoint
-                    currentItem.quantity ++;
-                }
-            }
-        };
-        a_max.innerHTML = '<i class="far fa-plus-square"></i>';
-        cntl.appendChild(a_max);
-
-        let a_min = document.createElement("a");
-        a_min.href = "#";
-        a_min.onclick = ()=>{
-            let currentItem = this.collection.getItemByReference(item.itemReference);
-            if (currentItem) {
-                currentItem.quantity --;
-                if (currentItem.quantity === 0){
-                    this.collection.removeItemByReference(item.itemReference)
-                }
-            }
-        };
-        a_min.innerHTML = '<i class="far fa-minus-square"></i>';
-        cntl.appendChild(a_min);
-
-        let a_del = document.createElement("a");
-        a_del.href = "#";
-        a_del.onclick = ()=>{ this.collection.removeItemByReference(item.itemReference) };
-        a_del.innerHTML = '<i class="far fa-trash-alt"></i>';
-        cntl.appendChild(a_del);
-
-        infoEl.appendChild(cntl);
-        div.appendChild(infoEl);
+        it.addEventListener('removed',()=>{
+            this.collection.removeItemByReference(item.itemReference)
+        });
 
         return it;
 
@@ -332,3 +268,168 @@ class XBasket extends HTMLElement{
 }
 
 customElements.define('x-basket', XBasket);
+
+
+class XBasketItem extends HTMLElement{
+
+    private _imgSrc:string = "";
+    private _quantity:number = 0;
+    private _deleted:boolean = false;
+    private _title:string = "";
+    private _desc:string = "";
+    private _maxStockCount:number = 1000;
+    private _initialized:boolean = false;
+
+    public get quantity(){ return this._quantity; }
+    public set quantity(v){
+        this._quantity = v;
+        if (this._quantity > this._maxStockCount) this._quantity = this._maxStockCount;
+        if (this._quantity <= 0) this._quantity = 0;
+        this.updateVisuals()
+    }
+
+    public get title(){ return this._title; }
+    public set title(v){ this._title = v; this.updateVisuals() }
+
+    public get description(){ return this._desc; }
+    public set description(v){ this._desc = v; this.updateVisuals() }
+
+    public get max(){ return this._maxStockCount; }
+    public set max(v){ this._maxStockCount = v; this.updateVisuals() }
+
+    static get observedAttributes() { return ['src','title','desc','quantity','max']; }
+
+    static generateBody(opt:XCatalogItemProperties){
+        let options = Object.assign(opt, {
+            imgSrc:"/public/res/sims-logo.png",
+            imgDesc:"",
+            itemInfo:"",
+            quantity: 1
+        });
+
+        return `
+        <img id="item-image" src="${options.imgSrc}" alt="${options.imgDesc}">
+        <div id="info">
+            <p id="title">${options.title}</p>
+            <p id="description">${options.itemInfo}</p>
+        </div>
+        <div id="edit">
+            <div>
+                <button id="decrease-btn">&minus;</button>
+                <span id="quantity">${options.quantity}</span>
+                <button id="increase-btn">&plus;</button>
+            </div>
+        </div>
+        `
+    }
+
+    private readonly _shadow:ShadowRoot;
+
+    constructor() {
+        super();
+        this._shadow = this.attachShadow({ mode: "closed" });
+    }
+
+    connectedCallback() { // added to page
+        this.reset({
+            title: this._title,
+            imgDesc: this._desc,
+            itemInfo: this._desc,
+            imgSrc: this._imgSrc,
+            quantity: 1
+        });
+        this._initialized = true;
+        this.updateVisuals();
+    }
+
+    disconnectedCallback(){
+        this.clearResource();
+        this._initialized = false;
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        switch (name) {
+            case "src":
+                this._imgSrc = newValue;
+                break;
+            case "quantity":
+                this._quantity = parseInt(newValue);
+                break;
+            case "title":
+                this._title = newValue;
+                break;
+            case "desc":
+                this._desc = newValue;
+                break;
+            case "max":
+                this._maxStockCount = newValue;
+                break;
+        }
+        this.updateVisuals();
+    }
+
+    private updateVisuals(){
+        if (this._initialized){
+            if (this._quantity <= 0 && this._deleted === false) this._deleted = true;
+
+            if (this._shadow !== null){
+                this._shadow.querySelector('#item-image').setAttribute('src', this._imgSrc);
+                this._shadow.querySelector('#quantity').innerHTML = String(this._quantity);
+                this._shadow.querySelector('#description').innerHTML = String(this._desc);
+            }
+
+            if (this._deleted === true){
+                this.classList.add("hiding");
+                setTimeout(()=>{
+                    this.remove();
+                    this.emitEvent('removed');
+                },240);
+            }
+
+        }
+    }
+
+    private setup(){
+
+        let l = document.createElement("link");
+        l.href = "/public/styles/xbasketItem.css";
+        l.rel = "stylesheet";
+        this._shadow.appendChild( l );
+
+        this._shadow.querySelector('#increase-btn').addEventListener('click',()=>{
+            this.quantity += 1;
+        });
+
+        this._shadow.querySelector('#decrease-btn').addEventListener('click',()=>{
+            this.quantity -= 1;
+        });
+
+    }
+
+    private reset(opt:XCatalogItemProperties){
+        if (this._shadow !== null) {
+            this._shadow.innerHTML = XBasketItem.generateBody(opt);
+            this.setup();
+        }
+    }
+
+    private clearResource(){
+        if (this._shadow !== null) this._shadow.innerHTML = "";
+    }
+
+    private emitEvent(eventName:string,data={}){
+        this.dispatchEvent(new CustomEvent(eventName, {
+            bubbles: true,
+            detail: data
+        }));
+        return this;
+    }
+
+    public dispose(){
+        this._deleted = true;
+        this.updateVisuals();
+    }
+
+}
+
+customElements.define('xbasket-item', XBasketItem);

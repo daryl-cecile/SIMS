@@ -2,10 +2,15 @@
 
 :host{
 	height: 38px;
-	border: 1px solid gainsboro;
+	border: @input-normal-border;
 	border-radius: 2px;
 	position: relative;
 	box-sizing: border-box;
+	display: block;
+}
+
+:host([type="search"]){
+	background: @bleach;
 }
 
 input#text-input{
@@ -19,10 +24,15 @@ input#text-input{
 	font-size: 14px;
 	border: none;
 	background: transparent;
+	text-align: inherit;
+}
+
+:host(:focus-within){
+	border: @input-focus-border;
 }
 
 input#text-input:focus{
-	outline-color: @action-color;
+	outline:none;
 }
 
 ul#suggestions{

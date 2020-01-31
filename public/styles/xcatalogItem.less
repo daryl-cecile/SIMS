@@ -1,0 +1,41 @@
+@import "__variables";
+
+:host{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	img{
+		border-radius: @rounded-border;
+		width: 100%;
+	}
+
+	#info{
+		margin-top: 5px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		flex:1;
+
+		p {
+			margin: 0;
+			text-align: center;
+			.paragraph();
+		}
+
+		#title{
+			font-size: 0.8rem;
+		}
+
+		#description{
+			font-size: 0.7rem;
+
+			&:empty{
+				display: none;
+			}
+		}
+
+	}
+
+}
