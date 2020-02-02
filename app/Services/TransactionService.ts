@@ -5,6 +5,8 @@ import {System} from "../config/System";
 import {ItemRepository} from "../Repository/ItemRepository";
 import {UserModel} from "../models/UserModel";
 import {RefundItemList} from "../payloads/refundItemList";
+import {TransactionsModel} from "../models/TransactionsModel";
+import {TransactionRepository} from "../Repository/TransactionRepository";
 
 class service extends BaseService {
     async updateInventory(itemsToUpdate:ItemModel[], receivedItems:Items[], currentUser:UserModel) {
@@ -24,6 +26,20 @@ class service extends BaseService {
                 }
             }
         }
+    }
+
+    async handleRefund(transaction:TransactionsModel, itemsToRefund:RefundItemList) {
+        for (const item of itemsToRefund.items) {
+            //Find element index
+            let tempIndex = transaction.items.findIndex(element => element.id = item.id);
+
+            // Add returned items to unit count
+            transaction.items[tempIndex].unitCount += item.quantity;
+            await System.log("Transaction[" + transaction.id + "]", "User[" +
+                transaction.userOwner.identifier+"] refunded " + item.quantity + " of item["+
+                item.id+"]");
+        }
+        await TransactionRepository.update(transaction);
     }
 
     async parseRefundItems(req) {

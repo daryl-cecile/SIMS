@@ -29,8 +29,12 @@ export const TransactionsEndpointController = new RouterSet((router)=>{
     });
 
     router.post("/transactions/refund", async function(req, res) {
-        let {receivedItems, itemsToUpdate} = await TransactionService.parseReceivedItems(req);
+        let itemsToRefund = await TransactionService.parseRefundItems(req);
+        let tempTransaction = await TransactionRepository.getByItemCode(itemsToRefund.transactionCode);
 
+        await TransactionService.handleRefund(tempTransaction, itemsToRefund);
+
+        res.json(new JSONResp(true, "Refund successful").object);
 
     });
 
