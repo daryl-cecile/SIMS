@@ -11,19 +11,13 @@ export const TransactionsEndpointController = new RouterSet((router)=>{
         let currentUser = await Passport.getCurrentUser(req,res);
         if (currentUser != undefined) {
 
-            let {receivedItems, itemsToUpdate} = await TransactionService.parseReceivedItems(req);
+            let purchasedItems = await TransactionService.parsePurchasedItems(req);
 
             let tempTransaction:TransactionsModel = new TransactionsModel();
             tempTransaction.userOwner = currentUser;
-            tempTransaction.items = itemsToUpdate;
 
-            //Add Transaction
-            await TransactionRepository.update(tempTransaction);
+            await TransactionService.handlePurchase(tempTransaction, purchasedItems, currentUser);
 
-            // Update the inventory
-            await TransactionService.updateInventory(itemsToUpdate, receivedItems, currentUser);
-
-            //TODO Add transaction log
             res.json( (new JSONResp(true, "Transaction successfully added")).object);
         } else res.json((new JSONResp(false)).object);
     });
