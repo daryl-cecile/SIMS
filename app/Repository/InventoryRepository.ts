@@ -6,6 +6,11 @@ class repo extends BaseRepository<InventoryModel> {
         super(InventoryModel);
     }
 
+    async findByItemId(itemID:number) {
+        return await this.repo.findOne( {
+            item:{id:itemID}
+        })
+    }
 }
 
 export const InventoryRepository = new repo();

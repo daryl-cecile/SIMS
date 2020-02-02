@@ -1,23 +1,23 @@
 import {BaseService} from "./BaseService";
 import {Items} from "../payloads/ItemList";
 import {System} from "../config/System";
-import {ItemRepository} from "../Repository/ItemRepository";
 import {UserModel} from "../models/UserModel";
 import {TransactionsModel} from "../models/TransactionsModel";
 import {TransactionRepository} from "../Repository/TransactionRepository";
+import {InventoryRepository} from "../Repository/InventoryRepository";
 
 class service extends BaseService {
 
     async handlePurchase(transaction:TransactionsModel, purchasedItems:Items[], currentUser:UserModel) {
         for (const item of purchasedItems) {
-            // Retrieve Item
-            let tempItem = await ItemRepository.getByItemCode(item.id);
-            // Update Item
-            tempItem.unitCount -= item.quantity;
-            await ItemRepository.update(tempItem);
+            // Retrieve Inventory
+            let tempInventory = await InventoryRepository.findByItemId(item.id);
+            // Update Inventory
+            tempInventory.quantity -= item.quantity;
+            await InventoryRepository.update(tempInventory);
 
             // Add item to transaction
-            transaction.items.push(tempItem);
+            transaction.items.push(tempInventory.item);
             await System.log("User[" + currentUser.identifier + "]", "Issued " + item.quantity + " of item["
             + item.id +"]");
 
@@ -26,16 +26,14 @@ class service extends BaseService {
     }
     async handleRefund(transaction:TransactionsModel, itemsToRefund:Items[]) {
         for (const item of itemsToRefund) {
-            //Find element index
-            let tempIndex = transaction.items.findIndex(element => element.id = item.id);
-
-            // Add returned items to unit count
-            transaction.items[tempIndex].unitCount += item.quantity;
+            let tempInventory = await InventoryRepository.findByItemId(item.id);
+            tempInventory.quantity += item.quantity;
             await System.log("Transaction[" + transaction.id + "]", "User[" +
                 transaction.userOwner.identifier+"] refunded " + item.quantity + " of item["+
                 item.id+"]");
+
+            await InventoryRepository.update(tempInventory);
         }
-        await TransactionRepository.update(transaction);
     }
     async parseRefundItems(req) {
         let itemsToRefund:Items[] = JSON.parse(req.body['data']['transactions']);
