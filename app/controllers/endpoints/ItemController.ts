@@ -4,8 +4,13 @@ import {ItemRepository} from "../../Repository/ItemRepository";
 
 export const ItemManagementController = new RouterSet((router) => {
 
-    router.get("/items/search", async function(req, res) {
-        let searchResults = await ItemRepository.getByItemCode(req.body["itemId"]);
+    router.get("/items/searchbyname", async function(req, res) {
+        let searchResults = await ItemRepository.findByText(req.body["term"]);
+        res.json(JSONResponse(true, "Results", searchResults))
+    });
+
+    router.get("/items/searchbyid", async function(req, res) {
+        let searchResults = await ItemRepository.getByItemCode(req.body["itemID"]);
         res.json(JSONResponse(true, "Results", searchResults))
     });
 
