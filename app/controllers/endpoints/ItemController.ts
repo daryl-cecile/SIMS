@@ -14,7 +14,7 @@ export const ItemManagementController = new RouterSet((router) => {
         res.json(JSONResponse(true, "Results", searchResults))
     });
 
-    router.post("/items/itemlist", async function (req, res){
+    router.get("/items/itemlist", async function (req, res){
         let listResults = await ItemRepository.getAll();
         res.json(JSONResponse(true, "ItemList", listResults));
     });
