@@ -7,9 +7,11 @@ class repo extends BaseRepository<InventoryModel> {
     }
 
     async findByItemId(itemID:number) {
-        return await this.repo.findOne( {
-            item:{id:itemID}
-        })
+        return await this.repo.findOne({
+            where : {
+                item:{ id:itemID }
+            }
+        });
     }
 }
 
