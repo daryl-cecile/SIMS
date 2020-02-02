@@ -1,5 +1,6 @@
 import {BaseRepository} from "./BaseRepository";
 import {ItemModel} from "../models/ItemModel";
+import {Like} from "typeorm";
 
 class repo extends BaseRepository<ItemModel>{
 
