@@ -2,9 +2,10 @@ import * as http from "http";
 import {System} from "./System";
 import {LoginEndpointController} from "../controllers/endpoints/LoginController";
 import {UserEndpointController} from "../controllers/endpoints/UsersController";
-import {TransactionEndpointController} from "../controllers/endpoints/TransactionController";
+import {TransactionsEndpointController} from "../controllers/endpoints/TransactionController";
 import {LoginController} from "../controllers/frontend/LoginController";
 import {TransactionController} from "../controllers/frontend/TransactionController";
+import {ItemManagementController} from "../controllers/endpoints/ItemController";
 
 const PORT = process.env.PORT || 3000;
 const eventManager = require('./GlobalEvents');
@@ -40,7 +41,8 @@ module.exports = {
         loader.registerEndpointControllers(
             LoginEndpointController,
             UserEndpointController,
-            TransactionEndpointController
+            TransactionsEndpointController,
+            ItemManagementController
         );
 
         loader.registerBaseControllers(
