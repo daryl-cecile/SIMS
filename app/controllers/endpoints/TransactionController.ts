@@ -29,8 +29,8 @@ export const TransactionsEndpointController = new RouterSet((router)=>{
     });
 
     router.post("/transactions/refund", async function(req, res) {
-        let itemsToRefund = await TransactionService.parseRefundItems(req);
-        let tempTransaction = await TransactionRepository.getByItemCode(itemsToRefund.transactionCode);
+        let {transactionsCode, itemsToRefund} = await TransactionService.parseRefundItems(req);
+        let tempTransaction = await TransactionRepository.getByItemCode(transactionsCode);
 
         await TransactionService.handleRefund(tempTransaction, itemsToRefund);
 

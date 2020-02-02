@@ -10,6 +10,10 @@ import {TransactionRepository} from "../Repository/TransactionRepository";
 
 class service extends BaseService {
     async updateInventory(itemsToUpdate:ItemModel[], receivedItems:Items[], currentUser:UserModel) {
+        for (const item of receivedItems) {
+            itemsToUpdate.findIndex(element => element.id)
+        }
+
         //This could be done more cleanly but oh well.
         for (const itemToUpdate of itemsToUpdate) {
             for (const receivedItem of receivedItems) {
@@ -28,8 +32,8 @@ class service extends BaseService {
         }
     }
 
-    async handleRefund(transaction:TransactionsModel, itemsToRefund:RefundItemList) {
-        for (const item of itemsToRefund.items) {
+    async handleRefund(transaction:TransactionsModel, itemsToRefund:Items[]) {
+        for (const item of itemsToRefund) {
             //Find element index
             let tempIndex = transaction.items.findIndex(element => element.id = item.id);
 
@@ -43,8 +47,17 @@ class service extends BaseService {
     }
 
     async parseRefundItems(req) {
-        let itemsToRefund:RefundItemList = JSON.parse(req.body['data']);
-        return itemsToRefund
+        let itemsToRefund:Items[] = JSON.parse(req.body['data']['transactions']);
+        let transactionsCode = JSON.parse(req.body['data']['transactionCode']);
+        return {
+            transactionsCode,
+            itemsToRefund
+        }
+    }
+
+    async parsePurchasedItems(req) {
+        let itemsPurchased:Items[] = JSON.parse(req.body['data']);
+        return itemsPurchased;
     }
 
     async parseReceivedItems(req) {
