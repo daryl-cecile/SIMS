@@ -22,6 +22,7 @@ export class TransactionsModel extends BaseModel {
     @JoinColumn()
     public userOwner:UserModel;
 
-    @Column("integer")
+    @Column("enum",{ enum: TransactionType, default: TransactionType.PURCHASE })
     public transactionType: TransactionType;
+
 }
