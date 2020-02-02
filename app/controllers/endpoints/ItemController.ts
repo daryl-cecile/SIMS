@@ -2,7 +2,7 @@ import {RouterSet} from "../../config/RouterSet";
 import {JSONResponse} from "../../config/JSONResponse";
 import {ItemRepository} from "../../Repository/ItemRepository";
 
-export const ItemManagementController = new RouterSet((router) => {
+export const ItemsEndpointController = new RouterSet((router) => {
 
     router.get("/items/searchbyname", async function(req, res) {
         let searchResults = await ItemRepository.findByText(req.body["term"]);

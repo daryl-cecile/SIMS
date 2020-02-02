@@ -5,7 +5,8 @@ import {UserEndpointController} from "../controllers/endpoints/UsersController";
 import {TransactionsEndpointController} from "../controllers/endpoints/TransactionController";
 import {LoginController} from "../controllers/frontend/LoginController";
 import {TransactionController} from "../controllers/frontend/TransactionController";
-import {ItemManagementController} from "../controllers/endpoints/ItemController";
+import {ItemsEndpointController} from "../controllers/endpoints/ItemController";
+import {StocksEndpointController} from "../controllers/endpoints/StocksController";
 
 const PORT = process.env.PORT || 3000;
 const eventManager = require('./GlobalEvents');
@@ -42,7 +43,8 @@ module.exports = {
             LoginEndpointController,
             UserEndpointController,
             TransactionsEndpointController,
-            ItemManagementController
+            ItemsEndpointController,
+            StocksEndpointController
         );
 
         loader.registerBaseControllers(
