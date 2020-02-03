@@ -20,6 +20,11 @@ class repo extends BaseRepository<ItemModel>{
         });
     }
 
+    async findByTextSingle(text:string) {
+        return await this.repo.findOne( {
+            where:{name:text}
+        });
+    }
 }
 
 export const ItemRepository = new repo();
