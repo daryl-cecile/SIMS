@@ -1,6 +1,7 @@
 import {Passport} from "../../Services/Passport";
 import {UserService} from "../../Services/UserService";
 import {RouterSet} from "../../config/RouterSet";
+import {FSManager} from "../../config/FSManager";
 
 export const LoginController = new RouterSet( (router) => {
 
@@ -41,6 +42,13 @@ export const LoginController = new RouterSet( (router) => {
     router.get("/logout", async function(req, res){
         await Passport.voidSession(req, res);
         res.redirect("/");
+    });
+
+    router.get("/test", async function(req, res){
+        console.log( FSManager.getIncomingFiles() );
+        console.log( req.body['namef'] );
+        res.write("DONE");
+        res.end();
     });
 
     return router;

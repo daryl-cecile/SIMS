@@ -133,7 +133,7 @@ export namespace Passport{
         return new JSONResp(false, "Incorrect password", "Password incorrect. Please try again");
     }
 
-    export async function isAuthenticated(req, res){
+    export async function isAuthenticated(req?, res?){
 
         let passportToken = System.cookieStore.get("_passport");
 

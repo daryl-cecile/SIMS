@@ -6,6 +6,8 @@ import {dbConnector as db} from "./DBConnection";
 import * as core from "express-serve-static-core";
 import {RouterSet} from "./RouterSet";
 import {isNullOrUndefined} from "./convenienceHelpers";
+import {FSManager} from "./FSManager";
+import {Passport} from "../Services/Passport";
 
 const eventManager = require('./GlobalEvents');
 
@@ -16,6 +18,7 @@ export namespace System{
     let isProd:boolean = null;
     let ignoreOutput:boolean = false;
 
+    export let storagePath:string = "";
     export let cookieStore:CookieStore;
 
     export const InstanceId = require("crypto").randomBytes(12).toString('hex');
@@ -223,26 +226,32 @@ export namespace System{
             }
         }
 
-        export function CSRFHandler(){
+        export function SecurityMiddleware(){
             const CSRFCookieName = "_csrf";
-            return function (req, res, next){
+            return async function (req, res, next){
                 if ( req.url.startsWith("/api/") ){
                     let cookieCSRF = cookieStore.get(CSRFCookieName);
 
                     if (cookieCSRF === undefined){
                         res.status(403);
                         res.send('CSRF token invalid');
+                        return;
                     }
                     else{
+                        if (System.isProduction() && req.url.startsWith("/api/login") === false && (await Passport.isAuthenticated()).object.isSuccessful === false){
+                            res.status(403);
+                            res.send('API Token missing or invalid');
+                            return;
+                        }
+
                         let providedCSRFToken = req.header('CSRF-Token') ?? req.header('X-CSRF-TOKEN') ?? req.query['CSRF_Token'] ?? req.body['CSRF_Token'];
                         if (providedCSRFToken === undefined || providedCSRFToken !== cookieCSRF){
                             res.status(403);
                             res.send('CSRF token mismatch');
-                        }
-                        else{
-                            next();
+                            return;
                         }
                     }
+                    next();
 
                 }
                 else{
@@ -251,6 +260,29 @@ export namespace System{
                     req.csrfToken = function(){ return csrfToken };
                     next();
                 }
+            }
+        }
+
+        export function FileUploadHandler(){
+            let multer = require("multer");
+            return function(req,res,next){
+                let accept = multer({
+                    preservePath: true,
+                    limits: {
+                        fileSize: 10_000_000
+                    },
+                    storage : multer.diskStorage({
+                        destination: System.storagePath,
+                        filename: function (req, file, cb) {
+                            cb(null, `${Date.now()}-${file.originalname}`);
+                        }
+                    })
+                }).any();
+                accept(req, res, function(){
+                    FSManager.setIncomingFiles(req.files);
+                    req.files = FSManager.getIncomingFiles();
+                    next();
+                });
             }
         }
 
