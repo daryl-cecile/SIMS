@@ -4,11 +4,60 @@
     <%- include('../partials/meta') %>
     <title>Manage</title>
     <%- include('../partials/imports') %>
+    <script src="/public/scripts/XLogView.js"></script>
+    <link rel="stylesheet" href="/public/styles/manage.css">
 </head>
 <body>
-    <%- include('../partials/nav', {isAdmin:true}) %>
+    <%- include('../partials/nav', {isAdmin:true, showLogo:true}) %>
 
-    <h1>Manage</h1>
+    <section class="f h padded" style="overflow: hidden">
+        <div class="f v greedy relative">
+            <h1 style="margin: 0">Manage</h1>
+            <br>
+            <log-view id="notices" label="Notices"></log-view>
+            <br>
+            <log-view id="logs" label="Transaction Logs"></log-view>
+        </div>
+
+        <aside class="f v" id="power-sidebar">
+            <h3>Quick Access</h3>
+            <button>Add new Item to inventory</button>
+            <button>Receive Item</button>
+            <button>Process return</button>
+            <button>Add reminder</button>
+            <button>Log Spillage</button>
+
+            <br>
+            <br>
+
+            <h3>Transaction reports</h3>
+            <button>This month</button>
+            <button>Last month</button>
+            <button>Last 3 months</button>
+            <button>Last 6 months</button>
+            <button>Past year</button>
+        </aside>
+    </section>
+
+
+    <script>
+        let items = [
+            {
+                name: "Alert",
+                content: "out of stock for <a href='#'>Whiteboard pens</a>",
+                color: Tools.Color.RED
+            },
+            {
+                name: "Warning",
+                content: "Running low on <a href='#'>Whiteboard erasers</a>",
+                color: Tools.Color.ORANGE
+            }
+        ];
+
+        let logView = document.getElementById('notices');
+        logView.addEntry(items[0]);
+        logView.addEntry(items[1]);
+    </script>
 
     <%- include('../partials/footer') %>
 </body>

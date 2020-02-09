@@ -1,0 +1,30 @@
+@import "__variables";
+
+#power-sidebar{
+	padding: .5rem 2rem;
+
+	h3{
+		margin-top: 0;
+	}
+
+	button{
+		border-radius: 3px;
+		padding: 6px 14px;
+		font-size: 14px;
+		border: 1px solid gainsboro;
+		background: transparent;
+		color: @primary-dark;
+		margin-bottom: .5em;
+
+		&:hover{
+			border: 1px solid transparent;
+			background: gainsboro;
+		}
+
+		&:active{
+			opacity: 0.8;
+			background: @link-color;
+			color: @white
+		}
+	}
+}
