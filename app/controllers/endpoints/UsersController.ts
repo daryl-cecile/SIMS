@@ -37,7 +37,7 @@ export const UserEndpointController = new RouterSet(router => {
     router.post('/user/permissions', async function (req, res) {
         let tempUser = await UserRepository.getUserByIdentifier(req.body['identifier']);
         await UserService.editPermissions(tempUser, req);
-
+        res.json(JSONResponse(true, "Permissions Edited"));
     });
 
     return router;
