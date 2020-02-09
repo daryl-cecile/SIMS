@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.2",
-    "@types/jquery": "^3.3.31",
+    "@types/jquery": "^3.3.32",
     "@types/typescript": "^2.0.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
