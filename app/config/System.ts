@@ -238,7 +238,7 @@ export namespace System{
                         return;
                     }
                     else{
-                        if (System.isProduction() && req.url.startsWith("/api/login") === false && (await Passport.isAuthenticated()).object.isSuccessful === false){
+                        if (System.isProduction() && (req.url.startsWith("/api/login") === false && req.url.startsWith("/api/list") === false) && (await Passport.isAuthenticated()).object.isSuccessful === false){
                             res.status(403);
                             res.send('API Token missing or invalid');
                             return;
