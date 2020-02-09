@@ -36,7 +36,9 @@ module.exports = {
         app.use(System.Middlewares.LogRequest());
 
         // CSRF tokens
-        app.use(System.Middlewares.CSRFHandler());
+        app.use(System.Middlewares.SecurityMiddleware());
+
+        app.use(System.Middlewares.FileUploadHandler());
 
         // Routes
         loader.registerEndpointControllers(
@@ -67,6 +69,10 @@ module.exports = {
         System.attachTerminateListeners(server);
 
         return server;
+    },
+
+    setStoragePath : (p:string)=>{
+        System.storagePath = p;
     },
 
     enableTestMode: ()=>{

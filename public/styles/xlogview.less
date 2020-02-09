@@ -1,0 +1,51 @@
+@import "__variables";
+
+
+:host{
+	border: 1px solid #607D8B;
+	border-radius: 2px;
+	font-family: 'Avenir', sans-serif;
+	overflow-y: auto;
+	padding: calc(28px + 1rem) 1rem 1rem;
+	position: relative;
+	min-height: 200px;
+
+	*{
+		box-sizing: border-box;
+	}
+
+	div{
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 28px;
+		background: rgba(255,255,255,0.75);
+		backdrop-filter: blur(4px);
+		display: flex;
+		align-items: center;
+		padding: 3px;
+		border-bottom: 0.5px solid #999999;
+	}
+
+	li{
+		margin: 0;
+		list-style: none;
+
+		span:nth-child(1){
+			font-weight: bold;
+			letter-spacing: 1.2px;
+		}
+
+		a{
+			color: @link-color;
+			padding: 0 5px;
+			border-radius: 3px;
+
+			&:hover{
+				background: rgba(@link-color, 0.1);
+				text-decoration: none;
+			}
+		}
+	}
+}
