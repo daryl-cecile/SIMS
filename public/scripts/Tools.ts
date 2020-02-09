@@ -74,4 +74,68 @@ namespace Tools{
         return l;
     }
 
+    export class Color{
+        public R:number;
+        public G:number;
+        public B:number;
+        public A:number;
+
+        private getPartHex(part:"R"|"G"|"B"|"A"){
+            if (part !== "A"){
+                return this[part].toString(16).padStart(2,"0").toUpperCase();
+            }
+            return (this.A * 255).toString(16).padStart(2,"0").toUpperCase();
+        }
+
+        public get cssHex():string{
+            return `#${this.getPartHex("R")}${this.getPartHex("G")}${this.getPartHex("B")}`.toUpperCase();
+        }
+        public get cssHexAlpha():string{
+            return `${this.cssHex}${ this.getPartHex("A") }`.toUpperCase();
+        }
+        public get cssRGB():string{
+            return `rgb(${this.R},${this.G},${this.B})`;
+        }
+        public get cssRGBA():string{
+            return `rgba(${this.R},${this.G},${this.B},${this.A})`;
+        }
+
+        constructor(r:number,g:number,b:number,a?:number)
+        constructor(hex:string)
+        constructor(hexOrR:any,g?:number,b?:number,a?:number) {
+            if (typeof hexOrR === "string" || hexOrR instanceof String){
+                if (hexOrR[0] === "#") hexOrR = hexOrR.substr(1);
+                let parts = [];
+
+                if (hexOrR.length === 3) parts = [...hexOrR.split(""),1];
+                if (hexOrR.length === 6) parts = [...hexOrR.split(/(.{2})/).filter(k => k.length), 1];
+                if (hexOrR.length === 8) parts = hexOrR.split(/(.{2})/).filter(k => k.length);
+
+                this.R = parseInt(parts[0], 16);
+                this.G = parseInt(parts[1], 16);
+                this.B = parseInt(parts[2], 16);
+                this.A = parseInt(parts[2], 16) / 255;
+            }
+            else{
+                this.R = hexOrR;
+                this.G = g;
+                this.B = b;
+                this.A = a || 1;
+            }
+        }
+
+        public static get RED(){
+            return new Color("#ee2318");
+        }
+        public static get ORANGE(){
+            return new Color("#E89005")
+        }
+        public static get GREEN(){
+            return new Color("#57886C");
+        }
+        public static get BLUE(){
+            return new Color("#457B9D")
+        }
+    }
+
 }

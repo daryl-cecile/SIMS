@@ -1,4 +1,7 @@
 <nav class="opaque">
+    <% if (showLogo){ %>
+        <img src="/public/res/sims-logo.png" alt="SIMS logo" class="logo" onclick="location.href = '/'">
+    <% } %>
 
     <ul>
         <% if (isAdmin){ %>

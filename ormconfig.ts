@@ -9,8 +9,6 @@ import {SessionModel} from "./app/models/SessionModel";
 import {SystemLogEntryModel} from "./app/models/SystemLogEntryModel";
 import {TransactionsModel} from "./app/models/TransactionsModel";
 
-const cert = require('./app/config/cert_info');
-
 interface IConnectionInfo{
     type: string,
     host: string,
@@ -18,7 +16,7 @@ interface IConnectionInfo{
     username: string,
     password: string,
     database?: string,
-    ssl: {
+    ssl?: {
         ca: string,
         key: string,
         cert: string
@@ -37,8 +35,7 @@ let x:IConnectionInfo = {
     port: 3306,
     username: process.env.SQL_USER,
     password: process.env.SQL_PASS,
-    database: "db_main",
-    ssl: cert,
+    database: process.env.SQL_DB,
     synchronize: false,
     logging: false,
     entities: [

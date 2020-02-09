@@ -25,7 +25,7 @@ export namespace System{
 
     export function isProduction(){
         // check if .env file exists; if so, we are running dev mode, otherwise prod
-        if (isProd === null) isProd = (require("fs").existsSync("./.env") === false);
+        if (isProd === null) isProd = (process.env.IS_PROD == "true");
         return isProd;
     }
 
