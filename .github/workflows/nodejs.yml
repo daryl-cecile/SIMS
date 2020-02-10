@@ -27,3 +27,5 @@ jobs:
         SQL_IP: ${{ secrets.SQL_IP }}
         SQL_USER: ${{ secrets.SQL_USER }}
         SQL_PASS: ${{ secrets.SQL_PASS }}
+        SQL_DB: ${{ secrets.SQL_DB }}  
+        IS_PROD: ${{ secrets.IS_PROD }}  
