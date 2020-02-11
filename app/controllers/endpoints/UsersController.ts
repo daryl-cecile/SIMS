@@ -3,7 +3,7 @@ import {RouterSet} from "../../config/RouterSet";
 
 export const UserEndpointController = new RouterSet(route => {
 
-    route.get('/list/users', async function(req, res){
+    route.get('/users/list', async function(req, res){
 
         let term = (req.query['hint'] || "=").toLowerCase();
 
