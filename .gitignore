@@ -153,9 +153,6 @@ $RECYCLE.BIN/
 app/Repository/BaseRepository.js.map
 app/Repository/BaseRepository.d.ts
 app/Repository/BaseRepository.js
-app/Repository/InventoryRepository.js.map
-app/Repository/InventoryRepository.d.ts
-app/Repository/InventoryRepository.js
 app/Repository/ItemRepository.js.map
 app/Repository/ItemRepository.d.ts
 app/Repository/ItemRepository.js
@@ -177,6 +174,9 @@ app/Repository/UserRepository.js
 app/Services/BaseService.js.map
 app/Services/BaseService.d.ts
 app/Services/BaseService.js
+app/Services/ItemService.js.map
+app/Services/ItemService.d.ts
+app/Services/ItemService.js
 app/Services/Passport.js.map
 app/Services/Passport.d.ts
 app/Services/Passport.js
@@ -231,9 +231,6 @@ app/controllers/endpoints/ItemController.js
 app/controllers/endpoints/LoginController.js.map
 app/controllers/endpoints/LoginController.d.ts
 app/controllers/endpoints/LoginController.js
-app/controllers/endpoints/StocksController.js.map
-app/controllers/endpoints/StocksController.d.ts
-app/controllers/endpoints/StocksController.js
 app/controllers/endpoints/TransactionController.js.map
 app/controllers/endpoints/TransactionController.d.ts
 app/controllers/endpoints/TransactionController.js
@@ -252,15 +249,9 @@ app/controllers/frontend/TransactionController.js
 app/models/IModel.js.map
 app/models/IModel.d.ts
 app/models/IModel.js
-app/models/InventoryModel.js.map
-app/models/InventoryModel.d.ts
-app/models/InventoryModel.js
 app/models/ItemModel.js.map
 app/models/ItemModel.d.ts
 app/models/ItemModel.js
-app/models/NoticeModel.js.map
-app/models/NoticeModel.d.ts
-app/models/NoticeModel.js
 app/models/OrderModel.js.map
 app/models/OrderModel.d.ts
 app/models/OrderModel.js

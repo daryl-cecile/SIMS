@@ -6,7 +6,6 @@ import {TransactionsEndpointController} from "../controllers/endpoints/Transacti
 import {LoginController} from "../controllers/frontend/LoginController";
 import {TransactionController} from "../controllers/frontend/TransactionController";
 import {ItemsEndpointController} from "../controllers/endpoints/ItemController";
-import {InventoryEndpointController} from "../controllers/endpoints/InventoryController";
 import {AdminController} from "../controllers/frontend/AdminController";
 
 
@@ -47,8 +46,7 @@ module.exports = {
             LoginEndpointController,
             UserEndpointController,
             TransactionsEndpointController,
-            ItemsEndpointController,
-            InventoryEndpointController
+            ItemsEndpointController
         );
 
         loader.registerBaseControllers(

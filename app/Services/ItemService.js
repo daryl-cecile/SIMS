@@ -1,23 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseService_1 = require("./BaseService");
+const ItemModel_1 = require("../models/ItemModel");
 const ItemRepository_1 = require("../Repository/ItemRepository");
-const InventoryModel_1 = require("../models/InventoryModel");
-const InventoryRepository_1 = require("../Repository/InventoryRepository");
-const NoticeModel_1 = require("../models/NoticeModel");
+const System_1 = require("../config/System");
+const StorageLocationModel_1 = require("../models/StorageLocationModel");
 class service extends BaseService_1.BaseService {
-    async handleItemCreation(req) {
-        var _a;
-        let tempInventory = new InventoryModel_1.InventoryModel();
-        let tempItem = req.body['data']['item'];
-        tempItem.notices = (_a = req.body['data']['notices']) === null || _a === void 0 ? void 0 : _a.map(title => {
-            let temp = new NoticeModel_1.NoticeModel();
-            temp.title = title;
-            return temp;
-        });
-        tempInventory.item = tempItem;
-        tempInventory.quantity = req.body['data']['quantity'];
-        await InventoryRepository_1.InventoryRepository.update(tempInventory);
+    async handleItemUpdate(req) {
+        let inv = System_1.System.marshallToClass(req.body.entry, ItemModel_1.ItemModel);
+        inv.storageLocation = System_1.System.marshallToClass(req.body.entry.storageLocation, StorageLocationModel_1.StorageLocationModel);
+        inv.notices = req.body.entry.notices.split("\n");
+        return await ItemRepository_1.ItemRepository.update(inv);
     }
     async handleItemDeletion(req) {
         await ItemRepository_1.ItemRepository.delete(await ItemRepository_1.ItemRepository.getByItemCode(req.body['data']['id']));

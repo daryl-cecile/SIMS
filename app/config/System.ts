@@ -288,6 +288,22 @@ export namespace System{
 
     }
 
+    export function marshallToClass<T>(original:any, type:{new(): T}):T{
+        let n = new type();
+        Object.keys(original).forEach(k => {
+            if (k === "id"){
+                n[k] = parseInt(original[k]);
+            }
+            else if (k === "createdAt" || k === "updatedAt"){
+                n[k] = new Date(original[k]);
+            }
+            else if (typeof original[k] !== 'object'){
+                n[k] = original[k];
+            }
+        });
+        return n;
+    }
+
 }
 
 module.exports.default = System;

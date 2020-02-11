@@ -1,7 +1,6 @@
-import {Column, Entity, JoinTable, ManyToMany, OneToOne} from "typeorm";
+import {Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne} from "typeorm";
 import {BaseModel} from "./IModel";
-import {NoticeModel} from "./NoticeModel";
-import {InventoryModel} from "./InventoryModel";
+import {StorageLocationModel} from "./StorageLocationModel";
 
 
 @Entity("items")
@@ -13,11 +12,8 @@ export class ItemModel extends BaseModel{
     @Column("text")
     public description:string;
 
-    @ManyToMany(type=> NoticeModel,{
-        eager: true
-    })
-    @JoinTable()
-    public notices:NoticeModel[];
+    @Column("text")
+    public notices:string;
 
     @Column("int",{default:1})
     public unitCount:number;
@@ -28,9 +24,13 @@ export class ItemModel extends BaseModel{
     @Column("datetime", {nullable:true})
     public expiry:Date;
 
-    @OneToOne(type => InventoryModel, inventory => inventory.item, {
-        cascade:['update','insert']
+    @Column("int")
+    public quantity:number;
+
+    @OneToOne(type => StorageLocationModel, {
+        eager: true
     })
-    public inventoryEntry: InventoryModel;
+    @JoinColumn()
+    public storageLocation: StorageLocationModel;
 
 }

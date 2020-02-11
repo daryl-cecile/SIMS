@@ -43,25 +43,17 @@
             entry.model = inventoryEntry;
             table.addItem(entry);
         }
-        console.log(response.payload.items);
 
         table.addEventListener('save',ev => {
             console.log("save this",ev.detail);
 
-            $.ajax({
-                url: "/api/items/save-image",
-                contentType: false,
-                processData: false,
-                data: fd,
-                type: "POST",
-                success: (m)=>{
-                    console.warn(m.payload.name);
-                    ev.detail.callback(`/public/storage/${m.payload.name}`);
-                },
-                headers:{
-                    "CSRF-Token" : Tools.csrfToken()
-                }
+            $.post("/api/items/update",{
+                CSRF_Token : Tools.csrfToken(),
+                entry : ev.detail
+            }, result => {
+                console.warn(result);
             });
+
         });
 
         table.addEventListener('newfile', ev => {
