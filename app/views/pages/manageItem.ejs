@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('../partials/meta') %>
+    <title><%= title %></title>
+    <%- include('../partials/imports') %>
+	<link rel="stylesheet" href="/public/styles/xbasket.css">
+</head>
+<body>
+<%- include('../partials/nav', {isAdmin:true, showLogo:true}) %>
+
+    <% if (isNew === true){ %>
+        <%- include('../partials/new_item_form') %>
+    <% } else { %>
+        <%- include('../partials/edit_item_form') %>
+    <% } %>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>
