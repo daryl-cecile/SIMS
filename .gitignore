@@ -177,6 +177,9 @@ app/Repository/UserRepository.js
 app/Services/BaseService.js.map
 app/Services/BaseService.d.ts
 app/Services/BaseService.js
+app/Services/ItemService.js.map
+app/Services/ItemService.d.ts
+app/Services/ItemService.js
 app/Services/Passport.js.map
 app/Services/Passport.d.ts
 app/Services/Passport.js
@@ -225,15 +228,15 @@ app/config/seeder.js
 app/config/setup.js.map
 app/config/setup.d.ts
 app/config/setup.js
+app/controllers/endpoints/InventoryController.js.map
+app/controllers/endpoints/InventoryController.d.ts
+app/controllers/endpoints/InventoryController.js
 app/controllers/endpoints/ItemController.js.map
 app/controllers/endpoints/ItemController.d.ts
 app/controllers/endpoints/ItemController.js
 app/controllers/endpoints/LoginController.js.map
 app/controllers/endpoints/LoginController.d.ts
 app/controllers/endpoints/LoginController.js
-app/controllers/endpoints/StocksController.js.map
-app/controllers/endpoints/StocksController.d.ts
-app/controllers/endpoints/StocksController.js
 app/controllers/endpoints/TransactionController.js.map
 app/controllers/endpoints/TransactionController.d.ts
 app/controllers/endpoints/TransactionController.js
@@ -351,6 +354,8 @@ public/styles/manage.css
 public/styles/manage.css.map
 public/styles/nav.css
 public/styles/nav.css.map
+public/styles/report.css
+public/styles/report.css.map
 public/styles/xbasket.css
 public/styles/xbasket.css.map
 public/styles/xbasketItem.css

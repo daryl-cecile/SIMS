@@ -1,0 +1,100 @@
+@import "__variables";
+
+.header {
+   width: 1200px;
+   margin: 0 auto;
+   display: flex;
+   align-items: center;
+   padding: 20px 0;
+//    justify-content: center;
+}
+
+.header__title {
+    font-size: 60px;
+    margin: 0;
+}
+
+.header__subtitle {
+    text-align: right;
+    margin-left: auto;
+}
+
+
+
+.user-details__requested {
+    margin: 0;
+    font-style: italic;
+}
+
+.user-details__name {
+    font-size: 26px;
+    margin: 0;
+}
+
+.user-details__id {
+    font-size: 18px;
+    margin: 5px 0;
+}
+
+.statement-info {
+    display: flex;
+    width: 1000px;
+    margin: 0 auto;
+    padding: 50px 0;
+}
+
+.statement-period {
+    margin-left: auto;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    letter-spacing: 1px;
+    font-weight: 400;
+}
+
+.statement-period th {
+    background-color: @primary-color;
+    padding: 10px 40px;
+    color: white;
+}
+
+.statement-period__dates {
+    font-size: 20px;
+    text-align: center;
+    padding: 10px;
+}
+
+.statement-table {
+    width: 1000px;
+    margin: 0 auto;
+    padding: 50px 0;
+
+}
+
+.statement-table__headers th {
+    background-color: @primary-color;
+    padding: 10px 40px;
+    color: white;
+
+    margin-left: auto;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    letter-spacing: 1px;
+    font-weight: 400;
+}
+
+
+.statement-table__rows td {
+    padding: 10px 10px;
+    font-size: 20px;
+    font-family: 'Open Sans', sans-serif;
+    vertical-align: top;
+    white-space: pre-line;
+
+    &:first-child {
+        width: 100px;
+    }
+
+    &:last-child {
+        width: 270px;
+    }
+}

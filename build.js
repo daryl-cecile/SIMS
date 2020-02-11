@@ -4,7 +4,7 @@ const lessc = require("less");
 const fs = require("fs");
 const path = require("path");
 
-const FORCE_DELETE_BUILT_ITEM = false;
+const FORCE_DELETE_BUILT_ITEM = true;
 
 const DIRECTORIES_TO_IGNORE = [
     "node_modules",
