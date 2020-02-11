@@ -11,7 +11,7 @@ const DIRECTORIES_TO_IGNORE = [
     ".github",
     ".vscode",
     ".git",
-    "storage"
+    "public/storage"
 ];
 
 function fixGitIgnore(filesToIgnore){

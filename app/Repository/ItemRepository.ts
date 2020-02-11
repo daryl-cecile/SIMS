@@ -27,9 +27,7 @@ class repo extends BaseRepository<ItemModel>{
         });
     }
     async getAll(){
-        return await this.repo.find({
-            relations:['inventoryEntry']
-        })
+        return await this.repo.find()
     }
 }
 
