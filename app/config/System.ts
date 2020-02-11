@@ -290,6 +290,7 @@ export namespace System{
 
     export function marshallToClass<T>(original:any, type:{new(): T}):T{
         let n = new type();
+        if (original === undefined || original === null) return n;
         Object.keys(original).forEach(k => {
             if (k === "id"){
                 n[k] = parseInt(original[k]);
@@ -297,6 +298,7 @@ export namespace System{
             else if (k === "createdAt" || k === "updatedAt"){
                 n[k] = new Date(original[k]);
             }
+            else if (original[k] === null || original[k] === undefined){}
             else if (typeof original[k] !== 'object'){
                 n[k] = original[k];
             }

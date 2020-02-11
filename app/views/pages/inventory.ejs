@@ -45,13 +45,14 @@
         }
 
         table.addEventListener('save',ev => {
-            console.log("save this",ev.detail);
+            console.log("save this",ev.detail.values);
 
             $.post("/api/items/update",{
                 CSRF_Token : Tools.csrfToken(),
-                entry : ev.detail
+                entry : ev.detail.values
             }, result => {
                 console.warn(result);
+                ev.detail.callback();
             });
 
         });

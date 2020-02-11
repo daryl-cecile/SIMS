@@ -24,7 +24,7 @@ export class ItemModel extends BaseModel{
     @Column("datetime", {nullable:true})
     public expiry:Date;
 
-    @Column("int")
+    @Column("int", {default:1})
     public quantity:number;
 
     @OneToOne(type => StorageLocationModel, {

@@ -12,8 +12,8 @@ class service extends BaseService {
      */
     async handleItemUpdate(req) {
         let inv:ItemModel = System.marshallToClass(req.body.entry, ItemModel);
-        inv.storageLocation = System.marshallToClass(req.body.entry.storageLocation, StorageLocationModel);
-        inv.notices = req.body.entry.notices.split("\n");
+        if (req.body.entry.storageLocation) inv.storageLocation = System.marshallToClass(req.body.entry.storageLocation, StorageLocationModel);
+        inv.notices = req.body.entry.notices;
         return await ItemRepository.update(inv);
     }
 

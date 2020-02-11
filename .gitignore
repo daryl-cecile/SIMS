@@ -285,21 +285,12 @@ app/shape/Inventory.d.js
 index.js.map
 index.d.ts
 index.js
-orm_migrations/1579269894400-Transactions Model.js.map
-orm_migrations/1579269894400-Transactions Model.d.ts
-orm_migrations/1579269894400-Transactions Model.js
-orm_migrations/1579873399736-added extra feild in sys log.js.map
-orm_migrations/1579873399736-added extra feild in sys log.d.ts
-orm_migrations/1579873399736-added extra feild in sys log.js
-orm_migrations/1579873518177-changed to nullable.js.map
-orm_migrations/1579873518177-changed to nullable.d.ts
-orm_migrations/1579873518177-changed to nullable.js
-orm_migrations/1580655205327-added transaction type.js.map
-orm_migrations/1580655205327-added transaction type.d.ts
-orm_migrations/1580655205327-added transaction type.js
-orm_migrations/1581350472773-added previewImage to itemModel.js.map
-orm_migrations/1581350472773-added previewImage to itemModel.d.ts
-orm_migrations/1581350472773-added previewImage to itemModel.js
+orm_migrations/1581443184633-new db.js.map
+orm_migrations/1581443184633-new db.d.ts
+orm_migrations/1581443184633-new db.js
+orm_migrations/1581443312724-set quantity default value.js.map
+orm_migrations/1581443312724-set quantity default value.d.ts
+orm_migrations/1581443312724-set quantity default value.js
 ormconfig.js.map
 ormconfig.d.ts
 ormconfig.js
