@@ -47,6 +47,44 @@
 
         table.addEventListener('save',ev => {
             console.log("save this",ev.detail);
+
+            $.ajax({
+                url: "/api/items/save-image",
+                contentType: false,
+                processData: false,
+                data: fd,
+                type: "POST",
+                success: (m)=>{
+                    console.warn(m.payload.name);
+                    ev.detail.callback(`/public/storage/${m.payload.name}`);
+                },
+                headers:{
+                    "CSRF-Token" : Tools.csrfToken()
+                }
+            });
+        });
+
+        table.addEventListener('newfile', ev => {
+            console.log(ev.detail.file);
+
+            let fd = new FormData();
+            fd.append("file", ev.detail.file);
+
+            $.ajax({
+                url: "/api/items/save-image",
+                contentType: false,
+                processData: false,
+                data: fd,
+                type: "POST",
+                success: (m)=>{
+                    console.warn(m.payload.name);
+                    ev.detail.callback(`/public/storage/${m.payload.name}`);
+                },
+                headers:{
+                    "CSRF-Token" : Tools.csrfToken()
+                }
+            });
+
         });
     })();
 </script>

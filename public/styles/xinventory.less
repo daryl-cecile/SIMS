@@ -79,6 +79,19 @@
 		border-radius: 4px;
 		display: inline-block;
 		vertical-align: top;
+
+		&:hover{
+			cursor: pointer;
+			opacity: 0.8;
+		}
+	}
+
+	input[type=file]{
+		position: absolute;
+		pointer-events: none;
+		opacity: 0;
+		width: 16%;
+		height: 100%;
 	}
 
 	& > div{
@@ -86,7 +99,6 @@
 		flex-wrap: wrap;
 		margin-left: 0.5rem;
 		width: calc(84% - 0.5rem);
-
 
 		label{
 			width: calc((100% / 3) - 1rem);

@@ -2,6 +2,8 @@ import {RouterSet} from "../../config/RouterSet";
 import {JSONResponse} from "../../config/JSONResponse";
 import {ItemRepository} from "../../Repository/ItemRepository";
 import {InventoryRepository} from "../../Repository/InventoryRepository";
+import {System} from "../../config/System";
+import {FSManager} from "../../config/FSManager";
 
 export const ItemsEndpointController = new RouterSet((router) => {
 
@@ -19,6 +21,14 @@ export const ItemsEndpointController = new RouterSet((router) => {
         let listResults = await InventoryRepository.getAll();
         res.json(JSONResponse(true, "InventoryList", {
             items: listResults
+        }));
+    });
+
+    router.post("/items/save-image", async function(req, res) {
+        let files = FSManager.getIncomingFiles();
+        files[0].keep();
+        res.json(JSONResponse(true, "File", {
+            name : files[0].uniqueName
         }));
     });
 

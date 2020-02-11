@@ -16,6 +16,7 @@ class XInventoryTable extends HTMLElement{
     public addItem(item:XInventoryItem){
         item.own(this);
         item.addEventListener('update', this._saveHandler.bind(this));
+        item.addEventListener('gotfile', this._newFileHandler.bind(this));
         this._items.push(item);
         this.reset();
     }
@@ -23,6 +24,7 @@ class XInventoryTable extends HTMLElement{
     public removeItem(item:XInventoryItem){
         item.disown();
         item.removeEventListener('update', this._saveHandler.bind(this));
+        item.removeEventListener('gotfile', this._newFileHandler.bind(this));
     }
 
     public reset(){
@@ -44,6 +46,15 @@ class XInventoryTable extends HTMLElement{
     private _saveHandler(ev){
         this.dispatchEvent(
             new CustomEvent('save', {
+                bubbles: true,
+                detail: ev.detail
+            })
+        );
+    }
+
+    private _newFileHandler(ev){
+        this.dispatchEvent(
+            new CustomEvent('newfile', {
                 bubbles: true,
                 detail: ev.detail
             })
@@ -131,7 +142,30 @@ class XInventoryTable extends HTMLElement{
              class: "info-box"
          }).create(el => {
              let that = this;
-             el.appendChild( eb("img",{src: this.model.item.previewImg}).create() );
+             let fileInput = null;
+             el.appendChild( eb("input",{type:"file", name:"prev"}).create(i => {
+                 fileInput = i;
+                 i.addEventListener('change', function(){
+                     that.dispatchEvent(
+                         new CustomEvent('gotfile', {
+                             bubbles: true,
+                             detail: {
+                                 file : i.files[0],
+                                 callback: function(src){
+                                     that.values.item.previewImg = src;
+                                     (that.shadow.querySelector("#img-prev") as HTMLImageElement).src = src;
+                                     return that;
+                                 }
+                             }
+                         })
+                     );
+                 });
+             }) );
+             el.appendChild( eb("img",{id:"img-prev", src: this.model.item.previewImg}).create(img => {
+                 img.addEventListener('click', function(){
+                     (fileInput as HTMLElement).click();
+                 })
+             }) );
              el.appendChild( eb("div").create(d => {
                  that.values.id = this.model.id;
                  that.values.item.id = this.model.item.id;
