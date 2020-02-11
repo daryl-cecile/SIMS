@@ -1,4 +1,4 @@
-import {Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne} from "typeorm";
+import {Column, Entity, JoinTable, ManyToMany, OneToOne} from "typeorm";
 import {BaseModel} from "./IModel";
 import {NoticeModel} from "./NoticeModel";
 import {InventoryModel} from "./InventoryModel";
