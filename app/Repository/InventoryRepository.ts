@@ -20,6 +20,12 @@ class repo extends BaseRepository<InventoryModel> {
             where:{name: Like(`%${text}%`) }
         });
     }
+
+    async getAll(){
+        return await this.repo.find({
+            relations:['item','item.notices']
+        })
+    }
 }
 
 export const InventoryRepository = new repo();

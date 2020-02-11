@@ -46,5 +46,5 @@ export function JSONResponse(success:boolean,title?:string,message?:string)
 export function JSONResponse(success:boolean,title?:string,data?:any)
 export function JSONResponse(success:boolean,title?:string,message?:string,data?:any)
 export function JSONResponse(success:boolean,title?:string,messageOrData?:string|any,data?:any){
-    return (new JSONResp(success,title,messageOrData,data)).toString();
+    return (new JSONResp(success,title,messageOrData,data)).object;
 }

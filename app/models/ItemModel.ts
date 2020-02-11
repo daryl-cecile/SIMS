@@ -1,4 +1,4 @@
-import {Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne} from "typeorm";
+import {Column, Entity, JoinTable, ManyToMany, OneToOne} from "typeorm";
 import {BaseModel} from "./IModel";
 import {NoticeModel} from "./NoticeModel";
 import {InventoryModel} from "./InventoryModel";
@@ -13,12 +13,17 @@ export class ItemModel extends BaseModel{
     @Column("text")
     public description:string;
 
-    @ManyToMany(type=> NoticeModel)
+    @ManyToMany(type=> NoticeModel,{
+        eager: true
+    })
     @JoinTable()
     public notices:NoticeModel[];
 
     @Column("int",{default:1})
     public unitCount:number;
+
+    @Column("varchar", {length:255, nullable: true})
+    public previewImg:string;
 
     @Column("datetime", {nullable:true})
     public expiry:Date;

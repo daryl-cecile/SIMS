@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="/public/styles/login.css">
 </head>
 <body>
-    <%- include('../partials/nav', {isAdminLogin:false, showLogo:true}) %>
+    <%- include('../partials/nav', {isAdmin:false, showLogo:true}) %>
 
     <main>
 
         <div class="login-box">
-            <h1 class="no-margin">Not Authorized to access <% requestedPage.name %></h1>
+            <h1 class="no-margin">Not Authorized to access '<i><%= requestedPage %></i>'</h1>
         </div>
 
     </main>
