@@ -13,6 +13,36 @@ const uuid = require("uuid/v4");
 
 export namespace Passport{
 
+    function getNeuteredObject(){
+        return new Proxy({}, {
+            get: function(obj, prop) {
+                return ()=>{};
+            }
+        });
+    }
+
+    export async function MakeAdminAccessOnly(title, res){
+        let authCheck = await this.isAuthenticated();
+        if (authCheck.object.isSuccessful) {
+            let acc = authCheck.object.payload['user'];
+            if (await UserService.hasPermission(acc, "MANAGE") === false) {
+                res.render("pages/not_authorized",{
+                    requestedPage:title
+                });
+                res.end();
+                return getNeuteredObject()
+            }
+        }
+        else{
+            res.render("pages/not_authorized", {
+                requestedPage:title
+            });
+            res.end();
+            return getNeuteredObject()
+        }
+        return res;
+    }
+
     export async function getCurrentUser(req, res):Promise<UserModel>{
         let authCheck = await Passport.isAuthenticated(req, res);
         if (authCheck.object.isSuccessful) {

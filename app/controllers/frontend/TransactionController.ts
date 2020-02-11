@@ -6,6 +6,10 @@ export const TransactionController = new RouterSet( (router) => {
         res.render("pages/confirm_transaction");
     });
 
+    router.get("/report", async function(req, res){
+        res.render("partials/report");
+    });
+
     return router;
 
 });
