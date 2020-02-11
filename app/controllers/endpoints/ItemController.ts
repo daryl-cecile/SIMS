@@ -1,6 +1,7 @@
 import {RouterSet} from "../../config/RouterSet";
 import {JSONResponse} from "../../config/JSONResponse";
 import {ItemRepository} from "../../Repository/ItemRepository";
+import {InventoryRepository} from "../../Repository/InventoryRepository";
 
 export const ItemsEndpointController = new RouterSet((router) => {
 
@@ -15,8 +16,10 @@ export const ItemsEndpointController = new RouterSet((router) => {
     });
 
     router.get("/items/itemlist", async function (req, res){
-        let listResults = await ItemRepository.getAll();
-        res.json(JSONResponse(true, "ItemList", listResults));
+        let listResults = await InventoryRepository.getAll();
+        res.json(JSONResponse(true, "InventoryList", {
+            items: listResults
+        }));
     });
 
     return router;

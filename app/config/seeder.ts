@@ -100,6 +100,7 @@ import {dbConnector as db} from "./DBConnection";
         item.unitCount = unitCount;
         item.expiry = expiry;
         item.notices = notices;
+        item.previewImg = "/public/res/sims-logo.png";
 
         let itemRepo = db.connection.getRepository(ItemModel);
         let existingItem = await itemRepo.findOne({ where:  {name} });
@@ -146,4 +147,22 @@ import {dbConnector as db} from "./DBConnection";
 
     await seedUser("Test User","N0000100");
     await seedUser("Second User","N0000104");
+
+
+    await seedStock(
+        await seedItem("Sample Item","A sample item", 5, new Date(), [
+            await seedNotice("Store in a wet place"),
+            await seedNotice("Keep away from adults")
+        ]),
+        12,
+        await seedLocation("main room","somewhere")
+    );
+
+    await seedStock(
+        await seedItem("Sample Item TWO","A second sample item", 12, new Date(), [
+            await seedNotice("Keep away from adults")
+        ]),
+        10,
+        await seedLocation("little room","somewhere")
+    );
 })();
