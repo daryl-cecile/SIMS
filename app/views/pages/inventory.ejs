@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('../partials/meta') %>
+    <title>Manage Inventory</title>
+    <%- include('../partials/imports') %>
+    <link rel="stylesheet" href="/public/styles/manage.css">
+    <script src="/public/scripts/XInventoryTable.js"></script>
+</head>
+<body>
+<%- include('../partials/nav', {isAdmin:true, showLogo:true}) %>
+
+<section class="f v padded extra" style="overflow: auto" >
+    <div class="f h quick-bar">
+        <h1>Inventory</h1>
+        <button>Receive Item</button>
+        <button>Process Return</button>
+        <button class="link">+ Add New</button>
+    </div>
+
+    <inventory-table id="table"></inventory-table>
+</section>
+
+<%- include('../partials/footer') %>
+
+<script>
+
+    async function getItems(){
+        return new Promise(resolve => {
+            $.get("/api/items/itemlist",{
+                CSRF_Token : Tools.csrfToken()
+            }, result => {
+                resolve(result);
+            });
+        })
+    }
+
+    (async function(){
+        let table = $("#table").get(0);
+        let response = await getItems();
+        for (let inventoryEntry of response.payload.items){
+            let entry = document.createElement("inventory-item");
+            entry.model = inventoryEntry;
+            table.addItem(entry);
+        }
+        console.log(response.payload.items);
+
+        table.addEventListener('save',ev => {
+            console.log("save this",ev.detail);
+        });
+    })();
+</script>
+
+</body>
+</html>

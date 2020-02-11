@@ -240,6 +240,9 @@ app/controllers/endpoints/TransactionController.js
 app/controllers/endpoints/UsersController.js.map
 app/controllers/endpoints/UsersController.d.ts
 app/controllers/endpoints/UsersController.js
+app/controllers/frontend/AdminController.js.map
+app/controllers/frontend/AdminController.d.ts
+app/controllers/frontend/AdminController.js
 app/controllers/frontend/LoginController.js.map
 app/controllers/frontend/LoginController.d.ts
 app/controllers/frontend/LoginController.js
@@ -285,6 +288,9 @@ app/payloads/BasePayload.js
 app/payloads/ItemList.js.map
 app/payloads/ItemList.d.ts
 app/payloads/ItemList.js
+app/shape/Inventory.d.js.map
+app/shape/Inventory.d.d.ts
+app/shape/Inventory.d.js
 index.js.map
 index.d.ts
 index.js
@@ -300,6 +306,9 @@ orm_migrations/1579873518177-changed to nullable.js
 orm_migrations/1580655205327-added transaction type.js.map
 orm_migrations/1580655205327-added transaction type.d.ts
 orm_migrations/1580655205327-added transaction type.js
+orm_migrations/1581350472773-added previewImage to itemModel.js.map
+orm_migrations/1581350472773-added previewImage to itemModel.d.ts
+orm_migrations/1581350472773-added previewImage to itemModel.js
 ormconfig.js.map
 ormconfig.d.ts
 ormconfig.js
@@ -315,6 +324,9 @@ public/scripts/XBasket.js
 public/scripts/XCatalog.js.map
 public/scripts/XCatalog.d.ts
 public/scripts/XCatalog.js
+public/scripts/XInventoryTable.js.map
+public/scripts/XInventoryTable.d.ts
+public/scripts/XInventoryTable.js
 public/scripts/XLogView.js.map
 public/scripts/XLogView.d.ts
 public/scripts/XLogView.js
@@ -347,6 +359,8 @@ public/styles/xcatalog.css
 public/styles/xcatalog.css.map
 public/styles/xcatalogItem.css
 public/styles/xcatalogItem.css.map
+public/styles/xinventory.css
+public/styles/xinventory.css.map
 public/styles/xlogview.css
 public/styles/xlogview.css.map
 public/styles/xmodal.css

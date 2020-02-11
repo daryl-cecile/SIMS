@@ -38,6 +38,48 @@ namespace Tools{
 
     }
 
+    export const ElementPacker = {
+        unpack(e){
+            if (Array.isArray(e)){
+                return e.map(l => this.unpack(l));
+            }
+            else{
+                let k = Object.keys(e)[0];
+                let elem = document.createElement(k);
+                Object.keys(e[k]).forEach(prop => {
+                    if (prop === "html"){
+                        if (Array.isArray(e[k][prop])){
+                            e[k][prop].forEach((_,i)=>{
+                                elem.appendChild( this.unpack(e[k][prop][i]) );
+                            });
+                        }
+                        else{
+                            elem.innerHTML = e[k][prop];
+                        }
+                    }
+                    else if (prop === "classes"){
+                        elem.classList.add(...e[k][prop]);
+                    }
+                    else if (prop.indexOf("_") === 0){
+                        elem.addEventListener(prop.substr(1), e[k][prop]);
+                    }
+                    else{
+                        elem.setAttribute(prop, e[k][prop]);
+                    }
+                });
+                return elem;
+            }
+        },
+        unpackInto(container, e){
+            if (Array.isArray(e)){
+                e.forEach(k => container.appendChild( this.unpack(k) ));
+            }
+            else{
+                container.appendChild( this.unpack(e) );
+            }
+        }
+    };
+
     export function getCookie(name:string){
         /// Adapted from https://www.w3schools.com/js/js_cookies.asp
         let nameEQ = name + "=";
@@ -72,6 +114,11 @@ namespace Tools{
             }
         };
         return l;
+    }
+
+    export function DateToDOMCompatString(d){
+        let date = new Date(d);
+        return date['toDOMCompatibleDateString']();
     }
 
     export class Color{
@@ -138,4 +185,31 @@ namespace Tools{
         }
     }
 
+    export function magic(originalObject){
+        const handler = {
+            get: (obj, prop) => {
+                if (prop === "valueOf"){
+                    return ()=>originalObject;
+                }
+                else{
+                    obj[prop] = obj[prop] || {};
+                    if (typeof obj[prop] === "string" || obj[prop] instanceof String){
+                        return obj[prop];
+                    }
+                    return magic(obj[prop]);
+                }
+            },
+            valueOf: ()=>{
+                return originalObject;
+            },
+            toString: ()=>{
+                return JSON.stringify(originalObject);
+            }
+        };
+        return new Proxy(originalObject, handler);
+    }
 }
+
+Date.prototype['toDOMCompatibleDateString'] = function(){
+    return this.toISOString().split("T")[0];
+};
