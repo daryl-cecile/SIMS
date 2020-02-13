@@ -17,7 +17,7 @@
         <div class="f v greedy relative">
             <%- include('../partials/nav', {isAdmin:false, showLogo:false}) %>
             <section class="padded">
-                <smart-input name="find" placeholder="Find Item" type="search"></smart-input>
+                <smart-input id="filter-bar" name="find" placeholder="Find Item" type="search"></smart-input>
 
                 <x-catalog id="catalog"></x-catalog>
             </section>
@@ -43,6 +43,27 @@
                     resolve(result.payload.items);
                 });
             });
+        }
+
+        $('#filter-bar').on('input', ev => {
+            filter(ev.originalEvent.detail.value);
+        })
+
+        function filter(term){
+            term = term.toLowerCase();
+            catalog.catalogChildren.forEach(c => {
+                if (term.trim().length === 0){
+                    c.style.display = 'initial';
+                }
+                else{
+                    if (c.name.toLowerCase().indexOf(term) > -1 || c.description.toLowerCase().indexOf(term) > -1){
+                        c.style.display = 'initial';
+                    }
+                    else{
+                        c.style.display = 'none';
+                    }
+                }
+            })
         }
 
         catalog.addEventListener('itempicked',ev => {
