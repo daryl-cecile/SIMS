@@ -16,7 +16,7 @@ export class ItemModel extends BaseModel{
     public notices:string;
 
     @Column("int",{default:1})
-    public unitCount:number;
+    public stock:number;
 
     @Column("varchar", {length:255, nullable: true})
     public previewImg:string;
