@@ -1,4 +1,5 @@
 import {RouterSet} from "../../config/RouterSet";
+import {Passport} from "../../Services/Passport";
 
 export const TransactionController = new RouterSet( (router) => {
 

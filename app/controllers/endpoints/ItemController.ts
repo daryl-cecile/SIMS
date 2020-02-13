@@ -13,7 +13,6 @@ export const ItemsEndpointController = new RouterSet((router) => {
     });
 
     router.post("/items/update", async function(req, res) {
-        console.log(req.body);
         let result = await ItemService.handleItemUpdate(req);
         res.json(JSONResponse(true, "Item Created", result));
     });
@@ -31,7 +30,9 @@ export const ItemsEndpointController = new RouterSet((router) => {
     router.get("/items/itemlist", async function (req, res){
         let listResults = await ItemRepository.getAll();
         res.json(JSONResponse(true, "InventoryList", {
-            items: listResults
+            items: listResults.filter(item => {
+                return item.quantity > 0
+            })
         }));
     });
 

@@ -13,6 +13,7 @@
 <section class="f v padded extra" style="overflow: auto" >
     <div class="f h quick-bar">
         <h1>Inventory</h1>
+        <button id="delitem-btn">Delete selected</button>
         <button>Receive Item</button>
         <button>Process Return</button>
         <button class="link" id="newitem-btn">+ Add New</button>
@@ -38,14 +39,34 @@
     (async function(){
         let table = $("#table").get(0);
         let response = await getItems();
+        let delBtn = $('#delitem-btn').hide();
         for (let inventoryEntry of response.payload.items){
             let entry = document.createElement("inventory-item");
             entry.model = inventoryEntry;
             table.addItem(entry);
         }
 
+        delBtn.on('click',function(){
+            $.post("/api/items/delete",{
+                CSRF_Token : Tools.csrfToken(),
+                itemIdCollection : table.selectedItems.map(itm => itm.values.id)
+            }, result => {
+                console.log(result);
+                location.reload();
+            });
+        });
+
         $('#newitem-btn').on('click',function(){
             table.createNew();
+        });
+
+        table.addEventListener('selectionchanged', ev=>{
+            if (ev.detail.length > 0){
+                delBtn.show();
+            }
+            else{
+                delBtn.hide();
+            }
         });
 
         table.addEventListener('save',ev => {

@@ -1,10 +1,11 @@
 
 interface ICatalogItemOption{
-    name:string;
+    name?:string;
     description?:string;
     quantity?:number;
-    itemReference:string;
+    itemReference?:number;
     imageUrl?:string;
+    entry?:IItem;
 }
 
 type XCatalogItemProperties = {
@@ -12,15 +13,18 @@ type XCatalogItemProperties = {
     imgSrc?:string,
     imgDesc?:string,
     itemInfo?:string,
-    quantity?:number
+    quantity?:number,
+    reference?:number;
 }
 
 class CatalogItem{
 
     private _name:string = "";
     private _description:string = "";
-    private _itemRef:string = "";
+    private _itemRef:number = 0;
     private _image:string = "";
+
+    public itemModel:IItem;
 
     private _ignoreUpdates:boolean = false;
     private _onRemove:Function = ()=>{};
@@ -62,10 +66,19 @@ class CatalogItem{
     }
 
     constructor(options:ICatalogItemOption) {
-        this.name = options.name;
-        this.description = options.description ?? "";
-        this.itemReference = options.itemReference;
-        this.imageUrl = options.imageUrl ?? "/public/res/sims-logo.png";
+        if (options.entry){
+            this.name = options.entry.name;
+            this.description = options.entry.description ?? "";
+            this.itemReference = options.entry.id;
+            this.imageUrl = options.entry.previewImg ?? "/public/res/sims-logo.png";
+            this.itemModel = options.entry;
+        }
+        else{
+            this.name = options.name;
+            this.description = options.description ?? "";
+            this.itemReference = options.itemReference;
+            this.imageUrl = options.imageUrl ?? "/public/res/sims-logo.png";
+        }
     }
 
 }
@@ -88,7 +101,7 @@ class CatalogCollection{
         return this;
     }
 
-    public getItemByReference(reference:string){
+    public getItemByReference(reference:number){
         for (const item of this._collection){
             if (item.itemReference === reference) return item;
         }
@@ -183,6 +196,15 @@ class XCatalog extends HTMLElement{
         it.name = item.name;
         it.description = item.description;
 
+        it.addEventListener('click',() => {
+            this.dispatchEvent(
+                new CustomEvent('itempicked', {
+                    bubbles: true,
+                    detail: item.itemModel
+                })
+            );
+        });
+
         return it;
 
     }
@@ -245,7 +267,7 @@ class XCatalogItem extends HTMLElement{
             title: this.name,
             imgDesc: this.description,
             itemInfo: this.description,
-            imgSrc: this.imgSrc
+            imgSrc: this.imgSrc,
         });
         this._initialized = true;
     }

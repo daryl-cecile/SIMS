@@ -21,7 +21,7 @@ class service extends BaseService {
      * @param req The Request Body
      */
     async handleItemDeletion(req) {
-        await ItemRepository.delete(await ItemRepository.getByItemCode(req.body['id']))
+        await ItemRepository.removeMultipleById( ...req.body['itemIdCollection'] );
     }
 
 }
