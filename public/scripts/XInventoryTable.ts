@@ -3,6 +3,7 @@
 class XInventoryTable extends HTMLElement{
     private _items:XInventoryItem[] = [];
     private shadow:ShadowRoot = null;
+    public selectedItems:XInventoryItem[] = [];
 
     constructor(){
         super();
@@ -43,6 +44,7 @@ class XInventoryTable extends HTMLElement{
         item.own(this);
         item.addEventListener('update', this._saveHandler.bind(this));
         item.addEventListener('gotfile', this._newFileHandler.bind(this));
+        item.addEventListener('itemselected',this._itemSelectedHandler.bind(this));
         this._items.push(item);
         this.reset();
     }
@@ -51,6 +53,7 @@ class XInventoryTable extends HTMLElement{
         item.disown();
         item.removeEventListener('update', this._saveHandler.bind(this));
         item.removeEventListener('gotfile', this._newFileHandler.bind(this));
+        item.removeEventListener('itemselected',this._itemSelectedHandler.bind(this));
     }
 
     public reset(){
@@ -66,6 +69,19 @@ class XInventoryTable extends HTMLElement{
             let itemElement = item.getElement();
             if (itemElement == null) continue;
             this.shadow.querySelector("#list").appendChild(itemElement);
+        }
+    }
+
+    private _itemSelectedHandler(ev){
+        let collection = this.items.filter(i => i.checked);
+        this.dispatchEvent(
+            new CustomEvent('selectionchanged', {
+                bubbles: true,
+                detail: collection
+            })
+        );
+        if (collection.length > 0){
+            this.selectedItems = collection;
         }
     }
 
@@ -137,6 +153,12 @@ class XInventoryTable extends HTMLElement{
              el.appendChild( eb("input",{type:"checkbox"}).create(cb => {
                  cb.addEventListener('change',()=>{
                      this.isChecked = cb.checked;
+                     this.dispatchEvent(
+                         new CustomEvent('itemselected', {
+                             bubbles: true,
+                             detail: this.values
+                         })
+                     );
                  });
              }) );
              el.appendChild( eb("img", {class:"preview-img", src:this.model.previewImg}).create() );
@@ -269,10 +291,10 @@ class XInventoryTable extends HTMLElement{
 
                          locs.forEach(x => {
                              if (x.id == this.model.storageLocation.id){
-                                 i.appendChild( eb("option",{selected:true},`${x.name} (${x.location})`).create() );
+                                 i.appendChild( eb("option",{selected:true, value:x.id},`${x.name} (${x.location})`).create() );
                              }
                              else{
-                                 i.appendChild( eb("option",{},`${x.name} (${x.location})`).create() );
+                                 i.appendChild( eb("option",{value:x.id},`${x.name} (${x.location})`).create() );
                              }
                          });
 

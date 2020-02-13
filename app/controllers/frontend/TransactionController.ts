@@ -1,4 +1,5 @@
 import {RouterSet} from "../../config/RouterSet";
+import {Passport} from "../../Services/Passport";
 
 export const TransactionController = new RouterSet( (router) => {
 
@@ -10,6 +11,10 @@ export const TransactionController = new RouterSet( (router) => {
         res.render("partials/report");
     });
 
+    router.get("/help", async function(req, res){
+    res.render("pages/help");
+    });
+    
     return router;
 
 });
