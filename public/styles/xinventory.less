@@ -68,7 +68,7 @@
 	.paragraph();
 
 	&.open{
-		height: 250px;
+		height: 290px;
 		opacity: 1;
 		border-top: 0.5px dashed @white;
 		padding: 2rem;
@@ -79,6 +79,19 @@
 		border-radius: 4px;
 		display: inline-block;
 		vertical-align: top;
+
+		&:hover{
+			cursor: pointer;
+			opacity: 0.8;
+		}
+	}
+
+	input[type=file]{
+		position: absolute;
+		pointer-events: none;
+		opacity: 0;
+		width: 16%;
+		height: 100%;
 	}
 
 	& > div{
@@ -86,7 +99,6 @@
 		flex-wrap: wrap;
 		margin-left: 0.5rem;
 		width: calc(84% - 0.5rem);
-
 
 		label{
 			width: calc((100% / 3) - 1rem);
@@ -102,7 +114,7 @@
 				opacity: 0.8;
 			}
 
-			input,textarea{
+			input,textarea,select{
 				width: 100%;
 				border: @input-normal-border;
 				border-radius: 2px;
@@ -116,7 +128,7 @@
 				}
 			}
 
-			input{
+			input,select{
 				height: 38px;
 				padding: 5px 12px;
 			}

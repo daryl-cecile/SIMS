@@ -4,7 +4,7 @@ import {System} from "./System";
 let fs = require("fs");
 let path = require("path");
 
-class TempFile{
+export class TempFile{
     public originalName:string; //name on client computer
     public encoding:string;
     public mimeType:string;

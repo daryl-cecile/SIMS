@@ -8,8 +8,8 @@ export const TransactionController = new RouterSet( (router) => {
 
     router.get("/help", async function(req, res){
         res.render("pages/help");
+    router.get("/report", async function(req, res){
+        res.render("partials/report");
     });
-
     return router;
-
 });

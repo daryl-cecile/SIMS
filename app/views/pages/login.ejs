@@ -36,7 +36,7 @@
 
         async function getUsers(){
             return new Promise(resolve => {
-                $.get("/api/list/users",{
+                $.get("/api/user/list",{
                     hint : inp.value,
                     CSRF_Token : Tools.csrfToken()
                 }, result => {

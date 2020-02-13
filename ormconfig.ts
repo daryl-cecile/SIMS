@@ -1,7 +1,5 @@
 import {UserModel} from "./app/models/UserModel";
-import {InventoryModel} from "./app/models/InventoryModel";
 import {ItemModel} from "./app/models/ItemModel";
-import {NoticeModel} from "./app/models/NoticeModel";
 import {OrderModel} from "./app/models/OrderModel";
 import {PermissionModel} from "./app/models/PermissionModel";
 import {StorageLocationModel} from "./app/models/StorageLocationModel";
@@ -39,9 +37,7 @@ let x:IConnectionInfo = {
     synchronize: false,
     logging: false,
     entities: [
-        InventoryModel,
         ItemModel,
-        NoticeModel,
         OrderModel,
         PermissionModel,
         StorageLocationModel,

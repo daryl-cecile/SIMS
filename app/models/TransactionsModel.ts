@@ -2,6 +2,7 @@ import {Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne} from "type
 import {BaseModel} from "./IModel";
 import {UserModel} from "./UserModel";
 import {ItemModel} from "./ItemModel";
+import {OrderModel} from "./OrderModel";
 
 export enum TransactionType{
     PURCHASE,
@@ -14,9 +15,9 @@ export enum TransactionType{
 @Entity("Transactions")
 export class TransactionsModel extends BaseModel {
 
-    @ManyToMany(type => ItemModel)
+    @ManyToMany(type => OrderModel)
     @JoinTable()
-    public items:ItemModel[];
+    public entries:OrderModel[];
 
     @ManyToOne(type => UserModel, user => user.transactions )
     @JoinColumn()

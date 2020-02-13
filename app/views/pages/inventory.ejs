@@ -15,7 +15,7 @@
         <h1>Inventory</h1>
         <button>Receive Item</button>
         <button>Process Return</button>
-        <button class="link">+ Add New</button>
+        <button class="link" id="newitem-btn">+ Add New</button>
     </div>
 
     <inventory-table id="table"></inventory-table>
@@ -43,10 +43,45 @@
             entry.model = inventoryEntry;
             table.addItem(entry);
         }
-        console.log(response.payload.items);
+
+        $('#newitem-btn').on('click',function(){
+            table.createNew();
+        });
 
         table.addEventListener('save',ev => {
-            console.log("save this",ev.detail);
+            console.log("save this",ev.detail.values);
+
+            $.post("/api/items/update",{
+                CSRF_Token : Tools.csrfToken(),
+                entry : ev.detail.values
+            }, result => {
+                console.warn(result);
+                ev.detail.callback();
+            });
+
+        });
+
+        table.addEventListener('newfile', ev => {
+            console.log(ev.detail.file);
+
+            let fd = new FormData();
+            fd.append("file", ev.detail.file);
+
+            $.ajax({
+                url: "/api/items/save-image",
+                contentType: false,
+                processData: false,
+                data: fd,
+                type: "POST",
+                success: (m)=>{
+                    console.warn(m.payload.name);
+                    ev.detail.callback(`/public/storage/${m.payload.name}`);
+                },
+                headers:{
+                    "CSRF-Token" : Tools.csrfToken()
+                }
+            });
+
         });
     })();
 </script>
