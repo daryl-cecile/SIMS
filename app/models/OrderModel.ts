@@ -8,6 +8,6 @@ export class OrderModel extends BaseModel{
     public itemId:number;
 
     @Column("integer")
-    public stock:number;
+    public quantity:number;
 
 }
