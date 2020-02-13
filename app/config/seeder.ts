@@ -2,8 +2,6 @@ import {PermissionModel} from "../models/PermissionModel";
 import {UserModel} from "../models/UserModel";
 import {StorageLocationModel} from "../models/StorageLocationModel";
 import {ItemModel} from "../models/ItemModel";
-import {InventoryModel} from "../models/InventoryModel";
-import {NoticeModel} from "../models/NoticeModel";
 import {Passport} from "../Services/Passport";
 import {System} from "./System";
 import {PermissionRepository} from "../Repository/PermissionRepository";
@@ -76,30 +74,16 @@ import {dbConnector as db} from "./DBConnection";
 
     }
 
-    async function seedStock(item:ItemModel,quantity:number, storageLocation:StorageLocationModel){
-
-        let stock = new InventoryModel();
-        stock.item = item;
-        stock.quantity = quantity;
-        stock.storageLocation = storageLocation;
-
-        let stockRepo = db.connection.getRepository(InventoryModel);
-        let existingStock = await stockRepo.findOne({ where: { item, storageLocation } });
-        if (existingStock === undefined){
-            return await stockRepo.save(stock);
-        }
-        return existingStock;
-
-    }
-
-    async function seedItem(name:string, description:string, unitCount:number, expiry:Date, notices:NoticeModel[]){
+    async function seedItem(name:string, description:string, unitCount:number, expiry:Date, notices:string[], q:number, location:StorageLocationModel){
 
         let item = new ItemModel();
         item.name = name;
         item.description = description;
         item.unitCount = unitCount;
         item.expiry = expiry;
-        item.notices = notices;
+        item.notices = notices.join("\n");
+        item.previewImg = "/public/res/sims-logo.png";
+        item.storageLocation = location;
 
         let itemRepo = db.connection.getRepository(ItemModel);
         let existingItem = await itemRepo.findOne({ where:  {name} });
@@ -107,20 +91,6 @@ import {dbConnector as db} from "./DBConnection";
             return await itemRepo.save(item);
         }
         return existingItem;
-
-    }
-
-    async function seedNotice(title:string){
-
-        let notice = new NoticeModel();
-        notice.title = title;
-
-        let noticeRepo = db.connection.getRepository(NoticeModel);
-        let existingNotice = await noticeRepo.findOne({ where: {title} });
-        if (existingNotice === undefined){
-            return await noticeRepo.save(notice);
-        }
-        return existingNotice;
 
     }
 
@@ -146,4 +116,19 @@ import {dbConnector as db} from "./DBConnection";
 
     await seedUser("Test User","N0000100");
     await seedUser("Second User","N0000104");
+
+    await seedItem("Sample Item","A sample item", 5, new Date(), [
+        "Store in a wet place",
+        "Keep away from adults"
+        ],
+        10,
+        await seedLocation("main room","somewhere")
+    );
+
+    await seedItem("Sample Item TWO","A second sample item", 12, new Date(), [
+            "Keep away from adults"
+        ],
+        10,
+        await seedLocation("little room","somewhere")
+    );
 })();

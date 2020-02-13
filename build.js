@@ -6,34 +6,25 @@ const path = require("path");
 
 const FORCE_DELETE_BUILT_ITEM = false;
 
+const DIRECTORIES_TO_IGNORE = [
+    "node_modules",
+    ".github",
+    ".vscode",
+    ".git",
+    "public/storage"
+];
+
 function fixGitIgnore(filesToIgnore){
     let fileContent = fs.readFileSync( path.join(__dirname,".gitignore") , 'utf-8');
-    let lines = fileContent.split("\n");
-    let overwrite = false;
 
-    let newFileLines = [];
+    filesToIgnore = ["### BEGIN clean", ...filesToIgnore, "### END"];
 
-    lines.forEach(line => {
-        if (line.trim() === "### BEGIN clean"){
-            newFileLines.push(line);
-            overwrite = true;
-            return;
-        }
-        else if (line.trim() === "### END"){
-            newFileLines.push(line);
-            overwrite = false;
-            return;
-        }
-        else if (overwrite === true){
-            newFileLines.push( ...(filesToIgnore.map(k => k.replace(`${__dirname}/`,""))) );
-            overwrite = false;
-        }
-        else{
-            newFileLines.push(line);
-        }
-    });
+    let newFileContent = fileContent.replace(/((?:### BEGIN clean)[^]+(?:### END))/g, (filesToIgnore.map(k => {
+        if (k.startsWith("#")) return k;
+        return k.replace(`${__dirname}/`,"");
+    })).join("\n"));
 
-    fs.writeFileSync( path.join(__dirname,".gitignore"), newFileLines.join("\n") , 'utf-8');
+    fs.writeFileSync( path.join(__dirname,".gitignore"), newFileContent , 'utf-8');
 
     console.log("Updated gitignore");
 }
@@ -42,14 +33,12 @@ function ignoreBuiltFiles(ref) {
 
     let toIgnore = [];
 
-    function rm(thePath) {
+    function rm(thePath, ext) {
         let removedItems = [];
 
-        Object.keys(ref).map(coreExt => {
-            ref[coreExt].forEach(k => {
-                let p = path.join( path.dirname(thePath) , path.basename(thePath,`.${coreExt}`) + k);
-                removedItems.push(p);
-            });
+        ref[ext].forEach(k => {
+            let p = path.join( path.dirname(thePath) , path.basename(thePath,`.${ext}`) + k);
+            removedItems.push(p);
         });
 
         if (FORCE_DELETE_BUILT_ITEM){
@@ -70,16 +59,13 @@ function ignoreBuiltFiles(ref) {
 
         filesInRoot.forEach(item => {
             item = path.join(thePath, item);
-            if ( path.basename(item) === "node_modules" ) return;
-            if ( path.basename(item) === ".github" ) return;
-            if ( path.basename(item) === ".vscode" ) return;
-            if ( path.basename(item) === ".git" ) return;
+            if ( DIRECTORIES_TO_IGNORE.indexOf(path.basename(item)) > -1 ) return;
 
             let stat = fs.statSync(item);
             if (stat.isDirectory()) return walk(item);
 
             Object.keys(ref).forEach(k => {
-                if ( item.endsWith(k) ) rm( item );
+                if ( item.endsWith(k) ) rm( item , k );
             });
 
         });

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('../partials/meta') %>
+    <title>Manage Inventory</title>
+    <%- include('../partials/imports') %>
+    <link rel="stylesheet" href="/public/styles/manage.css">
+    <script src="/public/scripts/XInventoryTable.js"></script>
+</head>
+<body>
+<%- include('../partials/nav', {isAdmin:true, showLogo:true}) %>
+
+<section class="f v padded extra" style="overflow: auto" >
+    <div class="f h quick-bar">
+        <h1>Inventory</h1>
+        <button>Receive Item</button>
+        <button>Process Return</button>
+        <button class="link" id="newitem-btn">+ Add New</button>
+    </div>
+
+    <inventory-table id="table"></inventory-table>
+</section>
+
+<%- include('../partials/footer') %>
+
+<script>
+
+    async function getItems(){
+        return new Promise(resolve => {
+            $.get("/api/items/itemlist",{
+                CSRF_Token : Tools.csrfToken()
+            }, result => {
+                resolve(result);
+            });
+        })
+    }
+
+    (async function(){
+        let table = $("#table").get(0);
+        let response = await getItems();
+        for (let inventoryEntry of response.payload.items){
+            let entry = document.createElement("inventory-item");
+            entry.model = inventoryEntry;
+            table.addItem(entry);
+        }
+
+        $('#newitem-btn').on('click',function(){
+            table.createNew();
+        });
+
+        table.addEventListener('save',ev => {
+            console.log("save this",ev.detail.values);
+
+            $.post("/api/items/update",{
+                CSRF_Token : Tools.csrfToken(),
+                entry : ev.detail.values
+            }, result => {
+                console.warn(result);
+                ev.detail.callback();
+            });
+
+        });
+
+        table.addEventListener('newfile', ev => {
+            console.log(ev.detail.file);
+
+            let fd = new FormData();
+            fd.append("file", ev.detail.file);
+
+            $.ajax({
+                url: "/api/items/save-image",
+                contentType: false,
+                processData: false,
+                data: fd,
+                type: "POST",
+                success: (m)=>{
+                    console.warn(m.payload.name);
+                    ev.detail.callback(`/public/storage/${m.payload.name}`);
+                },
+                headers:{
+                    "CSRF-Token" : Tools.csrfToken()
+                }
+            });
+
+        });
+    })();
+</script>
+
+</body>
+</html>
