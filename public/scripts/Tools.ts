@@ -195,7 +195,7 @@ namespace Tools{
                 CSRF_Token : Tools.csrfToken()
             }, result => {
                 StorageLocations = result.payload;
-                resolve(result.payload);
+                resolve(StorageLocations);
             });
         });
     }

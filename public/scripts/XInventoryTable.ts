@@ -291,10 +291,10 @@ class XInventoryTable extends HTMLElement{
 
                          locs.forEach(x => {
                              if (x.id == this.model.storageLocation.id){
-                                 i.appendChild( eb("option",{selected:true},`${x.name} (${x.location})`).create() );
+                                 i.appendChild( eb("option",{selected:true, value:x.id},`${x.name} (${x.location})`).create() );
                              }
                              else{
-                                 i.appendChild( eb("option",{},`${x.name} (${x.location})`).create() );
+                                 i.appendChild( eb("option",{value:x.id},`${x.name} (${x.location})`).create() );
                              }
                          });
 
