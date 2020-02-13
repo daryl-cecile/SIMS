@@ -149,7 +149,7 @@ $RECYCLE.BIN/
 .idea/$CACHE_FILE$
 .idea/inspectionProfiles/profiles_settings.xml
 
-### BEGIN
+### BEGIN clean
 app/Repository/BaseRepository.js.map
 app/Repository/BaseRepository.d.ts
 app/Repository/BaseRepository.js
