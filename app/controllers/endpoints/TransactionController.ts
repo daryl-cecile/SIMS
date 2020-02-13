@@ -6,6 +6,9 @@ import {RouterSet} from "../../config/RouterSet";
 import {TransactionService} from "../../Services/TransactionService";
 import {UserRepository} from "../../Repository/UserRepository";
 
+/**
+ * DARYL UNIT COUNT IS OUR STOCK, REMEMBER THIS
+ */
 export const TransactionsEndpointController = new RouterSet((router)=>{
 
     router.post("/transactions/issue", async function (req, res){
