@@ -42,6 +42,10 @@ export const TransactionsEndpointController = new RouterSet((router)=>{
         res.json(JSONResponse(true, "transactionRecord", tempTransactions));
     });
 
+    router.get("/transactions/listall", async function (req, res) {
+        res.json(JSONResponse(true, "All Transactions", await TransactionRepository.getAll()));
+    });
+
 
     return router;
 

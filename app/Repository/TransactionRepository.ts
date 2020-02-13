@@ -19,6 +19,10 @@ class repo extends BaseRepository<TransactionsModel>{
             where:{userOwner:user}
         })
     }
+
+    async getAll() {
+        return await this.repo.find();
+    }
 }
 
 export const TransactionRepository = new repo();
