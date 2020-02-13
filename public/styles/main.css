@@ -1,0 +1,228 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0e.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UNirkOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN7rgOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Open Sans ExtraBold'), local('OpenSans-ExtraBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN8rsOUuhs.ttf) format('truetype');
+}
+.button-default {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: gainsboro;
+  color: #333333;
+}
+.button-primary {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #004877;
+  color: #eeeeee;
+}
+.button-negative {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #E4032E;
+  color: #eeeeee;
+}
+.smart-button {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: 1px solid gainsboro;
+  background: transparent;
+  color: #333333;
+  margin-bottom: 0.5em;
+}
+.smart-button:hover {
+  border: 1px solid transparent;
+  background: gainsboro;
+}
+.smart-button:active {
+  opacity: 0.8;
+  background: #12A0FF;
+  color: #eeeeee;
+}
+.relative {
+  position: relative;
+}
+.greedy {
+  flex: 1;
+}
+.padded {
+  padding: 2rem;
+}
+.padded.extra {
+  padding: 4rem;
+}
+.f {
+  display: flex;
+  box-sizing: border-box;
+}
+.f.h,
+.f .h {
+  flex-direction: row;
+}
+.f.v,
+.f .v {
+  flex-direction: column;
+}
+.f .w-half {
+  width: 50%;
+}
+.f .w-quarter {
+  width: 25%;
+}
+.f .w-third {
+  width: 33.33333333%;
+}
+.f .s-1 {
+  flex: 1;
+}
+.f .s-2 {
+  flex: 2;
+}
+.f .s-3 {
+  flex: 3;
+}
+.if {
+  display: inline-flex;
+  box-sizing: border-box;
+}
+.if.h,
+.if .h {
+  flex-direction: row;
+}
+.if.v,
+.if .v {
+  flex-direction: column;
+}
+.if .w-half {
+  width: 50%;
+}
+.if .w-quarter {
+  width: 25%;
+}
+.if .w-third {
+  width: 33.33333333%;
+}
+.if .s-1 {
+  flex: 1;
+}
+.if .s-2 {
+  flex: 2;
+}
+.if .s-3 {
+  flex: 3;
+}
+.limit-height-100 {
+  max-height: 100%;
+}
+.w-half {
+  width: 50%;
+}
+.w-quarter {
+  width: 25%;
+}
+.w-third {
+  width: 33.33333333%;
+}
+.s-1 {
+  flex: 1;
+}
+.s-2 {
+  flex: 2;
+}
+.s-3 {
+  flex: 3;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  font-size: 16px;
+}
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+body *:focus {
+  outline: none;
+}
+h1 {
+  font-family: 'Open Sans', sans-serif;
+  color: #303030;
+  font-size: 30px;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+h3 {
+  font-family: 'Open Sans', sans-serif;
+  color: #282828;
+  font-size: 21px;
+  letter-spacing: 1.2px;
+  font-weight: 600;
+}
+p {
+  font-family: 'Open Sans', sans-serif;
+  color: #252525;
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+section {
+  height: 100vh;
+  overflow: auto;
+}
+section.subtle-bg {
+  background: #eeeeee;
+}
+a {
+  color: #12A0FF;
+  padding: 0 5px;
+  margin: 0 -5px;
+  border-radius: 3px;
+}
+a:hover {
+  background: rgba(18, 160, 255, 0.1);
+  text-decoration: none;
+}
+.no-margin {
+  margin: 0;
+}

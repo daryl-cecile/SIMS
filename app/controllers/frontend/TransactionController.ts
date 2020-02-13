@@ -6,6 +6,10 @@ export const TransactionController = new RouterSet( (router) => {
         res.render("pages/confirm_transaction");
     });
 
+    router.get("/help", async function(req, res){
+        res.render("pages/help");
+    });
+
     return router;
 
 });

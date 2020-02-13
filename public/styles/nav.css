@@ -1,0 +1,130 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0e.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UNirkOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN7rgOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Open Sans ExtraBold'), local('OpenSans-ExtraBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN8rsOUuhs.ttf) format('truetype');
+}
+.button-default {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: gainsboro;
+  color: #333333;
+}
+.button-primary {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #004877;
+  color: #eeeeee;
+}
+.button-negative {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #E4032E;
+  color: #eeeeee;
+}
+.smart-button {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: 1px solid gainsboro;
+  background: transparent;
+  color: #333333;
+  margin-bottom: 0.5em;
+}
+.smart-button:hover {
+  border: 1px solid transparent;
+  background: gainsboro;
+}
+.smart-button:active {
+  opacity: 0.8;
+  background: #12A0FF;
+  color: #eeeeee;
+}
+nav {
+  position: fixed;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  height: 3.5rem;
+  padding: 5px;
+  box-sizing: border-box;
+  background: white;
+  border-bottom: 0.3px solid #eeeeee;
+}
+nav:not(.opaque) {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(6px);
+}
+nav ul {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  list-style: none;
+  margin: 0;
+  padding: 0 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+nav ul li {
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+}
+nav ul li a {
+  padding: 8px 12px;
+  font-family: 'Open Sans', sans-serif;
+  color: #607D8B;
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: 400;
+  text-decoration: none;
+}
+nav ul li a:hover {
+  opacity: 0.6;
+  background: initial;
+}
+nav .logo {
+  height: 46px;
+  position: absolute;
+  border-radius: 2px;
+}
+nav .logo:hover {
+  opacity: 0.8;
+}
+.nav-buffer {
+  display: block;
+  width: 100%;
+  height: 3.5rem;
+}

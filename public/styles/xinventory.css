@@ -1,0 +1,200 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0e.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UNirkOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN7rgOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Open Sans ExtraBold'), local('OpenSans-ExtraBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN8rsOUuhs.ttf) format('truetype');
+}
+.button-default {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: gainsboro;
+  color: #333333;
+}
+.button-primary {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #004877;
+  color: #eeeeee;
+}
+.button-negative {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #E4032E;
+  color: #eeeeee;
+}
+.smart-button {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: 1px solid gainsboro;
+  background: transparent;
+  color: #333333;
+  margin-bottom: 0.5em;
+}
+.smart-button:hover {
+  border: 1px solid transparent;
+  background: gainsboro;
+}
+.smart-button:active {
+  opacity: 0.8;
+  background: #12A0FF;
+  color: #eeeeee;
+}
+#list {
+  padding: 0;
+  border-bottom: 0.5px solid #eeeeee;
+}
+.preview-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  height: 40px;
+  border-top: 0.5px solid #eeeeee;
+  padding: 8px 0;
+  font-family: 'Open Sans', sans-serif;
+  color: #252525;
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+.preview-bar input[type=checkbox] {
+  margin-right: 1rem;
+}
+.preview-bar img {
+  height: 40px;
+  border-radius: 5px;
+}
+.preview-bar #sku {
+  flex: 1;
+  text-align: center;
+}
+.preview-bar #name {
+  flex: 1.5;
+}
+.preview-bar #desc {
+  flex: 2;
+}
+.preview-bar #store-loc {
+  flex: 1.5;
+}
+.preview-bar #unit-count {
+  width: 75px;
+  text-align: center;
+}
+.preview-bar #edit-btn {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: 1px solid gainsboro;
+  background: transparent;
+  color: #333333;
+  margin-bottom: 0.5em;
+  margin-bottom: 0;
+}
+.preview-bar #edit-btn:hover {
+  border: 1px solid transparent;
+  background: gainsboro;
+}
+.preview-bar #edit-btn:active {
+  opacity: 0.8;
+  background: #12A0FF;
+  color: #eeeeee;
+}
+.preview-bar #edit-btn:focus {
+  outline: none;
+}
+.info-box {
+  opacity: 0;
+  height: 0;
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+  border-top: 0.5px dashed transparent;
+  padding: 0 2rem;
+  font-family: 'Open Sans', sans-serif;
+  color: #252525;
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+.info-box.open {
+  height: 250px;
+  opacity: 1;
+  border-top: 0.5px dashed #eeeeee;
+  padding: 2rem;
+}
+.info-box img {
+  width: 16%;
+  border-radius: 4px;
+  display: inline-block;
+  vertical-align: top;
+}
+.info-box > div {
+  display: inline-flex;
+  flex-wrap: wrap;
+  margin-left: 0.5rem;
+  width: calc(84% - 0.5rem);
+}
+.info-box > div label {
+  width: calc((100% / 3) - 1rem);
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+.info-box > div label span {
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+}
+.info-box > div label:focus-within span {
+  opacity: 0.8;
+}
+.info-box > div label input,
+.info-box > div label textarea {
+  width: 100%;
+  border: 2px solid #DADCE1;
+  border-radius: 2px;
+  box-sizing: border-box;
+  font-size: 14px;
+  margin-top: 0.5rem;
+}
+.info-box > div label input:focus,
+.info-box > div label textarea:focus {
+  border: 2px solid #12A0FF;
+  outline: none;
+}
+.info-box > div label input {
+  height: 38px;
+  padding: 5px 12px;
+}
+.info-box > div label textarea {
+  min-height: 100px;
+  padding: 12px;
+}

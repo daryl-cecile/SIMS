@@ -1,0 +1,120 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0e.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UNirkOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN7rgOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Open Sans ExtraBold'), local('OpenSans-ExtraBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN8rsOUuhs.ttf) format('truetype');
+}
+.button-default {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: gainsboro;
+  color: #333333;
+}
+.button-primary {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #004877;
+  color: #eeeeee;
+}
+.button-negative {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #E4032E;
+  color: #eeeeee;
+}
+.smart-button {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: 1px solid gainsboro;
+  background: transparent;
+  color: #333333;
+  margin-bottom: 0.5em;
+}
+.smart-button:hover {
+  border: 1px solid transparent;
+  background: gainsboro;
+}
+.smart-button:active {
+  opacity: 0.8;
+  background: #12A0FF;
+  color: #eeeeee;
+}
+:host {
+  position: fixed;
+  transform: scale(0.7);
+  transform-origin: center bottom;
+  opacity: 0;
+  border-radius: 2px;
+  box-shadow: 0 1.5px 2.2px rgba(0, 0, 0, 0.07), 0 3.6px 5.3px rgba(0, 0, 0, 0.05), 0 6.8px 10px rgba(0, 0, 0, 0.042), 0 12.1px 17.9px rgba(0, 0, 0, 0.035), 0 22.6px 33.4px rgba(0, 0, 0, 0.028), 0 54px 80px rgba(0, 0, 0, 0.02);
+  width: 450px;
+  height: 250px;
+  left: calc(50vw - 225px);
+  top: calc(30vh - 125px);
+  padding: 25px;
+  box-sizing: border-box;
+  background: white;
+  z-index: 99999;
+  will-change: transition, top, opacity;
+  transition: top 0.3s, opacity 0.3s, transform 0.3s;
+}
+:host h3 {
+  font-family: sans-serif;
+}
+:host p {
+  font-family: sans-serif;
+}
+:host div {
+  position: absolute;
+  bottom: 25px;
+  width: calc(100% - 50px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+:host div button {
+  width: 130px;
+  padding: 3px 0;
+  margin-left: 15px;
+  height: 32px;
+}
+:host div button:focus {
+  outline: none;
+  border: 2px solid #12A0FF;
+}
+:host([open="true"]) {
+  opacity: 1;
+  transform: scale(1);
+  left: calc(50vw - 225px);
+  top: calc(50vh - 125px);
+}

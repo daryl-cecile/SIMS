@@ -1,0 +1,121 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0e.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UNirkOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN7rgOUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Open Sans ExtraBold'), local('OpenSans-ExtraBold'), url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN8rsOUuhs.ttf) format('truetype');
+}
+.button-default {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: gainsboro;
+  color: #333333;
+}
+.button-primary {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #004877;
+  color: #eeeeee;
+}
+.button-negative {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  background: #E4032E;
+  color: #eeeeee;
+}
+.smart-button {
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: 1px solid gainsboro;
+  background: transparent;
+  color: #333333;
+  margin-bottom: 0.5em;
+}
+.smart-button:hover {
+  border: 1px solid transparent;
+  background: gainsboro;
+}
+.smart-button:active {
+  opacity: 0.8;
+  background: #12A0FF;
+  color: #eeeeee;
+}
+:host {
+  height: 38px;
+  border: 2px solid #DADCE1;
+  border-radius: 2px;
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+}
+:host([type="search"]) {
+  background: white;
+}
+input#text-input {
+  position: absolute;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 5px 12px;
+  font-size: 14px;
+  border: none;
+  background: transparent;
+  text-align: inherit;
+}
+:host(:focus-within) {
+  border: 2px solid #12A0FF;
+}
+input#text-input:focus {
+  outline: none;
+}
+ul#suggestions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 38px;
+  width: 100%;
+  background: white;
+  z-index: 999;
+}
+ul#suggestions li {
+  padding: 2px 14px;
+}
+ul#suggestions li:hover {
+  background: #3c3c3c;
+  color: #eeeeee;
+}
+ul#suggestions li span {
+  opacity: 0.7;
+  font-style: italic;
+}

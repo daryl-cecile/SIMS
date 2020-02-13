@@ -1,0 +1,10 @@
+:host {
+  margin-top: 1.4rem;
+  padding: 0 0.5rem 1rem;
+  max-height: calc(100% - 26px);
+  width: 100%;
+  overflow: hidden auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  grid-gap: 36px;
+}
