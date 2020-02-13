@@ -13,6 +13,32 @@ class XInventoryTable extends HTMLElement{
         return this._items;
     }
 
+    public async createNew(){
+        let locs = (await Tools.getStorageLocations());
+        let inventoryEntry:IItem = {
+            createdAt: <any>(new Date()).toISOString(),
+            description: "",
+            expiry: <any>(new Date()).toISOString(),
+            id: undefined,
+            name: "",
+            notices: "",
+            previewImg: "/public/res/sims-logo.png",
+            quantity: 0,
+            storageLocation: locs?.[0],
+            unitCount: 0,
+            updatedAt: <any>(new Date()).toISOString()
+
+        };
+        console.log("new template",locs,inventoryEntry);
+        let entry = <XInventoryItem>document.createElement("inventory-item");
+        entry.reloadOnSave = true;
+        entry.model = inventoryEntry;
+        this.addItem(entry);
+
+        entry.shadowRoot.querySelector("#edit-btn").innerHTML = "Save";
+        entry.shadowRoot.querySelector(".info-box").classList.add("open");
+    }
+
     public addItem(item:XInventoryItem){
         item.own(this);
         item.addEventListener('update', this._saveHandler.bind(this));
@@ -68,6 +94,8 @@ class XInventoryTable extends HTMLElement{
      private isChecked:boolean = false;
      private shadow:ShadowRoot = null;
      private owner:XInventoryTable = null;
+     private hasChanges:boolean = false;
+     public reloadOnSave:boolean = false;
 
      public values:IItem = null;
 
@@ -85,11 +113,11 @@ class XInventoryTable extends HTMLElement{
 
          (this.shadow.querySelector('input[type=checkbox]') as any).checked = this.isChecked;
          this.shadow.querySelector(".preview-img").setAttribute('src', this.values.previewImg);
-         this.shadow.querySelector("#sku").innerHTML = this.values.id.toString();
+         this.shadow.querySelector("#sku").innerHTML = this.values.id?.toString();
          this.shadow.querySelector("#name").innerHTML = this.values.name;
          this.shadow.querySelector("#desc").innerHTML = this.values.description;
          this.shadow.querySelector("#store-loc").innerHTML = `${this.values.storageLocation.name} (${this.values.storageLocation.location})`;
-         this.shadow.querySelector("#unit-count").innerHTML = this.values.unitCount.toString();
+         this.shadow.querySelector("#unit-count").innerHTML = this.values.unitCount?.toString();
      }
 
      private updateVisuals(){
@@ -112,26 +140,32 @@ class XInventoryTable extends HTMLElement{
                  });
              }) );
              el.appendChild( eb("img", {class:"preview-img", src:this.model.previewImg}).create() );
-             el.appendChild( eb("span",{id:"sku"}, this.model.id.toString()).create() );
+             el.appendChild( eb("span",{id:"sku"}, this.model.id?.toString()).create() );
              el.appendChild( eb("span",{id:"name"}, this.model.name).create() );
              el.appendChild( eb("span",{id:"desc"}, this.model.description).create() );
              el.appendChild( eb("span",{id:"store-loc"}, `${this.model.storageLocation.name} (${this.model.storageLocation.location})`).create() );
-             el.appendChild( eb("span",{id:"unit-count"}, this.model.unitCount.toString()).create() );
+             el.appendChild( eb("span",{id:"unit-count"}, this.model.unitCount?.toString()).create() );
              el.appendChild( eb("button",{id:"edit-btn"}, "Edit").create(btn => {
                  btn.addEventListener('click', ()=>{
                      let infoBox = this.shadow.querySelector(".info-box");
                      if (infoBox.classList.contains("open")){
-                         this.dispatchEvent(
-                             new CustomEvent('update', {
-                                 bubbles: true,
-                                 detail: {
-                                     values: this.values,
-                                     callback:function(){
-                                         that.updatePreviews();
+                         if (this.hasChanges){
+                             this.dispatchEvent(
+                                 new CustomEvent('update', {
+                                     bubbles: true,
+                                     detail: {
+                                         values: this.values,
+                                         callback:function(){
+                                             that.hasChanges = false;
+                                             if (that.reloadOnSave){
+                                                 location.reload();
+                                             }
+                                             else that.updatePreviews();
+                                         }
                                      }
-                                 }
-                             })
-                         );
+                                 })
+                             );
+                         }
 
                          infoBox.classList.remove("open");
                          btn.innerHTML = "Edit";
@@ -158,6 +192,7 @@ class XInventoryTable extends HTMLElement{
                              detail: {
                                  file : i.files[0],
                                  callback: function(src){
+                                     that.hasChanges = true;
                                      that.values.previewImg = src;
                                      (that.shadow.querySelector("#img-prev") as HTMLImageElement).src = src;
                                      that.updatePreviews();
@@ -171,7 +206,7 @@ class XInventoryTable extends HTMLElement{
              el.appendChild( eb("img",{id:"img-prev", src: this.model.previewImg}).create(img => {
                  img.addEventListener('click', function(){
                      (fileInput as HTMLElement).click();
-                 })
+                 });
              }) );
              el.appendChild( eb("div").create(d => {
                  that.values.id = this.model.id;
@@ -179,44 +214,71 @@ class XInventoryTable extends HTMLElement{
                  d.appendChild( eb("label").create(lbl => {
                      lbl.appendChild( eb("span", "Name").create() );
                      lbl.appendChild( eb("input",{type:"text", name:"name", value: this.model.name}).create(i => {
-                         i.addEventListener('input', function(){ that.values.name = this.value });
+                         i.addEventListener('input', function(){ that.values.name = this.value; that.hasChanges =true });
                      }) )
                  }) );
 
                  d.appendChild( eb("label").create(lbl => {
                      lbl.appendChild( eb("span", "Unit Count").create() );
                      lbl.appendChild( eb("input",{type:"number", name:"unit_count", min: 0, value: this.model.unitCount}).create(i => {
-                         i.addEventListener('input', function(){ that.values.unitCount = parseInt(this.value) });
+                         i.addEventListener('input', function(){ that.values.unitCount = parseInt(this.value); that.hasChanges =true });
                      }) )
                  }) );
 
                  d.appendChild( eb("label").create(lbl => {
                      lbl.appendChild( eb("span", "Quantity (per unit)").create() );
                      lbl.appendChild( eb("input",{type:"number", name:"quantity", min: 0, value: this.model.quantity}).create(i => {
-                         i.addEventListener('input', function(){ that.values.quantity = parseInt(this.value) });
+                         i.addEventListener('input', function(){ that.values.quantity = parseInt(this.value); that.hasChanges =true });
                      }) )
                  }) );
 
                  d.appendChild( eb("label").create(lbl => {
                      lbl.appendChild( eb("span", "Expiry").create() );
                      lbl.appendChild( eb("input",{type:"date", name:"expiry", value: Tools.DateToDOMCompatString(this.model.expiry) }).create(i => {
-                         i.addEventListener('input', function(){ that.values.expiry = new Date(this.value + "T00:00:00.000Z") });
+                         i.addEventListener('input', function(){ that.values.expiry = new Date(this.value + "T00:00:00.000Z"); that.hasChanges =true });
                      }) )
                  }) );
 
                  d.appendChild( eb("label").create(lbl => {
                      lbl.appendChild( eb("span", "Description").create() );
                      lbl.appendChild( eb("textarea",{name:"description"},this.model.description).create(i => {
-                         i.addEventListener('input', function(){ that.values.description = this.value });
+                         i.addEventListener('input', function(){ that.values.description = this.value; that.hasChanges =true });
                      }) )
                  }) );
 
                  d.appendChild( eb("label").create(lbl => {
                      lbl.appendChild( eb("span", "Notices (one per line)").create() );
                      lbl.appendChild( eb("textarea",{name:"notices"}, this.model.notices).create(i => {
-                         i.addEventListener('input', function(){ that.values.notices = this.value });
+                         i.addEventListener('input', function(){ that.values.notices = this.value; that.hasChanges =true });
                      }) )
                  }) );
+
+                 d.appendChild( eb("label").create(lbl => {
+                     lbl.appendChild( eb("span", "Storage Location").create() );
+                     lbl.appendChild( eb("select",{value: this.model.storageLocation.id}).create(async i => {
+
+                         let locs = await Tools.getStorageLocations();
+
+                         i.addEventListener('input', function(){
+                             let curr = locs.filter(l => l.id === parseInt(this.value))[0];
+                             that.values.storageLocation.id = parseInt(this.value);
+                             that.values.storageLocation.name = curr.name;
+                             that.values.storageLocation.location = curr.location;
+                             that.hasChanges =true
+                         });
+
+                         locs.forEach(x => {
+                             if (x.id == this.model.storageLocation.id){
+                                 i.appendChild( eb("option",{selected:true},`${x.name} (${x.location})`).create() );
+                             }
+                             else{
+                                 i.appendChild( eb("option",{},`${x.name} (${x.location})`).create() );
+                             }
+                         });
+
+                     }) )
+                 }) );
+
              }) );
          }) );
      }
@@ -239,6 +301,8 @@ class XInventoryTable extends HTMLElement{
          return this;
      }
  }
+
+ Tools.getStorageLocations();
 
  customElements.define('inventory-item', XInventoryItem);
  customElements.define('inventory-table', XInventoryTable);

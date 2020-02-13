@@ -1,9 +1,8 @@
 import {BaseService} from "./BaseService";
 import {ItemModel} from "../models/ItemModel";
 import {ItemRepository} from "../Repository/ItemRepository";
-import {dbConnector as db, dbConnector} from "../config/DBConnection";
 import {System} from "../config/System";
-import {StorageLocationModel} from "../models/StorageLocationModel";
+import {StorageLocationRepository} from "../Repository/StorageLocationRepository";
 
 class service extends BaseService {
     /**
@@ -11,8 +10,8 @@ class service extends BaseService {
      * @param req The Request Body
      */
     async handleItemUpdate(req) {
-        let inv:ItemModel = System.marshallToClass(req.body.entry, ItemModel);
-        if (req.body.entry.storageLocation) inv.storageLocation = System.marshallToClass(req.body.entry.storageLocation, StorageLocationModel);
+        let inv:ItemModel = await System.marshallToClass(req.body.entry, ItemModel);
+        inv.storageLocation = await StorageLocationRepository.getById(parseInt(req.body.entry.storageLocation.id));
         inv.notices = req.body.entry.notices;
         return await ItemRepository.update(inv);
     }
@@ -22,7 +21,7 @@ class service extends BaseService {
      * @param req The Request Body
      */
     async handleItemDeletion(req) {
-        await ItemRepository.delete(await ItemRepository.getByItemCode(req.body['data']['id']))
+        await ItemRepository.delete(await ItemRepository.getByItemCode(req.body['id']))
     }
 
 }

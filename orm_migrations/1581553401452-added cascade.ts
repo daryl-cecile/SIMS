@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class newDb1581443184633 implements MigrationInterface {
-    name = 'newDb1581443184633'
+export class addedCascade1581553401452 implements MigrationInterface {
+    name = 'addedCascade1581553401452'
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query("CREATE TABLE `sessions` (`id` int NOT NULL AUTO_INCREMENT, `created_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `updated_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `sessionKey` varchar(255) NOT NULL, `expiry` datetime NOT NULL, `invalid` tinyint NOT NULL DEFAULT 0, UNIQUE INDEX `IDX_1ae515ea2b66b030cf3f5e5ba8` (`sessionKey`), PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
@@ -10,7 +10,7 @@ export class newDb1581443184633 implements MigrationInterface {
         await queryRunner.query("CREATE TABLE `Transactions` (`id` int NOT NULL AUTO_INCREMENT, `created_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `updated_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `transactionType` enum ('0', '1') NOT NULL DEFAULT '0', `userOwnerId` int NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
         await queryRunner.query("CREATE TABLE `users` (`id` int NOT NULL AUTO_INCREMENT, `created_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `updated_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `firstName` varchar(255) NULL, `lastName` varchar(255) NULL, `email` varchar(255) NULL, `identifier` varchar(8) NOT NULL, `password_hash` varchar(255) NULL, `saltine` varchar(255) NULL, `currentSessionId` int NULL, UNIQUE INDEX `IDX_2e7b7debda55e0e7280dc93663` (`identifier`), UNIQUE INDEX `REL_aad9d010f8b7d5f1367e002487` (`currentSessionId`), PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
         await queryRunner.query("CREATE TABLE `storageLocations` (`id` int NOT NULL AUTO_INCREMENT, `created_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `updated_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `name` varchar(255) NOT NULL, `location` varchar(255) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
-        await queryRunner.query("CREATE TABLE `items` (`id` int NOT NULL AUTO_INCREMENT, `created_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `updated_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `name` varchar(255) NOT NULL, `description` text NOT NULL, `notices` text NOT NULL, `unitCount` int NOT NULL DEFAULT 1, `previewImg` varchar(255) NULL, `expiry` datetime NULL, `quantity` int NOT NULL, `storageLocationId` int NULL, UNIQUE INDEX `REL_8b235527408207cd1bcbd2be08` (`storageLocationId`), PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
+        await queryRunner.query("CREATE TABLE `items` (`id` int NOT NULL AUTO_INCREMENT, `created_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `updated_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `name` varchar(255) NOT NULL, `description` text NOT NULL, `notices` text NOT NULL, `unitCount` int NOT NULL DEFAULT 1, `previewImg` varchar(255) NULL, `expiry` datetime NULL, `quantity` int NOT NULL DEFAULT 1, `storageLocationId` int NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
         await queryRunner.query("CREATE TABLE `sims-logs` (`id` int NOT NULL AUTO_INCREMENT, `created_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `updated_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `title` varchar(255) NULL, `message` varchar(255) NOT NULL, `extraInformation` text NULL, `err-code` varchar(12) NULL, `reference` varchar(255) NOT NULL, `expiry` datetime NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
         await queryRunner.query("CREATE TABLE `transactions_entries_transaction-entry` (`transactionsId` int NOT NULL, `transactionEntryId` int NOT NULL, INDEX `IDX_99747526740fa42ac3009bf208` (`transactionsId`), INDEX `IDX_1f7303010ea58156a6b0446f13` (`transactionEntryId`), PRIMARY KEY (`transactionsId`, `transactionEntryId`)) ENGINE=InnoDB", undefined);
         await queryRunner.query("CREATE TABLE `users_permissions_permission` (`usersId` int NOT NULL, `permissionId` int NOT NULL, INDEX `IDX_a8ae4c08841340a12bb7e2db62` (`usersId`), INDEX `IDX_bb779b42732e822b848f9f32ad` (`permissionId`), PRIMARY KEY (`usersId`, `permissionId`)) ENGINE=InnoDB", undefined);
@@ -38,7 +38,6 @@ export class newDb1581443184633 implements MigrationInterface {
         await queryRunner.query("DROP INDEX `IDX_99747526740fa42ac3009bf208` ON `transactions_entries_transaction-entry`", undefined);
         await queryRunner.query("DROP TABLE `transactions_entries_transaction-entry`", undefined);
         await queryRunner.query("DROP TABLE `sims-logs`", undefined);
-        await queryRunner.query("DROP INDEX `REL_8b235527408207cd1bcbd2be08` ON `items`", undefined);
         await queryRunner.query("DROP TABLE `items`", undefined);
         await queryRunner.query("DROP TABLE `storageLocations`", undefined);
         await queryRunner.query("DROP INDEX `REL_aad9d010f8b7d5f1367e002487` ON `users`", undefined);
