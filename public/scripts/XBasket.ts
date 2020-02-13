@@ -4,7 +4,7 @@ class BasketItem{
     private _name:string = "";
     private _description:string = "";
     private _quantity:number = 1;
-    private _itemRef:string = "";
+    private _itemRef:number = 0;
     private _image:string = "";
 
     private _ignoreUpdates:boolean = false;
@@ -80,14 +80,14 @@ class BasketCollection{
         return this;
     }
 
-    public getItemByReference(reference:string){
+    public getItemByReference(reference:number):BasketItem{
         for (const item of this._collection){
             if (item.itemReference === reference) return item;
         }
         return null;
     }
 
-    public removeItemByReference(reference:string){
+    public removeItemByReference(reference:number){
         let item = this.getItemByReference(reference);
         let itemIndex = this._collection.indexOf(item);
         if (itemIndex === -1) return null;
@@ -122,6 +122,7 @@ class XBasket extends HTMLElement{
 
     private readonly _shadow:ShadowRoot;
     private _collection:BasketCollection = null;
+    public basketChildren:XBasketItem[] = [];
 
     constructor() {
         super();
@@ -140,6 +141,23 @@ class XBasket extends HTMLElement{
         this.reset();
     }
 
+    public updateChild(id:number, handler:(item:XBasketItem)=>void){
+        let child = this.basketChildren.filter(c => parseInt(c.getAttribute('data-ref')) === id)?.[0];
+        if (child) {
+            handler(child);
+            child.updateVisuals();
+            return true;
+        }
+        return false;
+    }
+
+    public updateAll(){
+        this.basketChildren.forEach(c => {
+            c.updateVisuals();
+        });
+        return this;
+    }
+
     public attachCollection(collection:BasketCollection){
         this.detachCollection();
         this._collection = collection;
@@ -152,14 +170,15 @@ class XBasket extends HTMLElement{
         if (this._collection === null) return this;
         this._collection.onUpdate(()=>{});
         this._collection = null;
+        this.basketChildren = [];
         return this;
     }
 
-    private updateVisuals(){
+    public updateVisuals(){
         this._shadow.querySelector("#title").innerHTML = `<strong> Basket </strong> <span>(${this.itemCount} Items)</span>`;
         this._shadow.querySelector(".checkout-btn").innerHTML = `<button>Checkout ${this.itemCount} item(s)</span>`;
 
-        let currentItemElementIds = [... this._shadow.querySelectorAll("ul.b-list > xbasket-item")].map(el => el.id.replace("item-",""));
+        let currentItemElementIds = [... this._shadow.querySelectorAll("ul.b-list > xbasket-item")].map(el => parseInt(el.id.replace("item-","")));
 
         if (this.itemCount > 0){
             this.collection.eachItem((item,prev, next) => {
@@ -170,6 +189,7 @@ class XBasket extends HTMLElement{
 
                     let container = this._shadow.querySelector("ul.b-list");
                     let it = this.createItemElement(item);
+                    this.basketChildren.push(it);
 
                     if (next){
                         let nextEl = this._shadow.querySelector("#item-"+next.itemReference);
@@ -252,13 +272,16 @@ class XBasket extends HTMLElement{
 
         let it:XBasketItem = <any>document.createElement("xbasket-item");
         it.setAttribute('id', "item-" + item.itemReference);
+        it.setAttribute('data-ref',item.itemReference.toString());
         it.setAttribute('src', item.imageUrl);
         it.setAttribute('title', item.name);
         it.setAttribute('desc', item.description);
         it.setAttribute('quantity', String(item.quantity));
 
-        it.addEventListener('removed',()=>{
-            this.collection.removeItemByReference(item.itemReference)
+        it.addEventListener('removed',(ev)=>{
+            this.collection.removeItemByReference(item.itemReference);
+            let itm = (<any>ev).detail;
+            this.basketChildren.splice( this.basketChildren.indexOf( itm ) , 1 )
         });
 
         return it;
@@ -368,7 +391,7 @@ class XBasketItem extends HTMLElement{
         this.updateVisuals();
     }
 
-    private updateVisuals(){
+    public updateVisuals(){
         if (this._initialized){
             if (this._quantity <= 0 && this._deleted === false) this._deleted = true;
 
@@ -382,7 +405,7 @@ class XBasketItem extends HTMLElement{
                 this.classList.add("hiding");
                 setTimeout(()=>{
                     this.remove();
-                    this.emitEvent('removed');
+                    this.emitEvent('removed', this);
                 },240);
             }
 
@@ -418,10 +441,12 @@ class XBasketItem extends HTMLElement{
     }
 
     private emitEvent(eventName:string,data={}){
-        this.dispatchEvent(new CustomEvent(eventName, {
-            bubbles: true,
-            detail: data
-        }));
+        this.dispatchEvent(
+            new CustomEvent(eventName, {
+                bubbles: true,
+                detail: data
+            })
+        );
         return this;
     }
 

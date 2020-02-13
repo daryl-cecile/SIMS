@@ -29,6 +29,22 @@ class repo extends BaseRepository<ItemModel>{
     async getAll(){
         return await this.repo.find()
     }
+
+    async removeMultipleById(...id:string[]){
+        return new Promise(async resolve => {
+            let f = [];
+            this.repo.find({
+                where: id.map(_id => {
+                    return {id: _id}
+                })
+            }).then(async entityCollection => {
+                f.push( await this.repo.remove(entityCollection) );
+                resolve(f);
+            }).catch(x => {
+                console.log(x);
+            });
+        });
+    }
 }
 
 export const ItemRepository = new repo();
