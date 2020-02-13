@@ -123,6 +123,7 @@ class XCatalog extends HTMLElement{
 
     private readonly _shadow:ShadowRoot;
     private _collection:CatalogCollection = null;
+    public catalogChildren:XCatalogItem[] = [];
 
     constructor() {
         super();
@@ -162,6 +163,7 @@ class XCatalog extends HTMLElement{
             this.refresh();
             this.collection.eachItem((item,prev, next) => {
                 let el = this.createItemElement(item);
+                if (this.catalogChildren.indexOf(el) === -1) this.catalogChildren.push(el);
                 this._shadow.appendChild( el );
                 el.updateValue();
             });
@@ -177,6 +179,7 @@ class XCatalog extends HTMLElement{
 
     private refresh(){
         if (this._shadow !== null) this._shadow.innerHTML = "";
+        this.catalogChildren = [];
         this.setup();
         return this;
     }
