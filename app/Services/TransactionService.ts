@@ -14,17 +14,17 @@ class service extends BaseService {
 
             let tempItem = await ItemRepository.getByItemCode(item.id);
 
-            tempItem.stock -= item.stock;
+            tempItem.unitCount -= item.unitCount;
             await ItemRepository.update(tempItem);
 
             // Add item to transaction
             let tempEntry = new OrderModel();
             tempEntry.itemId = item.id;
-            tempEntry.stock = item.stock;
+            tempEntry.stock = item.unitCount;
             if (!transaction.entries) transaction.entries = [];
             transaction.entries.push(tempEntry);
 
-            await System.log(`User[${currentUser.identifier}]`, `Issued ${item.stock} of item[${item.id}]`);
+            await System.log(`User[${currentUser.identifier}]`, `Issued ${item.unitCount} of item[${item.id}]`);
 
         }
         transaction.transactionType = TransactionType.PURCHASE;
@@ -38,14 +38,14 @@ class service extends BaseService {
 
         for (const item of itemsToRefund) {
             let tempItem = await ItemRepository.getByItemCode(item.id);
-            tempItem.stock += item.stock;
+            tempItem.unitCount += item.unitCount;
             await ItemRepository.update(tempItem);
 
-            await System.log(`Transaction[${transaction.id}]`, `User[${transaction.userOwner.identifier}] refunded ${item.stock} of item[${item.id}]`);
+            await System.log(`Transaction[${transaction.id}]`, `User[${transaction.userOwner.identifier}] refunded ${item.unitCount} of item[${item.id}]`);
 
             let tempEntry = new OrderModel();
             tempEntry.itemId = item.id;
-            tempEntry.stock = item.stock;
+            tempEntry.stock = item.unitCount;
             if (!refundTransaction.entries) refundTransaction.entries = [];
             refundTransaction.entries.push(tempEntry);
         }
