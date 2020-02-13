@@ -1,4 +1,7 @@
 
+
+let StorageLocations = null;
+
 namespace Tools{
 
     interface Attributes{
@@ -185,28 +188,16 @@ namespace Tools{
         }
     }
 
-    export function magic(originalObject){
-        const handler = {
-            get: (obj, prop) => {
-                if (prop === "valueOf"){
-                    return ()=>originalObject;
-                }
-                else{
-                    obj[prop] = obj[prop] || {};
-                    if (typeof obj[prop] === "string" || obj[prop] instanceof String){
-                        return obj[prop];
-                    }
-                    return magic(obj[prop]);
-                }
-            },
-            valueOf: ()=>{
-                return originalObject;
-            },
-            toString: ()=>{
-                return JSON.stringify(originalObject);
-            }
-        };
-        return new Proxy(originalObject, handler);
+    export async function getStorageLocations(){
+        if (StorageLocations !== null) return StorageLocations;
+        return new Promise(resolve => {
+            $.get("/api/storage/list",{
+                CSRF_Token : Tools.csrfToken()
+            }, result => {
+                StorageLocations = result.payload;
+                resolve(result.payload);
+            });
+        });
     }
 }
 

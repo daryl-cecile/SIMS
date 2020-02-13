@@ -2,8 +2,8 @@ import {RouterSet} from "../../config/RouterSet";
 import {JSONResponse} from "../../config/JSONResponse";
 import {ItemRepository} from "../../Repository/ItemRepository";
 import {ItemService} from "../../Services/ItemService";
-import {System} from "../../config/System";
 import {FSManager} from "../../config/FSManager";
+import {StorageLocationRepository} from "../../Repository/StorageLocationRepository";
 
 export const ItemsEndpointController = new RouterSet((router) => {
 
@@ -13,6 +13,7 @@ export const ItemsEndpointController = new RouterSet((router) => {
     });
 
     router.post("/items/update", async function(req, res) {
+        console.log(req.body);
         let result = await ItemService.handleItemUpdate(req);
         res.json(JSONResponse(true, "Item Created", result));
     });
@@ -40,6 +41,11 @@ export const ItemsEndpointController = new RouterSet((router) => {
         res.json(JSONResponse(true, "File", {
             name : files[0].uniqueName
         }));
+    });
+
+    router.get("/storage/list", async function(req, res) {
+        let locations = await StorageLocationRepository.getAll();
+        res.json(JSONResponse(true,"Locations", locations));
     });
 
     return router;

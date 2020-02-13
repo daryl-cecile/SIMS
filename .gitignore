@@ -162,6 +162,9 @@ app/Repository/PermissionRepository.js
 app/Repository/SessionRepository.js.map
 app/Repository/SessionRepository.d.ts
 app/Repository/SessionRepository.js
+app/Repository/StorageLocationRepository.js.map
+app/Repository/StorageLocationRepository.d.ts
+app/Repository/StorageLocationRepository.js
 app/Repository/SystemLogRepository.js.map
 app/Repository/SystemLogRepository.d.ts
 app/Repository/SystemLogRepository.js
@@ -225,9 +228,6 @@ app/config/seeder.js
 app/config/setup.js.map
 app/config/setup.d.ts
 app/config/setup.js
-app/controllers/endpoints/InventoryController.js.map
-app/controllers/endpoints/InventoryController.d.ts
-app/controllers/endpoints/InventoryController.js
 app/controllers/endpoints/ItemController.js.map
 app/controllers/endpoints/ItemController.d.ts
 app/controllers/endpoints/ItemController.js
@@ -288,12 +288,9 @@ app/shape/Inventory.d.js
 index.js.map
 index.d.ts
 index.js
-orm_migrations/1581443184633-new db.js.map
-orm_migrations/1581443184633-new db.d.ts
-orm_migrations/1581443184633-new db.js
-orm_migrations/1581443312724-set quantity default value.js.map
-orm_migrations/1581443312724-set quantity default value.d.ts
-orm_migrations/1581443312724-set quantity default value.js
+orm_migrations/1581553401452-added cascade.js.map
+orm_migrations/1581553401452-added cascade.d.ts
+orm_migrations/1581553401452-added cascade.js
 ormconfig.js.map
 ormconfig.d.ts
 ormconfig.js

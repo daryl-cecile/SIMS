@@ -15,7 +15,7 @@
         <h1>Inventory</h1>
         <button>Receive Item</button>
         <button>Process Return</button>
-        <button class="link">+ Add New</button>
+        <button class="link" id="newitem-btn">+ Add New</button>
     </div>
 
     <inventory-table id="table"></inventory-table>
@@ -43,6 +43,10 @@
             entry.model = inventoryEntry;
             table.addItem(entry);
         }
+
+        $('#newitem-btn').on('click',function(){
+            table.createNew();
+        });
 
         table.addEventListener('save',ev => {
             console.log("save this",ev.detail.values);

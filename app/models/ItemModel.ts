@@ -1,4 +1,4 @@
-import {Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne} from "typeorm";
+import {Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne} from "typeorm";
 import {BaseModel} from "./IModel";
 import {StorageLocationModel} from "./StorageLocationModel";
 
@@ -27,8 +27,9 @@ export class ItemModel extends BaseModel{
     @Column("int", {default:1})
     public quantity:number;
 
-    @OneToOne(type => StorageLocationModel, {
-        eager: true
+    @ManyToOne(type => StorageLocationModel, {
+        eager: true,
+        cascade: true
     })
     @JoinColumn()
     public storageLocation: StorageLocationModel;
