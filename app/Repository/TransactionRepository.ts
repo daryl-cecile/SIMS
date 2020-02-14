@@ -10,13 +10,15 @@ class repo extends BaseRepository<TransactionsModel>{
 
     async getById(transactionId:number) {
         return await this.repo.findOne({
-            where:{id:transactionId}
+            where:{id:transactionId},
+            relations:['entries','userOwner']
         })
     }
 
     async getByUser(user:UserModel) {
         return await this.repo.find( {
-            where:{userOwner:user}
+            where:{userOwner:user},
+            relations:['entries','userOwner']
         })
     }
 
