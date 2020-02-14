@@ -5,6 +5,7 @@ import {JSONResp, JSONResponse} from "../../config/JSONResponse";
 import {RouterSet} from "../../config/RouterSet";
 import {TransactionService} from "../../Services/TransactionService";
 import {UserRepository} from "../../Repository/UserRepository";
+import {Items} from "../../payloads/ItemList";
 
 export const TransactionsEndpointController = new RouterSet((router)=>{
 
@@ -12,20 +13,20 @@ export const TransactionsEndpointController = new RouterSet((router)=>{
         let currentUser = await Passport.getCurrentUser(req,res);
         if (currentUser != undefined) {
 
-            let purchasedItems = await TransactionService.parsePurchasedItems(req);
+            let purchasedItems:Items[] = req.body['data'];
 
             let tempTransaction:TransactionsModel = new TransactionsModel();
             tempTransaction.userOwner = currentUser;
 
-            await TransactionService.handlePurchase(tempTransaction, purchasedItems, currentUser);
+            let finalTransaction = await TransactionService.handlePurchase(tempTransaction, purchasedItems, currentUser);
 
-            res.json( (new JSONResp(true, "Transaction successfully added")).object);
+            res.json( (new JSONResp(true, "Transaction successfully added", {transactionId: finalTransaction.id})).object);
         } else res.json((new JSONResp(false)).object);
     });
 
     router.post("/transactions/refund", async function(req, res) {
         let {transactionsCode, itemsToRefund} = await TransactionService.parseRefundItems(req);
-        let tempTransaction = await TransactionRepository.getByItemCode(transactionsCode);
+        let tempTransaction = await TransactionRepository.getById(transactionsCode);
 
         await TransactionService.handleRefund(tempTransaction, itemsToRefund);
 

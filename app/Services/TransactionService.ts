@@ -28,7 +28,7 @@ class service extends BaseService {
 
         }
         transaction.transactionType = TransactionType.PURCHASE;
-        await TransactionRepository.update(transaction);
+        return await TransactionRepository.update(transaction);
     }
 
     async handleRefund(transaction:TransactionsModel, itemsToRefund:Items[]) {
@@ -62,8 +62,5 @@ class service extends BaseService {
         }
     }
 
-    parsePurchasedItems(req):Items[] {
-        return JSON.parse(req.body['data']);
-    }
 }
 export const TransactionService = new service();

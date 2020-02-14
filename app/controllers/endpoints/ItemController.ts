@@ -30,9 +30,24 @@ export const ItemsEndpointController = new RouterSet((router) => {
     router.get("/items/itemlist", async function (req, res){
         let listResults = await ItemRepository.getAll();
         res.json(JSONResponse(true, "InventoryList", {
-            items: listResults.filter(item => {
-                return item.quantity > 0
-            })
+            items: listResults
+        }));
+    });
+
+    router.get("/items/warnings", async function (req, res){
+        let listResults = await ItemRepository.getAll();
+
+        let lowStock = listResults.filter(item => {
+            return item.quantity < 10 && item.quantity > 0
+        });
+
+        let noStock = listResults.filter(item => {
+            return item.quantity === 0
+        });
+
+        res.json(JSONResponse(true, "InventoryList", {
+            outOfStock: noStock,
+            lowStock: lowStock
         }));
     });
 

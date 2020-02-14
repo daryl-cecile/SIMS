@@ -8,9 +8,9 @@ class repo extends BaseRepository<TransactionsModel>{
         super(TransactionsModel);
     }
 
-    async getByItemCode(itemCode:number) {
+    async getById(transactionId:number) {
         return await this.repo.findOne({
-            where:{id:itemCode}
+            where:{id:transactionId}
         })
     }
 
