@@ -14,21 +14,21 @@ class service extends BaseService {
 
             let tempItem = await ItemRepository.getByItemCode(item.id);
 
-            tempItem.unitCount -= item.unitCount;
+            tempItem.unitCount -= item.quantity;
             await ItemRepository.update(tempItem);
 
             // Add item to transaction
             let tempEntry = new OrderModel();
             tempEntry.itemId = item.id;
-            tempEntry.stock = item.unitCount;
+            tempEntry.quantity = item.quantity;
             if (!transaction.entries) transaction.entries = [];
             transaction.entries.push(tempEntry);
 
-            await System.log(`User[${currentUser.identifier}]`, `Issued ${item.unitCount} of item[${item.id}]`);
+            await System.log(`User[${currentUser.identifier}]`, `Issued ${item.quantity} of item[${item.id}]`);
 
         }
         transaction.transactionType = TransactionType.PURCHASE;
-        await TransactionRepository.update(transaction);
+        return await TransactionRepository.update(transaction);
     }
 
     async handleRefund(transaction:TransactionsModel, itemsToRefund:Items[]) {
@@ -38,14 +38,14 @@ class service extends BaseService {
 
         for (const item of itemsToRefund) {
             let tempItem = await ItemRepository.getByItemCode(item.id);
-            tempItem.unitCount += item.unitCount;
+            tempItem.unitCount += item.quantity;
             await ItemRepository.update(tempItem);
 
-            await System.log(`Transaction[${transaction.id}]`, `User[${transaction.userOwner.identifier}] refunded ${item.unitCount} of item[${item.id}]`);
+            await System.log(`Transaction[${transaction.id}]`, `User[${transaction.userOwner.identifier}] refunded ${item.quantity} of item[${item.id}]`);
 
             let tempEntry = new OrderModel();
             tempEntry.itemId = item.id;
-            tempEntry.stock = item.unitCount;
+            tempEntry.quantity = item.quantity;
             if (!refundTransaction.entries) refundTransaction.entries = [];
             refundTransaction.entries.push(tempEntry);
         }
@@ -62,8 +62,5 @@ class service extends BaseService {
         }
     }
 
-    parsePurchasedItems(req):Items[] {
-        return JSON.parse(req.body['data']);
-    }
 }
 export const TransactionService = new service();

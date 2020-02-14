@@ -15,7 +15,10 @@ export enum TransactionType{
 @Entity("Transactions")
 export class TransactionsModel extends BaseModel {
 
-    @ManyToMany(type => OrderModel)
+    @ManyToMany(type => OrderModel, {
+        cascade: true,
+        eager: true
+    })
     @JoinTable()
     public entries:OrderModel[];
 

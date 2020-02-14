@@ -35,6 +35,18 @@
 
         basket.attachCollection(itemCollection);
 
+        basket.addEventListener('checkout', function(ev){
+            $.post("/api/transactions/issue",{
+                CSRF_Token : Tools.csrfToken(),
+                data : ev.detail.items
+            }, result => {
+                if (result.isSuccessful){
+                    location.href = '/confirm/' + result.payload.transactionId;
+                }
+                console.log(result);
+            });
+        });
+
         async function getItems(){
             return new Promise(resolve => {
                 $.get("/api/items/itemlist",{
@@ -78,8 +90,9 @@
             itemCollection.addItem( new BasketItem({
                 name: item.name,
                 description: item.description,
-                quantity: item.quantity,
-                itemReference: item.id
+                quantity: 1,
+                itemReference: item.id,
+                imageUrl : item.previewImg
             }) );
 
             basket.updateVisuals();
@@ -89,6 +102,7 @@
             let col = await getItems();
 
             col.forEach(item => {
+                if (item.quantity === 0) return;
                 catalogCollection.addItem( new CatalogItem({
                     entry : item
                 }) );

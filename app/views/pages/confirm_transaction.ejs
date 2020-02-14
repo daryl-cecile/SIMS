@@ -9,23 +9,26 @@
 <body>
     <%- include('../partials/nav', {isAdmin:true, showLogo:true}) %>
 
-    <h1>Confirm</h1>
+    <section class="f v padded extra" style="overflow: auto" >
 
-    <div class="main-contain">
-        <div class="confirm-message">
-            <h3>Thank you!</h3>
-            Here is what you've checked out
-        </div>
-        <div class="confirm-summary">
-            <div class="checkout-item" id="item1">Whiteboard Pens 2 Pack (Blue and Black)</div>
-            <div class="checkout-item" id="item2">Blu-tack</div>
-            <div class="checkout-item" id="item3"></div>
-        </div>
-        <div class="confirm-buttons">
-            <button class="button-primary">Finish and Sign Out!</button>
-            <a href="/">cancel transaction</a>
-        </div>
-    </div>
+        <main>
+            <div class="f v" style="width: 350px">
+                <h3 style="margin:0">Thank you!</h3>
+                <p>Here is what you've checked out</p>
+            </div>
+            <div class="f v confirm-summary" style="width: 350px">
+                <% for (let itm of items){ %>
+                <div><%= itm.name %> <i>x<%= itm.quantity %></i></div>
+                <% } %>
+            </div>
+            <br>
+            <br>
+            <div class="confirm-buttons">
+                <button class="button-primary" style="height:40px" onclick="location.href='/'">Finish and Sign Out!</button>
+            </div>
+        </main>
+
+    </section>
 
     <%- include('../partials/footer') %>
 

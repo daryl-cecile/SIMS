@@ -249,6 +249,24 @@ class XBasket extends HTMLElement{
         checkoutSection.innerHTML = `<button>Checkout ${this.itemCount} item(s)</button>`;
         this._shadow.appendChild(checkoutSection);
 
+
+        checkoutSection.addEventListener('click',(ev)=>{
+            if (ev.target === checkoutSection.querySelector('button') && this.itemCount > 0){
+                this.dispatchEvent(
+                    new CustomEvent("checkout", {
+                        bubbles: true,
+                        detail: {
+                            items : this.basketChildren.map(child => {
+                                return {
+                                    id : child.getAttribute('data-ref'),
+                                    quantity : child.quantity
+                                }
+                            })
+                        }
+                    })
+                );
+            }
+        });
     }
 
     private reset(){

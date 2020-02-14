@@ -39,22 +39,31 @@
 
 
     <script>
-        let items = [
-            {
-                name: "Alert",
-                content: "out of stock for <a href='#'>Whiteboard pens</a>",
-                color: Tools.Color.RED
-            },
-            {
-                name: "Warning",
-                content: "Running low on <a href='#'>Whiteboard erasers</a>",
-                color: Tools.Color.ORANGE
-            }
-        ];
 
         let logView = document.getElementById('notices');
-        logView.addEntry(items[0]);
-        logView.addEntry(items[1]);
+
+        $.get("/api/items/warnings",{
+            CSRF_Token : Tools.csrfToken()
+        }, result => {
+            if (result.isSuccessful){
+                result.payload.outOfStock.forEach(item => {
+                    logView.addEntry({
+                        name: "Alert",
+                        color: Tools.Color.RED,
+                        content: `Out of stock for <a href="/manage/inventory#${item.id}">${item.name}</a>`
+                    });
+                });
+
+                result.payload.lowStock.forEach(item => {
+                    logView.addEntry({
+                        name: "Warning",
+                        color: Tools.Color.ORANGE,
+                        content: `Running low on <a href="/manage/inventory#${item.id}">${item.name}</a>`
+                    });
+                });
+            }
+        });
+
     </script>
 
     <%- include('../partials/footer') %>

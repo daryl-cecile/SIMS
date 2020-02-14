@@ -117,18 +117,18 @@ import {dbConnector as db} from "./DBConnection";
     await seedUser("Test User","N0000100");
     await seedUser("Second User","N0000104");
 
-    await seedItem("Sample Item","A sample item", 5, new Date(), [
-        "Store in a wet place",
-        "Keep away from adults"
-        ],
-        10,
-        await seedLocation("main room","somewhere")
-    );
-
-    await seedItem("Sample Item TWO","A second sample item", 12, new Date(), [
-            "Keep away from adults"
-        ],
-        10,
-        await seedLocation("little room","somewhere")
-    );
+    // await seedItem("Sample Item","A sample item", 5, new Date(), [
+    //     "Store in a wet place",
+    //     "Keep away from adults"
+    //     ],
+    //     10,
+    //     await seedLocation("main room","somewhere")
+    // );
+    //
+    // await seedItem("Sample Item TWO","A second sample item", 12, new Date(), [
+    //         "Keep away from adults"
+    //     ],
+    //     10,
+    //     await seedLocation("little room","somewhere")
+    // );
 })();
