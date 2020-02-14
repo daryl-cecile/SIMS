@@ -10,12 +10,13 @@
 <body>
 <%- include('../partials/nav', {isAdmin:true, showLogo:true}) %>
 
-<section class="f v padded extra" style="overflow: auto" >
+<section class="f v padded extra" id="main-container" style="overflow: auto" >
     <div class="f h quick-bar">
         <h1>Inventory</h1>
-        <button id="delitem-btn">Delete selected</button>
-        <button>Process Return</button>
-        <button class="link" id="newitem-btn">+ New item</button>
+        <smart-input id="filter-bar" name="find" placeholder="Find Item" type="search" style="width: 220px; position: absolute; transform: translateX(-50%); left: 50%"></smart-input>
+        <button style="height: 38px" id="delitem-btn">Delete selected</button>
+        <button style="height: 38px">Process Return</button>
+        <button style="height: 38px" class="link" id="newitem-btn">+ New item</button>
     </div>
 
     <inventory-table id="table"></inventory-table>
@@ -45,18 +46,49 @@
             table.addItem(entry);
         }
 
+        function filterItems(val){
+            table.items.forEach(child => {
+                if (val.trim().length === 0){
+                    $(child).show();
+                }
+                else if ( child.values.name.toLowerCase().indexOf(val) > -1 || child.values.description.toLowerCase().indexOf(val) > -1 ){
+                    $(child).show();
+                }
+                else{
+                    $(child).hide();
+                }
+            })
+        }
+
+        $('#filter-bar').on('input', function(ev){
+            let val = ev.originalEvent.detail.value.toLowerCase();
+            filterItems(val);
+        });
+
+        if (location.hash.length > 1){
+            filterItems(decodeURI(location.hash.substr(1).toLowerCase()));
+        }
+
         delBtn.on('click',function(){
-            $.post("/api/items/delete",{
-                CSRF_Token : Tools.csrfToken(),
-                itemIdCollection : table.selectedItems.map(itm => itm.values.id)
-            }, result => {
-                console.log(result);
-                location.reload();
-            });
+            if (window.confirm("Are you sure you want to delete this?")){
+                $.post("/api/items/delete",{
+                    CSRF_Token : Tools.csrfToken(),
+                    itemIdCollection : table.selectedItems.map(itm => itm.values.id)
+                }, result => {
+                    console.log(result);
+                    location.reload();
+                });
+            }
         });
 
         $('#newitem-btn').on('click',function(){
             table.createNew();
+            setTimeout(()=>{
+                $('#main-container').get(0).scrollTo({
+                    behavior: "smooth",
+                    top: 1000
+                })
+            },250);
         });
 
         table.addEventListener('selectionchanged', ev=>{

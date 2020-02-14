@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('../partials/meta') %>
+    <title>Manage Storage</title>
+    <%- include('../partials/imports') %>
+    <link rel="stylesheet" href="/public/styles/manage.css">
+</head>
+<body>
+<%- include('../partials/nav', {isAdmin:false, showLogo:true}) %>
+
+<section class="f v padded extra" >
+    <div class="f h quick-bar">
+        <h1>Storage Locations</h1>
+        <button class="link" onclick="newLoc()">+ New Location</button>
+    </div>
+    <br>
+
+    <table>
+        <tr>
+            <th>Storage Name</th>
+            <th>Storage Location</th>
+            <th style="width: 250px"></th>
+        </tr>
+
+        <% for (let loc of locations){ %>
+            <tr id="<%= loc.id %>">
+                <td contenteditable="true"><%= loc.name %></td>
+                <td contenteditable="true"><%= loc.location %></td>
+                <td>
+                    <button class="button-primary smart-button" onclick="saveChange(<%=loc.id%>)">Save Changes</button>
+                    <button class="button-negative smart-button" onclick="remove(<%= loc.id %>)">Remove</button>
+                </td>
+            </tr>
+        <% } %>
+    </table>
+</section>
+
+<script>
+    function saveChange(storageId){
+        let row = $('#'+storageId);
+
+        $.post("/api/storage/update",{
+            CSRF_Token : Tools.csrfToken(),
+            id : storageId,
+            name : row.find('td:nth-of-type(1)').html().trim(),
+            location : row.find('td:nth-of-type(2)').html().trim()
+        }, result => {
+            if (result.isSuccessful){
+                location.reload();
+            }
+            else{
+                alert("Something went wrong... please try again");
+            }
+        })
+    }
+
+    function saveEntry(el){
+        let row = $(el).parents('tr');
+
+        $.post("/api/storage/update",{
+            CSRF_Token : Tools.csrfToken(),
+            name : row.find('td:nth-of-type(1)').html().trim(),
+            location : row.find('td:nth-of-type(2)').html().trim()
+        }, result => {
+            if (result.isSuccessful){
+                location.reload();
+            }
+            else{
+                alert("Something went wrong... please try again");
+            }
+        })
+    }
+
+    function remove(storageId){
+        if (confirm("Are you sure you want to remove this location?")){
+            $.post("/api/storage/delete",{
+                CSRF_Token : Tools.csrfToken(),
+                id : storageId
+            }, result => {
+                if (result.isSuccessful){
+                    location.reload();
+                }
+                else{
+                    alert("Something went wrong... please try again");
+                }
+            })
+        }
+    }
+
+    function newLoc(){
+        $('table').append(`<tr>
+                <td contenteditable="true">name</td>
+                <td contenteditable="true">location</td>
+                <td>
+                    <button class="button-primary smart-button" onclick="saveEntry(this)">Save Entry</button>
+                </td>
+            </tr>`);
+    }
+</script>
+
+</body>
+</html>
