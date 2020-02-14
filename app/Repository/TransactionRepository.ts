@@ -10,12 +10,14 @@ class repo extends BaseRepository<TransactionsModel>{
 
     async getById(transactionId:number) {
         return await this.repo.findOne({
+            relations: ['userOwner', 'entries'],
             where:{id:transactionId}
         })
     }
 
     async getByUser(user:UserModel) {
         return await this.repo.find( {
+            relations: ['userOwner', 'entries'],
             where:{userOwner:user}
         })
     }
@@ -24,6 +26,15 @@ class repo extends BaseRepository<TransactionsModel>{
         return await this.repo.find({
             relations:['userOwner', 'entries']
         });
+    }
+
+    async getAllOrdered(){
+        return await this.repo.find({
+            relations: ['userOwner', 'entries'],
+            order:{
+                createdAt:"DESC"
+            }
+        })
     }
 }
 

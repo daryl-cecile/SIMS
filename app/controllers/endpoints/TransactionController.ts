@@ -1,11 +1,14 @@
 import {Passport} from "../../Services/Passport";
-import {TransactionsModel} from "../../models/TransactionsModel";
+import {TransactionsModel, TransactionType} from "../../models/TransactionsModel";
 import {TransactionRepository} from "../../Repository/TransactionRepository";
 import {JSONResp, JSONResponse} from "../../config/JSONResponse";
 import {RouterSet} from "../../config/RouterSet";
 import {TransactionService} from "../../Services/TransactionService";
 import {UserRepository} from "../../Repository/UserRepository";
 import {Items} from "../../payloads/ItemList";
+import {ItemRepository} from "../../Repository/ItemRepository";
+import {System} from "../../config/System";
+import {OrderModel} from "../../models/OrderModel";
 
 /**
  * DARYL UNIT COUNT IS OUR STOCK, REMEMBER THIS
@@ -28,10 +31,29 @@ export const TransactionsEndpointController = new RouterSet((router)=>{
     });
 
     router.post("/transactions/refund", async function(req, res) {
-        let {transactionsCode, itemsToRefund} = await TransactionService.parseRefundItems(req);
-        let tempTransaction = await TransactionRepository.getById(transactionsCode);
+        let itemCode = parseInt(req.body['itemCode']);
+        let quantity = parseInt(req.body['quantity']);
 
-        await TransactionService.handleRefund(tempTransaction, itemsToRefund);
+        let currentUser = await Passport.getCurrentUser(req,res);
+
+        let refundTransaction = new TransactionsModel();
+        refundTransaction.transactionType = TransactionType.RETURN;
+        refundTransaction.entries = [];
+
+        let tempItem = await ItemRepository.getByItemCode(itemCode);
+        tempItem.unitCount += quantity;
+        await ItemRepository.update(tempItem);
+
+        let tempEntry = new OrderModel();
+        tempEntry.itemId = itemCode;
+        tempEntry.quantity = quantity;
+        if (!refundTransaction.entries) refundTransaction.entries = [];
+        refundTransaction.entries.push(tempEntry);
+
+        refundTransaction.userOwner = currentUser;
+        refundTransaction = await TransactionRepository.update(refundTransaction); // save refund transaction
+
+        await System.log(`Transaction[${refundTransaction.id}]`, `User[${refundTransaction.userOwner.identifier}] refunded ${quantity} of item[${itemCode}]`);
 
         res.json(new JSONResp(true, "Refund successful").object);
 
@@ -47,7 +69,7 @@ export const TransactionsEndpointController = new RouterSet((router)=>{
     });
 
     router.get("/transactions/listall", async function (req, res) {
-        res.json(JSONResponse(true, "All Transactions", await TransactionRepository.getAll()));
+        res.json(JSONResponse(true, "All Transactions", await TransactionRepository.getAllOrdered()));
     });
 
 

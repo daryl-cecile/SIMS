@@ -23,6 +23,8 @@
             <h3>Quick Access</h3>
             <button onclick="location.href='/manage/inventory'">Manage Inventory</button>
             <button onclick="location.href='/manage/store-location'">Manage storage location</button>
+            <button onclick="location.href='/manage/permissions'">Manage permissions</button>
+            <button onclick="location.href='/store'">Make Transaction</button>
 
             <br>
             <br>
@@ -37,6 +39,19 @@
     <script>
 
         let logView = document.getElementById('notices');
+        let logs = document.getElementById("logs");
+
+        $.get("/api/transactions/listall",{
+            CSRF_Token : Tools.csrfToken()
+        }, result => {
+            for (let ent of result.payload){
+                logs.addEntry({
+                    name: ent.createdAt,
+                    color: Tools.Color.BLUE,
+                    content: `${ent.userOwner.identifier} ${ent.transactionType === 0 ? "purchased" : "returned"} ${ent.entries.length} item(s)`
+                });
+            }
+        });
 
         $.get("/api/items/warnings",{
             CSRF_Token : Tools.csrfToken()

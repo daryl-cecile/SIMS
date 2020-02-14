@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('../partials/meta') %>
+    <title>Manage Permissions</title>
+    <%- include('../partials/imports') %>
+    <link rel="stylesheet" href="/public/styles/manage.css">
+</head>
+<body>
+<%- include('../partials/nav', {isAdmin:false, showLogo:true}) %>
+
+<section class="f v padded extra" >
+    <div class="f h quick-bar">
+        <h1>Permissions</h1>
+<!--        <button class="link" onclick="newLoc()">+ New Location</button>-->
+    </div>
+    <br>
+
+    <table>
+        <tr>
+            <th>Username</th>
+            <th>Name</th>
+            <th>Permission</th>
+            <th style="width: 150px"></th>
+        </tr>
+
+        <% for (let user of users){ %>
+            <tr id="<%= user.id %>">
+                <td><%= user.identifier %></td>
+                <td><%= user.firstName + ' ' + user.lastName %></td>
+                <td><%= user.permissions.map(p => p.name).join(", ") %></td>
+                <td>
+                    <button class="button-primary smart-button" onclick="changePermission()">Change permission</button>
+                </td>
+            </tr>
+        <% } %>
+    </table>
+</section>
+
+
+</body>
+</html>

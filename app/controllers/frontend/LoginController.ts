@@ -27,6 +27,27 @@ export const LoginController = new RouterSet( (router) => {
 
     });
 
+    router.get("/store", async function (req, res) {
+
+        let authCheck = await Passport.isAuthenticated(req, res);
+        if (authCheck.object.isSuccessful){
+
+            let acc = authCheck.object.payload['user'];
+
+            if ( await UserService.hasPermission(acc, "STAFF") ){
+                res.render("pages/pos", { user: acc });
+            }
+            else{
+                res.redirect("/");
+            }
+
+        }
+        else{
+            res.redirect("/login");
+        }
+
+    });
+
     router.get("/login", async function(req, res){
         res.redirect("/login/user"); // redirect to user-mode login
     });
