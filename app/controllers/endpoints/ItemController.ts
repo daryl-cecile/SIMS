@@ -38,11 +38,11 @@ export const ItemsEndpointController = new RouterSet((router) => {
         let listResults = await ItemRepository.getAll();
 
         let lowStock = listResults.filter(item => {
-            return item.quantity < 10 && item.quantity > 0
+            return item.unitCount < 10 && item.unitCount > 0
         });
 
         let noStock = listResults.filter(item => {
-            return item.quantity === 0
+            return item.unitCount === 0
         });
 
         res.json(JSONResponse(true, "InventoryList", {

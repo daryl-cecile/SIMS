@@ -24,7 +24,7 @@ class XInventoryTable extends HTMLElement{
             name: "",
             notices: "",
             previewImg: "/public/res/sims-logo.png",
-            quantity: 0,
+            quantity: 1,
             storageLocation: locs?.[0],
             unitCount: 0,
             updatedAt: <any>(new Date()).toISOString()
