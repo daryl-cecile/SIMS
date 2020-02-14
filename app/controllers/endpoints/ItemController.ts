@@ -4,6 +4,7 @@ import {ItemRepository} from "../../Repository/ItemRepository";
 import {ItemService} from "../../Services/ItemService";
 import {FSManager} from "../../config/FSManager";
 import {StorageLocationRepository} from "../../Repository/StorageLocationRepository";
+import {StorageLocationModel} from "../../models/StorageLocationModel";
 
 export const ItemsEndpointController = new RouterSet((router) => {
 
@@ -42,7 +43,7 @@ export const ItemsEndpointController = new RouterSet((router) => {
         });
 
         let noStock = listResults.filter(item => {
-            return item.unitCount === 0
+            return item.unitCount <= 0
         });
 
         res.json(JSONResponse(true, "InventoryList", {
@@ -62,6 +63,26 @@ export const ItemsEndpointController = new RouterSet((router) => {
     router.get("/storage/list", async function(req, res) {
         let locations = await StorageLocationRepository.getAll();
         res.json(JSONResponse(true,"Locations", locations));
+    });
+
+    router.post("/storage/update", async function(req, res) {
+        let location;
+        if (req.body['id']){
+            location = await StorageLocationRepository.getById( parseInt(req.body['id']) );
+        }
+        else{
+            location = new StorageLocationModel();
+        }
+        location.name = req.body['name'];
+        location.location = req.body['location'];
+        await StorageLocationRepository.save(location);
+        res.json(JSONResponse(true));
+    });
+
+    router.post("/storage/delete", async function(req, res) {
+        let location = await StorageLocationRepository.getById( parseInt(req.body['id']) );
+        await StorageLocationRepository.delete(location);
+        res.json(JSONResponse(true));
     });
 
     return router;

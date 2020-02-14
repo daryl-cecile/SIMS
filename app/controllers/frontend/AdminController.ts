@@ -1,5 +1,6 @@
 import {RouterSet} from "../../config/RouterSet";
 import {Passport} from "../../Services/Passport";
+import {StorageLocationRepository} from "../../Repository/StorageLocationRepository";
 
 export const AdminController = new RouterSet( (router) => {
 
@@ -8,19 +9,11 @@ export const AdminController = new RouterSet( (router) => {
         res.render("pages/inventory");
     });
 
-    router.get("/manage/item/new", async function(req, res){
-        res = await Passport.MakeAdminAccessOnly("New Item", res);
-        res.render("pages/manageItem",{
-            title:'Add new item',
-            isNew: true
-        });
-    });
-
-    router.get("/manage/item/edit", async function(req, res){
-        res = await Passport.MakeAdminAccessOnly("Edit Item", res);
-        res.render("pages/manageItem",{
-            title:'Edit item > ',
-            isNew: false
+    router.get("/manage/store-location", async function(req, res){
+        let locations = await StorageLocationRepository.getAll();
+        res = await Passport.MakeAdminAccessOnly("Inventory", res);
+        res.render("pages/manage_storage",{
+            locations: locations
         });
     });
 

@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <%- include('../partials/meta') %>
     <title>Help</title>
+    <%- include('../partials/imports') %>
     <link rel="stylesheet" href="/public/styles/help.css">
 </head>
-<body style="background-color:#eeeeee">
-    
-    <div class="line-top">
-        <hr style="border: 28px solid #ffffff;" />
-    </div>
+<body>
+<%- include('../partials/nav', {isAdmin:false, showLogo:true}) %>
 
+<section class="padded">
     <div class="help-contain">
 <!-------------------login help-------------------->
         <h2>Welcome to Login help</h2>
@@ -43,7 +43,7 @@
             <br>This is the same if you wish to go page to the normal login
         </div>
         <div class="line">
-        <hr style="border: 4px solid #333333;" />
+        <hr />
         </div>
 <!--------------------POS help-------------------------->
         <h2>POS help</h2>
@@ -75,7 +75,7 @@
         </div>
 
         <div class="line">
-            <hr style="border: 4px solid #333333;" />
+            <hr />
         </div>
 <!---------------------Transaction help----------------------------->
         <h2>Transaction help</h2>
@@ -99,7 +99,7 @@
             <br> cancel an order.
         </div>
         <div class="line">
-            <hr style="border: 4px solid #333333;" />
+            <hr />
         </div>
 <!----------------Admin login help---------------------------->
         <h2>Admin login help</h2>
@@ -122,7 +122,7 @@
             <br> login page. This is the same if you wish to go page to the admin login
         </div>
         <div class="line">
-            <hr style="border: 4px solid #333333;" />
+            <hr />
         </div>
 <!--------------------------Manager help-------------------------------->
         <h2>Manager help</h2>
@@ -148,10 +148,11 @@
         </div>
         
         <div class="line">
-            <hr style="border: 4px solid #333333;" />
+            <hr />
         </div>
 
     </div>
+</section>
 
 </body>
 </html>
