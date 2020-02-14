@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('../partials/meta') %>
+    <title>Report</title>
+    <%- include('../partials/imports') %>
+    <link rel="stylesheet" href="/public/styles/manage.css">
+</head>
+<body>
+    <%- include('../partials/nav', {isAdmin:true, showLogo:true}) %>
+
+    <section class="f v padded extra" id="main-container" style="overflow: auto" >
+        <div class="f h quick-bar">
+            <h1 style="margin: 0">Report</h1>
+            <button class="link" id="print-btn">Print</button>
+        </div>
+
+        <br>
+
+        <% if (type === "transaction") { %>
+            <iframe class="preview-frame" src="/report/framed/transaction" frameborder="0"></iframe>
+        <% } else { %>
+            <iframe class="preview-frame" src="/report/framed/inventory" frameborder="0"></iframe>
+        <% } %>
+    </section>
+
+    <script>
+        $('#print-btn').on('click', function(){
+            $('.preview-frame').get(0).contentWindow.print();
+        });
+    </script>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

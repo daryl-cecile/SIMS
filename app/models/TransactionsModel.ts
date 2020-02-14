@@ -16,13 +16,12 @@ export enum TransactionType{
 export class TransactionsModel extends BaseModel {
 
     @ManyToMany(type => OrderModel, {
-        cascade: true,
-        eager: true
+        cascade: true
     })
     @JoinTable()
     public entries:OrderModel[];
 
-    @ManyToOne(type => UserModel, user => user.transactions )
+    @ManyToOne(type => UserModel, user => user.transactions)
     @JoinColumn()
     public userOwner:UserModel;
 

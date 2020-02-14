@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<%- include('./meta') %>
+	<title>Report</title>
+	<%- include('./imports') %>
+	<link rel="stylesheet" href="/public/styles/report.css">
+</head>
+
+<body>
+
+	<div class="header">
+		<img class="header__logo" src="/public/res/sims-logo-full.png" alt="SIMS Logo">
+		<p class="header__subtitle">Slackers Inventory Management System</p>
+	</div>
+
+	<div class="statement-info">
+		<div class="user-details">
+			<p class="user-details__requested">Stock as of:</p>
+			<p class="user-details__name"><strong><%= genDate.toISOString().split("T")[0] %></strong></p>
+		</div>
+
+	</div>
+
+	<div class="statement-main">
+		<table class="statement-table">
+			<tr class="statement-table__headers">
+				<th>Item ID</th>
+				<th>Name</th>
+				<th>Unit Count</th>
+				<th>Count per pack</th>
+				<th>Item Description</th>
+			</tr>
+
+			<% for (let item of items){ %>
+
+			<tr class="statement-table__rows">
+				<td><%= item.itemId %></td>
+				<td><%= item.name %></td>
+				<td><%= item.unitCount %></td>
+				<td><%= item.quantity %></td>
+				<td><%= item.description %></td>
+			</tr>
+
+			<% } %>
+
+		</table>
+	</div>
+</body>
+
+</html>

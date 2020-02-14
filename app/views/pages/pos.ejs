@@ -102,7 +102,7 @@
             let col = await getItems();
 
             col.forEach(item => {
-                if (item.quantity === 0) return;
+                if (item.unitCount === 0) return;
                 catalogCollection.addItem( new CatalogItem({
                     entry : item
                 }) );

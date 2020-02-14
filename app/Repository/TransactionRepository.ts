@@ -21,7 +21,9 @@ class repo extends BaseRepository<TransactionsModel>{
     }
 
     async getAll() {
-        return await this.repo.find();
+        return await this.repo.find({
+            relations:['userOwner', 'entries']
+        });
     }
 }
 

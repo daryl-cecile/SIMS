@@ -11,22 +11,22 @@
 <body>
 
 	<div class="header">
-		<img class="header__logo" src="../public/res/sims-logo-full.png" alt="SIMS Logo">
+		<img class="header__logo" src="/public/res/sims-logo-full.png" alt="SIMS Logo">
 		<p class="header__subtitle">Slackers Inventory Management System</p>
 	</div>
 
 	<div class="statement-info">
 		<div class="user-details">
 			<p class="user-details__requested">Requested by:</p>
-			<p class="user-details__name"><strong>Daryl Cecile</strong></p>
-			<p class="user-details__id">N0698041</p>
+			<p class="user-details__name"><strong><%= currentUserName %></strong></p>
+			<p class="user-details__id"><%= currentUserId %></p>
 		</div>
 
 
 		<table class="statement-period">
 			<tr><th>Statement Period</th></tr>
 			
-			<tr><td class="statement-period__dates"><strong>10th Dec 2019</strong> to <strong>1st Jan 2020</strong></td></tr>
+			<tr><td class="statement-period__dates"><strong><%= (new Date("2020-01-01")).toISOString().split("T")[0] %></strong> to <strong><%= (new Date()).toISOString().split("T")[0] %></strong></td></tr>
 		</table>
 	</div>
 
@@ -41,50 +41,20 @@
 				
 			</tr>
 
+			<% for (let transaction of transactions){ %>
+
 			<tr class="statement-table__rows">
-				<td>001</td>
-				<td>Return</td>
-				<td>20-12-2019</td>
-				<td>Daryl Cecile</td>
-				<td>Whiteboard Pen</td>
+				<td><%= transaction.transactionId %></td>
+				<td><%= transaction.transactionType %></td>
+				<td><%= transaction.transactionDate.toISOString().split("T")[0] %></td>
+				<td><%= transaction.transactionOwner %></td>
+				<td> <% for (let item of transaction.items){ %> <span><%= item.name %> <i style="opacity: 0.5">x<%= item.count %></i></span>
+					<% } %> </td>
 				
 			</tr>
 
-			<tr class="statement-table__rows">
-				<td>002</td>
-				<td>Return</td>
-				<td>20-12-2019</td>
-				<td>Daryl Cecile</td>
-				<td>Whiteboard
-					Book
-					Tape
-				</td>
-				
-			</tr>
+			<% } %>
 
-			<tr class="statement-table__rows">
-				<td>003</td>
-				<td>Purchase</td>
-				<td>20-12-2019</td>
-				<td>Daryl Cecile</td>
-				<td>Pens
-					Ruler
-					Marker
-					5× Flask
-				</td>
-				
-			</tr>
-
-			<tr class="statement-table__rows">
-				<td>004</td>
-				<td>Purchase</td>
-				<td>20-12-2019</td>
-				<td>Daryl Cecile</td>
-				<td>Pencils
-					Mat
-				</td>
-				
-			</tr>
 		</table>
 	</div>
 </body>

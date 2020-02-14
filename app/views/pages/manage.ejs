@@ -22,18 +22,14 @@
         <aside class="f v" id="power-sidebar">
             <h3>Quick Access</h3>
             <button onclick="location.href='/manage/inventory'">Manage Inventory</button>
-            <button>Add reminder</button>
-            <button>Log Spillage</button>
+            <button onclick="location.href='/manage/store-location'">Manage storage location</button>
 
             <br>
             <br>
 
-            <h3>Transaction reports</h3>
-            <button>This month</button>
-            <button>Last month</button>
-            <button>Last 3 months</button>
-            <button>Last 6 months</button>
-            <button>Past year</button>
+            <h3>Generate Reports</h3>
+            <button onclick="location.href='/report/transactions'">Transactions</button>
+            <button onclick="location.href='/report/inventory'">Inventory</button>
         </aside>
     </section>
 
@@ -50,7 +46,7 @@
                     logView.addEntry({
                         name: "Alert",
                         color: Tools.Color.RED,
-                        content: `Out of stock for <a href="/manage/inventory#${item.id}">${item.name}</a>`
+                        content: `Out of stock for <a href="/manage/inventory#${item.name}">${item.name}</a>`
                     });
                 });
 
@@ -58,7 +54,7 @@
                     logView.addEntry({
                         name: "Warning",
                         color: Tools.Color.ORANGE,
-                        content: `Running low on <a href="/manage/inventory#${item.id}">${item.name}</a>`
+                        content: `Running low on <a href="/manage/inventory#${item.name}">${item.name}</a>`
                     });
                 });
             }
