@@ -31,27 +31,27 @@ class service extends BaseService {
         return await TransactionRepository.update(transaction);
     }
 
-    async handleRefund(transaction:TransactionsModel, itemsToRefund:Items[]) {
-        let refundTransaction = new TransactionsModel();
-        refundTransaction.transactionType = TransactionType.RETURN;
-        refundTransaction.entries = [];
-
-        for (const item of itemsToRefund) {
-            let tempItem = await ItemRepository.getByItemCode(item.id);
-            tempItem.unitCount += item.quantity;
-            await ItemRepository.update(tempItem);
-
-            await System.log(`Transaction[${transaction.id}]`, `User[${transaction.userOwner.identifier}] refunded ${item.quantity} of item[${item.id}]`);
-
-            let tempEntry = new OrderModel();
-            tempEntry.itemId = item.id;
-            tempEntry.quantity = item.quantity;
-            if (!refundTransaction.entries) refundTransaction.entries = [];
-            refundTransaction.entries.push(tempEntry);
-        }
-        refundTransaction.userOwner = transaction.userOwner;
-        await TransactionRepository.update(refundTransaction); // save refund transaction
-    }
+    // async handleRefund(transaction:TransactionsModel, itemsToRefund:Items[]) {
+    //     let refundTransaction = new TransactionsModel();
+    //     refundTransaction.transactionType = TransactionType.RETURN;
+    //     refundTransaction.entries = [];
+    //
+    //     for (const item of itemsToRefund) {
+    //         let tempItem = await ItemRepository.getByItemCode(item.id);
+    //         tempItem.unitCount += item.quantity;
+    //         await ItemRepository.update(tempItem);
+    //
+    //         await System.log(`Transaction[${transaction.id}]`, `User[${transaction.userOwner.identifier}] refunded ${item.quantity} of item[${item.id}]`);
+    //
+    //         let tempEntry = new OrderModel();
+    //         tempEntry.itemId = item.id;
+    //         tempEntry.quantity = item.quantity;
+    //         if (!refundTransaction.entries) refundTransaction.entries = [];
+    //         refundTransaction.entries.push(tempEntry);
+    //     }
+    //     refundTransaction.userOwner = transaction.userOwner;
+    //     await TransactionRepository.update(refundTransaction); // save refund transaction
+    // }
 
     parseRefundItems(req) {
         let itemsToRefund:Items[] = JSON.parse(req.body['data']['transactions']);

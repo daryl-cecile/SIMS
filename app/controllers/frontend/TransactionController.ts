@@ -29,6 +29,11 @@ export const TransactionController = new RouterSet( (router) => {
         }
     });
 
+    router.get("/transaction/return", async function(req, res){
+        res = await Passport.MakeStaffAccessOnly("Returns", res);
+        res.render("pages/returns");
+    });
+
     router.get("/report/framed/transaction", async function(req, res){
         res = await Passport.MakeAdminAccessOnly("Transaction Report", res);
         let transactions = await TransactionRepository.getAll();

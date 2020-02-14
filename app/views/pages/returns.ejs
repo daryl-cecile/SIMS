@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('../partials/meta') %>
+    <title>Returns</title>
+    <%- include('../partials/imports') %>
+    <link rel="stylesheet" href="/public/styles/login.css">
+</head>
+<body>
+<%- include('../partials/nav', {isAdmin:true, showLogo:true}) %>
+
+<main>
+
+    <div class="login-box" style="height: 200px">
+
+        <label class="input">
+            <span>Enter Item:</span>
+            <smart-input id="itemId" name="uid" placeholder="Enter Item name or ID"></smart-input>
+        </label>
+
+        <label class="input">
+            <span>Quantity:</span>
+            <smart-input id="itemCount" name="ic" value="1"></smart-input>
+        </label>
+
+        <button onclick="refund(this)">Process Return</button>
+
+    </div>
+
+</main>
+
+<script>
+
+    let inp = $('#itemId').get(0);
+    let items = null;
+
+    function updateHandler(v){
+        inp.value = v;
+    }
+
+    async function refund(el){
+        let btnState = Tools.ButtonStateSwapper(el);
+        btnState.setLoading();
+
+        let itemCode = $('#itemId').get(0).value;
+        let count = $('#itemCount').get(0).value;
+
+        return new Promise(resolve => {
+            $.post("/api/transactions/refund",{
+                CSRF_Token : Tools.csrfToken(),
+                itemCode: itemCode,
+                quantity: count
+            }, result => {
+                btnState.reset();
+                if (result.isSuccessful){
+                    location.href = '/';
+                }
+                else{
+                    console.log(result);
+                }
+            });
+        })
+    }
+
+    async function getItems(){
+        if (items !== null) return items;
+        return new Promise(resolve => {
+            $.get("/api/items/itemlist",{
+                CSRF_Token : Tools.csrfToken()
+            }, result => {
+                items = result.payload.items;
+                resolve(result.payload.items);
+            });
+        });
+    }
+
+    inp.addEventListener("value_changed", async e => {
+
+        let u = await getItems();
+
+        inp.suggestions = [];
+
+        u.forEach(item => {
+            if (item.name.trim().length === 0 || item.name.toLowerCase().indexOf(e.detail.value) > -1){
+                inp.suggestions.push( new SmartInputSuggestionItem(item.name, item.id, (v) => {
+                    updateHandler(v);
+                } ) );
+            }
+        });
+
+        inp.updateSuggestions();
+
+    });
+
+</script>
+
+<%- include('../partials/footer') %>
+</body>
+</html>
